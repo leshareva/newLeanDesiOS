@@ -1,0 +1,6 @@
+framework module Swiftstraints {
+  umbrella header "Swiftstraints-umbrella.h"
+
+  export *
+  module * { export * }
+}
