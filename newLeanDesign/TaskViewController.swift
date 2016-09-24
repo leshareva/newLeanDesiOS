@@ -51,9 +51,29 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         return label
     }()
     
+    let emptyTableView = EmptyTableView()
+    
+    let testView: UIView = {
+        let uv = UIView()
+        uv.backgroundColor = UIColor.clearColor()
+        uv.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        let loaderView = UIImageView()
+        loaderView.image = UIImage.gifWithName("loader")
+        loaderView.translatesAutoresizingMaskIntoConstraints = false
+        uv.addSubview(loaderView)
+        
+        uv.addConstraints("H:|[\(loaderView)]|")
+        uv.addConstraints("V:|[\(loaderView)]|")
+        
+        return uv
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "more")?.imageWithRenderingMode(.AlwaysOriginal), style: .Plain, target: self, action: #selector(handleMore))
         
@@ -65,12 +85,20 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.registerClass(UserCell.self, forCellReuseIdentifier: cellId)
         tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.backgroundView = emptyTableView
+        
         
         navigationController?.navigationBar.translucent = false
         
         checkIfUserIsLoggedIn()
         
         self.view.addSubview(tableView)
+        
+        self.view.addSubview(testView)
+        self.view.addConstraints(testView.widthAnchor == self.view.widthAnchor,
+                                 testView.heightAnchor == 20,
+                                 testView.topAnchor == self.view.topAnchor,
+                                 testView.leftAnchor == self.view.leftAnchor)
         
         
         setupAddTaskView()
@@ -101,6 +129,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         self.addTaskButtonView.alpha = 0
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -117,18 +146,28 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         let companyView = CompanyView(frame: CGRectMake(0, 0, tableView.frame.size.width, 60))
         companyView.backgroundColor = UIColor.whiteColor()
         
+        if let companyNameFromCash = NSUserDefaults.standardUserDefaults().stringForKey("company") {
+            companyView.companyNameLabel.text = companyNameFromCash
+        }
+        
         
         if let uid = Digits.sharedInstance().session()?.userID {
             let clientsRef = FIRDatabase.database().reference().child("clients")
             clientsRef.child(uid).observeEventType(.Value, withBlock: { (snapshot) in
                 
-                if let companyNameFromCash = NSUserDefaults.standardUserDefaults().stringForKey("company") {
-                    companyView.companyNameLabel.text = companyNameFromCash
-                }
+                companyView.companyNameLabel.text = snapshot.value!["company"] as? String
                 
                 if let sum = snapshot.value!["sum"] as? NSNumber {
                     companyView.priceLabel.text = String(sum) + " ₽"
                 }
+                
+                guard let folderUrl = snapshot.value!["folderUrl"] as? String else {
+                    return
+                }
+                 NSUserDefaults.standardUserDefaults().setObject(folderUrl, forKey: "folderUrl")
+                
+                
+                companyView.conceptButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
                 
                 }, withCancelBlock: nil)
         } else {
@@ -138,7 +177,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         return companyView
     }
     
-    
+    func openConceptFolder() {
+        
+        if let folderUrlFromCash = NSUserDefaults.standardUserDefaults().stringForKey("folderUrl") {
+           UIApplication.sharedApplication().openURL(NSURL(string: folderUrlFromCash)!)
+        }
+        
+    }
     
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -146,6 +191,15 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if tasks.count == 0 {
+            tableView.separatorStyle = .None
+            tableView.backgroundView?.hidden = false
+        } else {
+            tableView.separatorStyle = .SingleLine
+            tableView.backgroundView?.hidden = true
+        }
+        
         return tasks.count
     }
     
@@ -167,27 +221,23 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             if status == "none" {
                 cell.detailTextLabel?.text = "Ищем дизайнера"
-                 cell.doneView.hidden = true
+                
             } else if status == "awareness" {
                 cell.detailTextLabel?.text = "Дизайнер разбирается в задаче"
-                cell.doneView.hidden = true
+                
             } else if status == "awarenessApprove" {
                 cell.detailTextLabel?.text = "Согласуйте понимание задачи"
-                 cell.doneView.hidden = true
+                
             } else if status == "concept" {
                 cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
-                 cell.doneView.hidden = true
+                
             } else if status == "conceptApprove" {
                 cell.detailTextLabel?.text = "Согласуйте черновик"
-                 cell.doneView.hidden = true
             } else if status == "design" {
                 cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
-                 cell.doneView.hidden = true
             } else if status == "sources" {
                 cell.detailTextLabel?.text = "Примите работу"
-                 cell.doneView.hidden = true
             } else if status == "done" {
-                 cell.doneView.hidden = false
                 
             }
             
@@ -315,7 +365,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func checkUserInBase() {
-        guard let userId = Digits.sharedInstance().session()?.userID, let phone = Digits.sharedInstance().session()?.phoneNumber, let refreshedToken = FIRInstanceID.instanceID().token()  else {
+        guard let userId = Digits.sharedInstance().session()?.userID, let phone = Digits.sharedInstance().session()?.phoneNumber   else {
             return
         }
         
@@ -342,17 +392,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     }, withCancelBlock: nil)
                 
                 self.fetchUser()
-                
-                let values: [String : String] = ["token": refreshedToken]
-                
-                clientsReference.child(userId).updateChildValues(values, withCompletionBlock: { (err, ref) in
-                    if err != nil {
-                        print(err)
-                        return
-                    }
-                    
-                })
-                
+       
             } else {
                 print("Таких не знаем")
                 
@@ -361,7 +401,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.presentViewController(navController, animated: true, completion: nil)
                 
                 let usersReference = ref.child("requests").child("clients").child(userId)
-                let values: [String : String] = ["id": userId, "phone": phone, "state": "none", "token": refreshedToken]
+                let values: [String : String] = ["id": userId, "phone": phone, "state": "none"]
                 
                 usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
                     if err != nil {
@@ -383,15 +423,34 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         dispatch_async(dispatch_get_main_queue(), {
             self.tableView.reloadData()
         })
+        
+        registerUserTokenInDB()
         observeUserTasks()
     }
     
+    func registerUserTokenInDB(){
+        
+        guard let userId = Digits.sharedInstance().session()?.userID, let refreshedToken = FIRInstanceID.instanceID().token() else {
+            return
+        }
+        
+            let values: [String : String] = ["token": refreshedToken]
+            let clientsReference = FIRDatabase.database().reference().child("clients").child(userId)
+            clientsReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                if err != nil {
+                    print(err)
+                    return
+                }
+    
+            })
+        
+    }
     
     func observeUserTasks() {
         guard let uid = Digits.sharedInstance().session()!.userID else {
             return
         }
-        
+        self.testView.hidden = false
         let ref = FIRDatabase.database().reference().child("user-tasks").child(uid)
         ref.queryLimitedToLast(20).observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
@@ -410,7 +469,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                         dispatch_async(dispatch_get_main_queue(), {
                             self.tableView.reloadData()
                         })
-                        
+                        self.testView.hidden = true
                     }
                     
                 }
@@ -469,7 +528,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func handleReloadTable() {
         self.tasks = Array(self.taskDictionary.values)
         self.tasks.sortInPlace({ (task1, task2) -> Bool in
-            return task1.timestamp?.intValue > task2.timestamp?.intValue
+            return task1.start?.intValue > task2.start?.intValue
         })
         //this will crash because of background thread, so lets call this on dispatch_async main thread
         dispatch_async(dispatch_get_main_queue(), {

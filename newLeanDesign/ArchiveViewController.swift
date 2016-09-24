@@ -190,7 +190,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     func handleReloadTable() {
         self.tasks = Array(self.taskDictionary.values)
         self.tasks.sortInPlace({ (task1, task2) -> Bool in
-            return task1.timestamp?.intValue > task2.timestamp?.intValue
+            return task1.start?.intValue > task2.start?.intValue
         })
         //this will crash because of background thread, so lets call this on dispatch_async main thread
         dispatch_async(dispatch_get_main_queue(), {

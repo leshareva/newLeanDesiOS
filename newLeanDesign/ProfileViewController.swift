@@ -225,7 +225,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     private func sendMessageWithImageUrl(imageUrl: String, image: UIImage) {
         let userId = Digits.sharedInstance().session()?.userID
         let ref = FIRDatabase.database().reference().child("clients").child(userId!)
-        var values: [String: AnyObject] = ["photoUrl": imageUrl]
+        let values: [String: AnyObject] = ["photoUrl": imageUrl]
         
         ref.updateChildValues(values) { (error, ref) in
             if error != nil {

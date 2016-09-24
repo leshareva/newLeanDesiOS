@@ -16,7 +16,6 @@
 		CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE01D942AAA007E9365 /* NewClientViewController.swift */; };
 		CB39FAE31D942AD9007E9365 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE21D942AD9007E9365 /* ProfileViewController.swift */; };
 		CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */; };
-		CB39FAE71D942B0B007E9365 /* AwarenessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE61D942B0B007E9365 /* AwarenessViewController.swift */; };
 		CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE81D942B2B007E9365 /* NewTaskController+handlers.swift */; };
 		CB39FAEC1D942B6D007E9365 /* ConceptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */; };
 		CB39FAEE1D942B8C007E9365 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAED1D942B8C007E9365 /* Extensions.swift */; };
@@ -31,6 +30,9 @@
 		CB39FB031D942C3F007E9365 /* AcceptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB021D942C3F007E9365 /* AcceptView.swift */; };
 		CB39FB061D942C6E007E9365 /* spinner-duo.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB041D942C6E007E9365 /* spinner-duo.gif */; };
 		CB39FB071D942C6E007E9365 /* spinner.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB051D942C6E007E9365 /* spinner.gif */; };
+		CB39FB0C1D94E92F007E9365 /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0B1D94E92F007E9365 /* StepsView.swift */; };
+		CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0D1D952156007E9365 /* EmptyTableView.swift */; };
+		CB39FB101D954FB4007E9365 /* loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB0F1D954FB4007E9365 /* loader.gif */; };
 		CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */; };
 		CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682BF1D93EBD400CB3679 /* Main.storyboard */; };
 		CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C21D93EBD400CB3679 /* Assets.xcassets */; };
@@ -52,7 +54,6 @@
 		CB39FAE01D942AAA007E9365 /* NewClientViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewClientViewController.swift; sourceTree = "<group>"; };
 		CB39FAE21D942AD9007E9365 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
-		CB39FAE61D942B0B007E9365 /* AwarenessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwarenessViewController.swift; sourceTree = "<group>"; };
 		CB39FAE81D942B2B007E9365 /* NewTaskController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NewTaskController+handlers.swift"; sourceTree = "<group>"; };
 		CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConceptViewController.swift; sourceTree = "<group>"; };
 		CB39FAED1D942B8C007E9365 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -67,6 +68,9 @@
 		CB39FB021D942C3F007E9365 /* AcceptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptView.swift; sourceTree = "<group>"; };
 		CB39FB041D942C6E007E9365 /* spinner-duo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "spinner-duo.gif"; sourceTree = "<group>"; };
 		CB39FB051D942C6E007E9365 /* spinner.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = spinner.gif; sourceTree = "<group>"; };
+		CB39FB0B1D94E92F007E9365 /* StepsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
+		CB39FB0D1D952156007E9365 /* EmptyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyTableView.swift; sourceTree = "<group>"; };
+		CB39FB0F1D954FB4007E9365 /* loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loader.gif; sourceTree = "<group>"; };
 		CBE682B81D93EBD300CB3679 /* newLeanDesign.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newLeanDesign.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBE682C01D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -108,7 +112,6 @@
 				CB39FAE01D942AAA007E9365 /* NewClientViewController.swift */,
 				CB39FAE21D942AD9007E9365 /* ProfileViewController.swift */,
 				CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */,
-				CB39FAE61D942B0B007E9365 /* AwarenessViewController.swift */,
 				CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */,
 			);
 			name = Controllers;
@@ -148,7 +151,9 @@
 				CB39FAFC1D942C18007E9365 /* ChatMessageCell.swift */,
 				CB39FAFE1D942C24007E9365 /* SettingCell.swift */,
 				CB39FB001D942C32007E9365 /* CompanyView.swift */,
+				CB39FB0B1D94E92F007E9365 /* StepsView.swift */,
 				CB39FB021D942C3F007E9365 /* AcceptView.swift */,
+				CB39FB0D1D952156007E9365 /* EmptyTableView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -181,6 +186,7 @@
 				CB39FAEA1D942B3A007E9365 /* Helpers */,
 				CBE682C21D93EBD400CB3679 /* Assets.xcassets */,
 				CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */,
+				CB39FB0F1D954FB4007E9365 /* loader.gif */,
 				CBE682BF1D93EBD400CB3679 /* Main.storyboard */,
 				CB39FB041D942C6E007E9365 /* spinner-duo.gif */,
 				CB39FB051D942C6E007E9365 /* spinner.gif */,
@@ -275,6 +281,7 @@
 				CB39FB061D942C6E007E9365 /* spinner-duo.gif in Resources */,
 				CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */,
 				CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */,
+				CB39FB101D954FB4007E9365 /* loader.gif in Resources */,
 				CB39FB071D942C6E007E9365 /* spinner.gif in Resources */,
 				CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */,
 			);
@@ -349,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
+				CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */,
 				CB39FAFD1D942C18007E9365 /* ChatMessageCell.swift in Sources */,
 				CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */,
 				CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */,
@@ -368,7 +376,7 @@
 				CB39FAD91D942A48007E9365 /* NewTaskController.swift in Sources */,
 				CB39FAE31D942AD9007E9365 /* ProfileViewController.swift in Sources */,
 				CB39FADD1D942A78007E9365 /* ChatViewController.swift in Sources */,
-				CB39FAE71D942B0B007E9365 /* AwarenessViewController.swift in Sources */,
+				CB39FB0C1D94E92F007E9365 /* StepsView.swift in Sources */,
 				CB39FADB1D942A60007E9365 /* LoginController.swift in Sources */,
 				CB39FAEE1D942B8C007E9365 /* Extensions.swift in Sources */,
 			);

@@ -71,6 +71,9 @@ class LoginController: UIViewController {
                             return
                         }
                         
+                        
+                        
+                        
                         self.taskViewController?.checkUserInBase()
                         self.dismissViewControllerAnimated(true, completion: nil)
                     }

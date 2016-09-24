@@ -60,7 +60,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         let toId = "designStudio"
         let phone = Digits.sharedInstance().session()?.phoneNumber
         
-        let values : [String : AnyObject] = ["fromId": fromId, "text": taskText, "taskId": taskId, "timestamp": timestamp, "status": "none", "toId": toId, "price": 0, "timeState": 0, "phone": phone!, "rate": 0.5]
+        let values : [String : AnyObject] = ["fromId": fromId, "text": taskText, "taskId": taskId, "status": "none", "toId": toId, "price": 0, "phone": phone!, "rate": 0.5]
         
         postRef.setValue(values)
         postRef.updateChildValues(values) { (error, ref) in
@@ -78,7 +78,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         
         let messageRef = FIRDatabase.database().reference().child("tasks").child(taskId).child("messages")
         let messageРostRef = messageRef.childByAutoId()
-        let messageValues = ["text": taskText, "taskId": taskId, "timestamp": timestamp, "fromId": fromId, "toId": toId]
+        let messageValues = ["text": taskText, "taskId": taskId, "fromId": fromId, "toId": toId]
         messageРostRef.updateChildValues(messageValues) { (error, ref) in
             if error != nil {
                 print(error)

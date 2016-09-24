@@ -84,15 +84,120 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 8, right: 0)
         collectionView?.alwaysBounceVertical = true
         collectionView?.backgroundColor = UIColor.whiteColor()
         collectionView?.registerClass(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.keyboardDismissMode = .Interactive
         
         setupNavbarWithUser()
+        setupStepsView()
+        setupKeyboardObservers()
+    }
+    
+    
+    func setupStepsView() {
+        let containerView = StepsView(frame: CGRectMake(0, 0, self.view.frame.size.width, 30))
+        view.addSubview(containerView)
         
-        //        setupKeyboardObservers()
+        let taskId = task?.taskId
+        let ref = FIRDatabase.database().reference().child("tasks").child(taskId!)
+        ref.observeEventType(.Value, withBlock: { (snapshot) in
+            let status = snapshot.value!["status"] as! String
+            
+            let tappy = MyTapGesture(target: self, action: #selector(self.openStepInfo(_:)))
+           
+            
+            if status == "none" {
+                containerView.alertView.hidden = false
+                containerView.alertView.backgroundColor = StepsView.activeColor
+                containerView.alertTextView.text = "Мы подбираем дизайнера"
+            } else  if status == "awareness" {
+                containerView.stepOne.backgroundColor = StepsView.doneColor
+                containerView.textOne.textColor = StepsView.doneTextColor
+                containerView.alertView.hidden = true
+            } else if status == "awarenessApprove" {
+                containerView.alertTextView.text = "Согласуйте понимание задачи"
+                containerView.alertView.hidden = false
+                containerView.alertView.addGestureRecognizer(tappy)
+                tappy.status = "awareness"
+            } else if status == "concept" {
+                containerView.stepOne.backgroundColor = StepsView.doneColor
+                containerView.textOne.textColor = StepsView.doneTextColor
+                containerView.stepTwo.backgroundColor = StepsView.doneColor
+                containerView.textTwo.textColor = StepsView.doneTextColor
+                containerView.alertView.hidden = true
+            } else if status == "conceptApprove" {
+                containerView.alertTextView.text = "Согласуйте черновик"
+                containerView.alertView.hidden = false
+                containerView.alertView.addGestureRecognizer(tappy)
+                tappy.status = "concept"
+            }else if status == "design" {
+                containerView.stepOne.backgroundColor = StepsView.doneColor
+                containerView.textOne.textColor = StepsView.doneTextColor
+                containerView.stepTwo.backgroundColor = StepsView.doneColor
+                containerView.textTwo.textColor = StepsView.doneTextColor
+                containerView.stepThree.backgroundColor = StepsView.doneColor
+                containerView.textThree.textColor = StepsView.doneTextColor
+                containerView.alertView.hidden = true
+            } else if status == "designApprove" {
+                containerView.alertTextView.text = "Согласуйте чистовик"
+                containerView.alertView.hidden = false
+                containerView.alertView.addGestureRecognizer(tappy)
+                tappy.status = "design"
+            } else if status == "sources" {
+                containerView.stepOne.backgroundColor = StepsView.doneColor
+                containerView.textOne.textColor = StepsView.doneTextColor
+                containerView.stepTwo.backgroundColor = StepsView.doneColor
+                containerView.textTwo.textColor = StepsView.doneTextColor
+                containerView.stepThree.backgroundColor = StepsView.doneColor
+                containerView.textThree.textColor = StepsView.doneTextColor
+                containerView.stepFour.backgroundColor = StepsView.doneColor
+                containerView.textFour.textColor = StepsView.doneTextColor
+                containerView.alertView.hidden = true
+            } else if status == "done" {
+                containerView.alertTextView.text = "Задача закрыта, исходники лежат в вашей папке"
+                containerView.alertView.hidden = false
+                containerView.alertView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleDone)))
+            }
+            }, withCancelBlock: nil)
+        
+        
+        
+    }
+    
+    func handleDone() {
+       let taskViewController = TaskViewController()
+        navigationController?.pushViewController(taskViewController, animated: true)
+    }
+    
+    func openStepInfo(sender : MyTapGesture) {
+        let status = sender.status
+
+        let flowLayout = UICollectionViewFlowLayout()
+        let conceptViewController = ConceptViewController(collectionViewLayout: flowLayout)
+        conceptViewController.view.backgroundColor = UIColor.whiteColor()
+        conceptViewController.task = task
+        
+        if let taskId = self.task?.taskId {
+            let ref = FIRDatabase.database().reference().child("tasks").child(taskId).child(status!)
+            ref.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+                guard let dictionary = snapshot.value as? [String : AnyObject] else {
+                    return
+                }
+
+                conceptViewController.concepts.append(Concept(dictionary: dictionary))
+                dispatch_async(dispatch_get_main_queue(), {
+                    conceptViewController.collectionView?.reloadData()
+                })
+                
+                }, withCancelBlock: nil)
+            
+        }
+        
+        let navController = UINavigationController(rootViewController: conceptViewController)
+        presentViewController(navController, animated: true, completion: nil)
+        
     }
     
     
@@ -121,7 +226,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     
-    
+   
     lazy var inputContainerView: UIView = {
         let containerView = UIView()
         containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
@@ -149,9 +254,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         sendButton.rightAnchor.constraintEqualToAnchor(containerView.rightAnchor).active = true
         sendButton.widthAnchor.constraintEqualToConstant(80).active = true
         sendButton.heightAnchor.constraintEqualToAnchor(containerView.heightAnchor).active = true
-        
-        
-        
         
         containerView.addSubview(self.messageField)
         self.messageField.centerYAnchor.constraintEqualToAnchor(containerView.centerYAnchor).active = true
@@ -251,7 +353,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 print(error)
                 return
             }
-            
             self.messageField.text = nil
             
         }
@@ -272,6 +373,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             return inputContainerView
         }
     }
+
     
     override func canBecomeFirstResponder() -> Bool {
         return true
@@ -280,9 +382,9 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     func setupKeyboardObservers() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardDidShow), name: UIKeyboardDidShowNotification, object: nil)
-        //        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIKeyboardWillShowNotification, object: nil)
-        //
-        //        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIKeyboardWillHideNotification, object: nil)
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIKeyboardWillShowNotification, object: nil)
+        
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIKeyboardWillHideNotification, object: nil)
         
     }
     
@@ -327,36 +429,14 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         let message = messages[indexPath.item]
         cell.textView.text = message.text
-        
-        
-        let tappy = MyTapGesture(target: self, action: #selector(self.handleAwareness(_:)))
-        
+    
         setupCell(cell, message: message)
-        
-        
+
         
         // lets modify the bubble width somehow??
         if let text = message.text {
             cell.bubbleWidthAnchor?.constant = estimateFrameForText(text).width + 32
             cell.textView.hidden = false
-       
-        } else if let awareness = message.awareness {
-           cell.textView.hidden = false
-            cell.textView.userInteractionEnabled = true
-            checkTaskStatus(cell)
-            cell.textView.addGestureRecognizer(tappy)
-            tappy.message = message
-        } else if let concept = message.concept {
-            cell.textView.hidden = false
-            cell.textView.userInteractionEnabled = true
-            cell.textView.addGestureRecognizer(tappy)
-            checkTaskStatus(cell)
-            tappy.message = message
-        } else if message.imageUrl != nil {
-            //fall in here if its an image message
-            cell.bubbleWidthAnchor?.constant = 200
-            cell.textView.hidden = true
-            cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
         }
         
         if let photoUrl = message.photoUrl {
@@ -365,70 +445,15 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         return cell
     }
     
-    
-    func checkTaskStatus(cell: ChatMessageCell) {
-        let taskId = task?.taskId
-        let ref = FIRDatabase.database().reference().child("tasks").child(taskId!)
-        ref.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-            guard let status = snapshot.value!["status"] as? String else {
-                return
-            }
-            
-            let statusLength = status.characters.count
-            var child = ""
-            if statusLength <= 7 {
-                return
-            } else {
-                let index1 = status.endIndex.advancedBy(-7)
-                child = status.substringToIndex(index1)
-            }
-            ref.child(child).observeEventType(.Value, withBlock: { (snapshot) in
-                guard let status = snapshot.value!["status"] as? String else {
-                    return
-                }
-                
-                if status == "none" {
-                    cell.bubbleView.backgroundColor = UIColor(r: 203, g: 255, b: 128)
-                } else {
-                    cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-                }
-                
-                }, withCancelBlock: nil)
-            
-            
-            
-            }, withCancelBlock: nil)
-    }
-    
-    
-    func handleAwareness(sender : MyTapGesture) {
-        if sender.message?.awareness != nil {
-            let awarenessViewController = AwarenessViewController()
-            awarenessViewController.view.backgroundColor = UIColor.whiteColor()
-            awarenessViewController.task = task
-            awarenessViewController.message = sender.message!
-            awarenessViewController.setupView(sender.message!)
-            navigationController?.pushViewController(awarenessViewController, animated: true)
-        } else if sender.message?.concept != nil {
-            let flowLayout = UICollectionViewFlowLayout()
-            let conceptViewController = ConceptViewController(collectionViewLayout: flowLayout)
-            conceptViewController.view.backgroundColor = UIColor.whiteColor()
-            conceptViewController.task = task
-            navigationController?.pushViewController(conceptViewController, animated: true)
-        }
-        
-    }
+
     
     
     private func setupCell(cell: ChatMessageCell, message: Message) {
         if let messageImageUrl = message.imageUrl {
             cell.messageImageView.loadImageUsingCashWithUrlString(messageImageUrl)
             cell.messageImageView.hidden = false
+            cell.textView.hidden = true
             cell.bubbleView.backgroundColor = UIColor.clearColor()
-        } else if let awareness = message.awareness {
-            cell.textView.text = awareness
-        } else if let concept = message.concept {
-            cell.textView.text = concept
         } else {
             cell.messageImageView.hidden = true
         }
@@ -539,7 +564,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     var startingImageView: UIImageView?
     
     func performZoomInForImageView(startingImageView: UIImageView) {
-        
+        print("Что нибудь")
         self.startingImageView = startingImageView
         self.startingImageView?.hidden = true
         
@@ -592,11 +617,18 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             })
         }
     }
+
+    
+    
+    
+    
     
     
 }
 
+
+
 class MyTapGesture: UITapGestureRecognizer {
     var message = Message?()
-    var tasks = Task?()
+    var status = String?()
 }

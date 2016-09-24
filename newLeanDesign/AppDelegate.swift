@@ -26,14 +26,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window?.rootViewController = UINavigationController(rootViewController: TaskViewController())
         
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
+       
         
         UINavigationBar.appearance().barTintColor = UIColor(r: 48, g: 140, b: 229)
         application.statusBarStyle = .LightContent
         
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "tokenRefreshNotification:", name: kFIRInstanceIDTokenRefreshNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.tokenRefreshNotification(_:)), name: kFIRInstanceIDTokenRefreshNotification, object: nil)
         
         
         let notificationTypes: UIUserNotificationType = [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound]
@@ -47,10 +47,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         
-        
         // Override point for customization after application launch.
         return true
     }
+    
+
     
     // Handle refresh notification token
     func tokenRefreshNotification(notification: NSNotification) {
@@ -63,6 +64,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             connectToFcm()
             
             FIRMessaging.messaging().subscribeToTopic("/topics/topic")
+            
+            
         }
         
     }

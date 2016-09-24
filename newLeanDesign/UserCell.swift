@@ -9,7 +9,7 @@ class UserCell: UITableViewCell {
             
             setupNameAndProfileImage()
             
-            if let seconds = task?.timestamp?.doubleValue {
+            if let seconds = task?.start?.doubleValue {
                 let timestampDate = NSDate(timeIntervalSince1970: seconds)
                 let dateFormatter = NSDateFormatter()
                 dateFormatter.dateFormat = "hh:mm a"
@@ -70,14 +70,7 @@ class UserCell: UITableViewCell {
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
-    
-    let doneView: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage.gifWithName("spinner-duo")
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .ScaleAspectFill
-        return iv
-    }()
+  
     
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -98,13 +91,6 @@ class UserCell: UITableViewCell {
         notificationsLabel.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -8).active = true
         notificationsLabel.widthAnchor.constraintEqualToConstant(10).active = true
         notificationsLabel.heightAnchor.constraintEqualToConstant(10).active = true
-        
-        
-        addSubview(doneView)
-        doneView.topAnchor.constraintEqualToAnchor(self.topAnchor, constant: 0).active = true
-        doneView.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -18).active = true
-        doneView.widthAnchor.constraintEqualToConstant(60).active = true
-        doneView.heightAnchor.constraintEqualToAnchor(self.heightAnchor).active = true
         
     }
     

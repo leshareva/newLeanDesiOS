@@ -13,6 +13,7 @@ class Task: NSObject {
     var awareness: AnyObject?
     var concept: AnyObject?
     var design: AnyObject?
+    var sources: AnyObject?
     var company: String?
     var fromId: String?
     var imageUrl: String?
@@ -25,9 +26,10 @@ class Task: NSObject {
     var status: String?
     var text: String?
     var taskId: String?
-    var timestamp: NSNumber?
+    var start: NSNumber?
+    var end: NSNumber?
     var toId: String?
-    var timeState: NSNumber?
+    var time: NSNumber?
     
     func chatPartnerId() -> String? {
         return fromId == Digits.sharedInstance().session()?.userID ? toId : fromId

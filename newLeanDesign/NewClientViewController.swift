@@ -10,7 +10,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     let discriptionLabel: UILabel = {
         let tv = UILabel()
-        tv.text = "Привет! Ждите звонка от нас. Мы активируем ваш аккаунт."
+        tv.text = "Привет! Видимо мы еще не знакомы. Мы перезвоним вам, чтобы активировать аккаунт."
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = UIColor.whiteColor()
         tv.textAlignment = .Center
