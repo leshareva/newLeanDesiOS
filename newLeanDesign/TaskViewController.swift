@@ -14,6 +14,7 @@ import DigitsKit
 import Swiftstraints
 
 
+
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let cellId = "cellId"
@@ -53,23 +54,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }()
     
     let emptyTableView = EmptyTableView()
-    
-    let testView: UIView = {
-        let uv = UIView()
-        uv.backgroundColor = UIColor.clearColor()
-        uv.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        let loaderView = UIImageView()
-        loaderView.image = UIImage.gifWithName("loader")
-        loaderView.translatesAutoresizingMaskIntoConstraints = false
-        uv.addSubview(loaderView)
-        
-        uv.addConstraints("H:|[\(loaderView)]|")
-        uv.addConstraints("V:|[\(loaderView)]|")
-        
-        return uv
-    }()
+    let loaderView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,13 +81,18 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         checkIfUserIsLoggedIn()
         
         self.view.addSubview(tableView)
+        self.view.addSubview(loaderView)
         
-        self.view.addSubview(testView)
-        self.view.addConstraints(testView.widthAnchor == self.view.widthAnchor,
-                                 testView.heightAnchor == 20,
-                                 testView.topAnchor == self.view.topAnchor,
-                                 testView.leftAnchor == self.view.leftAnchor)
+        //setup loader view
+        let options : UIViewAnimationOptions =  [UIViewAnimationOptions.Autoreverse, UIViewAnimationOptions.Repeat, UIViewAnimationOptions.CurveEaseOut]
         
+        loaderView.backgroundColor = UIColor(r: 48, g: 140, b: 229)
+        loaderView.frame = CGRect(x: self.view.frame.width / 2, y: 0, width: 0, height: 10)
+        
+        UIView.animateWithDuration(1.0, delay: 0.0, options: options, animations: {
+             self.loaderView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 10)
+            }, completion: nil)
+
         setupLogoView()
         setupAddTaskView()
     }
@@ -116,6 +106,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: logoView)
 
     }
+    
+    
+
+    
+    
+    
+
     
     func setupAddTaskView() {
         
@@ -234,7 +231,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             if status == "none" {
                 cell.detailTextLabel?.text = "Ищем дизайнера"
-                
             } else if status == "awareness" {
                 cell.detailTextLabel?.text = "Дизайнер разбирается в задаче"
                 
@@ -313,12 +309,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
     }
-    
-//    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-//        let task = self.tasks[indexPath.row]
-//        self.tasks.removeAtIndex(indexPath.row)
-//        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-//    }
+
     
   
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -454,10 +445,12 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func observeUserTasks() {
+        self.loaderView.hidden = false
+        
         guard let uid = Digits.sharedInstance().session()!.userID else {
             return
         }
-        self.testView.hidden = false
+        
         let ref = FIRDatabase.database().reference().child("user-tasks").child(uid)
         ref.queryLimitedToLast(20).observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
@@ -476,13 +469,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                         dispatch_async(dispatch_get_main_queue(), {
                             self.tableView.reloadData()
                         })
-                        self.testView.hidden = true
+                       self.loaderView.hidden = true
                     }
                     
                 }
                 
                 }, withCancelBlock: nil)
             
+           
             
             }, withCancelBlock: nil)
         

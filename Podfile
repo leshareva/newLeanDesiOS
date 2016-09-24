@@ -16,6 +16,5 @@ pod 'Firebase/Storage'
 pod 'Firebase/Messaging'
 pod 'DKImagePickerController'
 pod 'Swiftstraints'
-pod 'Walker'
 
 end

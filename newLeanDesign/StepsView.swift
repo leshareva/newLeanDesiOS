@@ -18,8 +18,8 @@ class StepsView: UIView {
     
     static let activeColor = UIColor(r: 237, g: 186, b: 10)
     static let activeTextColor = UIColor.whiteColor()
-    static let doneColor = UIColor(r: 239, g: 213, b: 41)
-    static let doneTextColor = UIColor(r: 208, g: 163, b: 8)
+    static let doneColor = UIColor(r: 192, g: 203, b: 214)
+    static let doneTextColor = UIColor(r: 130, g: 147, b: 164)
     
     let stepOne: UIView = {
        let view = UIView()
@@ -30,7 +30,8 @@ class StepsView: UIView {
     let alertView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.redColor()
+        view.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+        
         return view
     }()
     
@@ -38,7 +39,7 @@ class StepsView: UIView {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Согласуйте результаты этапа"
-        tv.font = UIFont.systemFontOfSize(12.0)
+        tv.font = UIFont.systemFontOfSize(14.0)
         tv.textColor = UIColor.whiteColor()
         return tv
     }()
@@ -142,6 +143,14 @@ class StepsView: UIView {
                             alertTextView.centerYAnchor == alertView.centerYAnchor)
         
         self.alertView.hidden = true
+        
+        
+        let options : UIViewAnimationOptions =  [UIViewAnimationOptions.Autoreverse, UIViewAnimationOptions.Repeat, UIViewAnimationOptions.CurveEaseOut, UIViewAnimationOptions.AllowUserInteraction]
+        UIView.animateWithDuration(1.0, delay: 0.0, options: options, animations: {
+           self.alertView.backgroundColor = UIColor(r: 139, g: 224, b: 112)
+            }, completion: nil)
+        
+        
         
     }
     
