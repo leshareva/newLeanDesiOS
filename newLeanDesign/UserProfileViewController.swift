@@ -77,21 +77,19 @@ class UserProfileViewController: UIViewController {
         guard let userId = self.task?.toId else {
             return
         }
-        
+
         let ref = FIRDatabase.database().reference().child("designers").child(userId)
-        ref.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-            guard let imageUrl = snapshot.value!["photoUrl"] as? String, let name = snapshot.value!["name"] as? String, let email = snapshot.value!["email"] as? String, let phone = snapshot.value!["phone"] as? String  else {
-                return
-            }
+        ref.observeEventType(.Value, withBlock: { (snapshot) in
+            let imageUrl = snapshot.value!["photoUrl"] as? String
+            let name = snapshot.value!["name"] as? String
+            let email = snapshot.value!["email"] as? String
+            let phone = snapshot.value!["phone"] as? String
             
-            self.taskImageView.loadImageUsingCashWithUrlString(imageUrl)
+            self.taskImageView.loadImageUsingCashWithUrlString(imageUrl!)
             self.nameLabel.text = name
             self.phoneLabel.text = phone
             self.emailLabel.text = email
-            
-            
-            
-            
+
             }, withCancelBlock: nil)
     }
     

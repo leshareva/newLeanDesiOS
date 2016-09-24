@@ -433,16 +433,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let userId = Digits.sharedInstance().session()?.userID, let refreshedToken = FIRInstanceID.instanceID().token() else {
             return
         }
+ 
+            let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
+            clientsReference.updateChildValues([refreshedToken: 1])
         
-            let values: [String : String] = ["token": refreshedToken]
-            let clientsReference = FIRDatabase.database().reference().child("clients").child(userId)
-            clientsReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                if err != nil {
-                    print(err)
-                    return
-                }
-    
-            })
         
     }
     
@@ -535,6 +529,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.tableView.reloadData()
         })
         
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.Default
     }
     
 }

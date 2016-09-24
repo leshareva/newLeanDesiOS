@@ -101,7 +101,7 @@ class UserCell: UITableViewCell {
         detailTextLabel?.frame = CGRect(x: 66, y: detailTextLabel!.frame.origin.y + 2, width: detailTextLabel!.frame.width, height: detailTextLabel!.frame.height)
         textLabel?.numberOfLines = 2
         textLabel?.font = UIFont.systemFontOfSize(14)
-        detailTextLabel?.textColor = UIColor(r: 230, g: 230, b: 230)
+        detailTextLabel?.textColor = UIColor(r: 180, g: 180, b: 180)
         detailTextLabel?.font = UIFont.systemFontOfSize(12)
         
         

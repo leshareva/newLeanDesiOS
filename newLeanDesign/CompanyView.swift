@@ -27,7 +27,7 @@ class CompanyView: UIView {
     let companyNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFontOfSize(16.0)
+        label.font = UIFont.boldSystemFontOfSize(18.0)
         return label
     }()
     
@@ -67,16 +67,15 @@ class CompanyView: UIView {
     
     let iconConceptView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "psd")
+        view.image = UIImage(named: "drive")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     lazy var conceptButton: UILabel = {
         let label = UILabel()
-        label.text = "Дизайн-макеты"
+        label.text = "Папка с макетами"
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openConcept)))
         label.userInteractionEnabled = true
         return label
     }()
@@ -119,7 +118,7 @@ class CompanyView: UIView {
 //        self.addConstraints("V:|-16-[\(logoView)]", "V:|-16-[\(companyNameLabel)]-12-[\(aboutPriceLabel)]-4-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
         
         self.addConstraints("H:|-16-[\(companyNameLabel)]|")
-        self.addConstraints("V:|-16-[\(companyNameLabel)]-12-[\(aboutPriceLabel)]-4-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
+        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-6-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
         self.addConstraints(
                             aboutPriceLabel.leftAnchor == companyNameLabel.leftAnchor,
                             priceLabel.leftAnchor == companyNameLabel.leftAnchor,
@@ -128,8 +127,8 @@ class CompanyView: UIView {
                             separatorOne.leftAnchor == companyNameLabel.leftAnchor,
                             separatorOne.rightAnchor == self.rightAnchor - 16,
                             
-                            iconConceptView.heightAnchor == 36,
-                            iconConceptView.widthAnchor == 36,
+                            iconConceptView.heightAnchor == 28,
+                            iconConceptView.widthAnchor == 28,
                             iconConceptView.leftAnchor == companyNameLabel.leftAnchor,
                             conceptButton.leftAnchor == iconConceptView.rightAnchor + 8,
                             conceptButton.centerYAnchor == iconConceptView.centerYAnchor,
@@ -144,9 +143,7 @@ class CompanyView: UIView {
         
     }
     
-    func openConcept() {
-        
-    }
+   
     
     
     

@@ -105,16 +105,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
                         return
                     }
                     if let imageUrl = metadata?.downloadURL()?.absoluteString {
-                        let messageRef = FIRDatabase.database().reference().child("tasks").child(taskId).child("messages")
-                        let messageРostRef = messageRef.childByAutoId()
-                        let messageValues = ["imageUrl": imageUrl, "taskId": taskId, "timestamp": timestamp, "fromId": fromId]
-                        messageРostRef.updateChildValues(messageValues) { (error, ref) in
-                            if error != nil {
-                                print(error)
-                                return
-                            }
-                            
-                        }
+                        self.sendMessageWithImageUrl(imageUrl, image: image!, taskId: taskId)
                     }
                 })
             }
@@ -122,6 +113,33 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         }
         
         
+    }
+    
+    private func sendMessageWithImageUrl(imageUrl: String, image: UIImage, taskId: String) {
+        let properties: [String: AnyObject] = ["imageUrl": imageUrl, "imageWidth": image.size.width, "imageHeight": image.size.height]
+        
+        sendMessageWithProperties(properties, taskId: taskId)
+    }
+    
+    private func sendMessageWithProperties(properties: [String: AnyObject], taskId: String) {
+//        let taskId = task?.taskId as String!
+        let ref = FIRDatabase.database().reference().child("tasks").child(taskId).child("messages")
+        let fromId = Digits.sharedInstance().session()?.userID as String!
+        let childRef = ref.childByAutoId()
+        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+        
+        
+        var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": "toDesigner"]
+        
+        properties.forEach({values[$0] = $1})
+        
+        childRef.updateChildValues(values) { (error, ref) in
+            if error != nil {
+                print(error)
+                return
+            }
+            
+        }
     }
  
 }

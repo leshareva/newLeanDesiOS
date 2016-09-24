@@ -70,11 +70,37 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         view.backgroundColor = UIColor(r: 48, g: 140, b: 229)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .Plain, target: self, action: #selector(handleLogout))
-        //        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Готово", style: .Plain, target: self, action: #selector(checkPromo));
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .Plain, target: self, action: #selector(checkUser));
         
         
         
         setupInputsForLogin()
+    }
+    
+    func checkUser() {
+        
+        guard let userId = Digits.sharedInstance().session()?.userID, let phone = Digits.sharedInstance().session()?.phoneNumber   else {
+            return
+        }
+        
+        let ref = FIRDatabase.database().reference()
+        let clientsReference = ref.child("clients")
+        
+        clientsReference.observeEventType(.Value, withBlock: { (snapshot) in
+            
+            if snapshot.hasChild(userId) {
+                print("Знакомое лицо")
+                
+                self.dismissViewControllerAnimated(true, completion: nil)
+                
+            } else {
+                print("Таких не знаем")
+                
+            }
+            
+            }, withCancelBlock: nil)
+        
+        
     }
     
     func handleLogout() {

@@ -9,42 +9,23 @@
 import UIKit
 import Firebase
 import DigitsKit
-
+import Swiftstraints
 
 class NewTaskController: UIViewController {
-    
-    
+
     //    var taskListController: TasksListController?
     var taskViewController: TaskViewController?
     
     let textDescription: UITextView = {
         let td = UITextView()
-        td.text = "Расскажите о своей задаче. Она сразу попадет к дизайнеру"
-        td.textColor = UIColor.whiteColor()
+        td.text = "Расскажите коротко о задаче. Дизайнер свяжется с вами и уточнит все детали."
+
         td.translatesAutoresizingMaskIntoConstraints = false
         td.backgroundColor = UIColor.clearColor()
-        td.font = UIFont.systemFontOfSize(18)
+        td.font = UIFont.systemFontOfSize(16)
+        td.userInteractionEnabled = false
+        td.editable = false
         return td
-    }()
-    
-    let adviceTextView: UITextView = {
-        let td = UITextView()
-        td.text = "Фото и другие материалы вы сможете добавить после"
-        td.textColor = UIColor.whiteColor()
-        td.translatesAutoresizingMaskIntoConstraints = false
-        td.backgroundColor = UIColor.clearColor()
-        td.font = UIFont.systemFontOfSize(14)
-        return td
-        
-    }()
-    
-    let inputForOrder: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.whiteColor()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 5
-        view.layer.masksToBounds = true
-        return view
     }()
     
     //поле имя
@@ -63,6 +44,9 @@ class NewTaskController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectAttachImageView)))
         imageView.userInteractionEnabled = true
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 20
+        imageView.contentMode = .ScaleAspectFill
         return imageView
     }()
     
@@ -72,10 +56,9 @@ class NewTaskController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(r: 48, g: 140, b: 229)
-        view.addSubview(inputForOrder)
-        view.addSubview(textDescription)
-        view.addSubview(adviceTextView)
+        view.backgroundColor = UIColor.whiteColor()
+       
+        
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .Plain, target: self, action: #selector(cancelNewTask))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить", style: .Plain, target: self, action: #selector(addNewTask));
@@ -83,52 +66,38 @@ class NewTaskController: UIViewController {
         setupInputForOrder()
         
     }
-    
-    
+
     
     func cancelNewTask() {
         
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    
     func setupInputForOrder() {
-        textDescription.leftAnchor.constraintEqualToAnchor(view.leftAnchor, constant: 8).active = true
-        textDescription.topAnchor.constraintEqualToAnchor(view.topAnchor, constant: 76).active = true
-        textDescription.rightAnchor.constraintEqualToAnchor(view.rightAnchor, constant: 16).active = true
-        textDescription.heightAnchor.constraintEqualToConstant(60).active = true
-        
-        //x, y, width, height
-        inputForOrder.centerXAnchor.constraintEqualToAnchor(view.centerXAnchor).active = true
-        inputForOrder.topAnchor.constraintEqualToAnchor(textDescription.bottomAnchor, constant: 10).active = true
-        inputForOrder.widthAnchor.constraintEqualToAnchor(view.widthAnchor, constant: -25).active = true
-        inputForOrder.heightAnchor.constraintEqualToConstant(150).active = true
-        
-        adviceTextView.leftAnchor.constraintEqualToAnchor(view.leftAnchor, constant: 8).active = true
-        adviceTextView.topAnchor.constraintEqualToAnchor(inputForOrder.bottomAnchor, constant: 4).active = true
-        adviceTextView.rightAnchor.constraintEqualToAnchor(view.rightAnchor, constant: 16).active = true
-        adviceTextView.heightAnchor.constraintEqualToConstant(24).active = true
-        
-        inputForOrder.addSubview(taskTextField)
-        
-        
-        taskTextField.leftAnchor.constraintEqualToAnchor(inputForOrder.leftAnchor, constant: 8).active = true
-        taskTextField.topAnchor.constraintEqualToAnchor(inputForOrder.topAnchor, constant: -60).active = true
-        taskTextField.rightAnchor.constraintEqualToAnchor(inputForOrder.rightAnchor, constant: -8).active = true
-        taskTextField.heightAnchor.constraintEqualToAnchor(inputForOrder.heightAnchor, constant: 32).active = true
-        
+
+        view.addSubview(textDescription)
+        view.addSubview(taskTextField)
         view.addSubview(attachImageView)
-        attachImageView.rightAnchor.constraintEqualToAnchor(inputForOrder.rightAnchor, constant: -15).active = true
-        attachImageView.bottomAnchor.constraintEqualToAnchor(inputForOrder.bottomAnchor, constant: -15).active = true
-        attachImageView.widthAnchor.constraintEqualToConstant(25).active = true
-        attachImageView.heightAnchor.constraintEqualToConstant(25).active = true
         
+   
+        view.addConstraints(
+                            textDescription.heightAnchor == 132,
+                            textDescription.rightAnchor == view.rightAnchor - 8,
+                            textDescription.leftAnchor == view.leftAnchor + 8,
+                            textDescription.topAnchor == view.topAnchor,
+                            
+                            taskTextField.topAnchor == textDescription.bottomAnchor,
+                            taskTextField.leftAnchor == textDescription.leftAnchor,
+                            taskTextField.rightAnchor == textDescription.rightAnchor,
+                            taskTextField.heightAnchor == view.heightAnchor / 3,
+                            
+                            attachImageView.heightAnchor == 40,
+                            attachImageView.widthAnchor == 40,
+                            attachImageView.rightAnchor == taskTextField.rightAnchor,
+                            attachImageView.bottomAnchor == taskTextField.bottomAnchor)
     }
-    
-    
-    
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
-    }
+
     
     
 }
