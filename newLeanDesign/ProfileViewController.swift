@@ -86,7 +86,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UIApplication.sharedApplication().statusBarStyle = .Default
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
         
         setupView()
         loadUserInfo()
@@ -237,5 +237,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
     }
     
+
     
 }

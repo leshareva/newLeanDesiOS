@@ -461,7 +461,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         if message.fromId == Digits.sharedInstance().session()?.userID {
             //outgoing blue
             cell.bubbleView.backgroundColor = ChatMessageCell.blueColor
-            cell.textView.textColor = UIColor.whiteColor()
+            cell.textView.textColor = UIColor.blackColor()
             cell.profileImageView.hidden = true
             cell.bubleViewRightAnchor?.active = true
             cell.bubbleViewLeftAnchor?.active = false

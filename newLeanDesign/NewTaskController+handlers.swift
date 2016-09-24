@@ -87,6 +87,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
             
         }
         
+        view.endEditing(true)
         self.sendTaskImageToChat(fromId, taskId: taskId)
         dismissViewControllerAnimated(true, completion: nil)
     }

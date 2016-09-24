@@ -13,6 +13,7 @@ import AVFoundation
 import DigitsKit
 import Swiftstraints
 
+
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let cellId = "cellId"
@@ -75,7 +76,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "more")?.imageWithRenderingMode(.AlwaysOriginal), style: .Plain, target: self, action: #selector(handleMore))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "point")?.imageWithRenderingMode(.AlwaysOriginal), style: .Plain, target: self, action: #selector(handleMore))
         
         
         let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -89,6 +90,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         
         navigationController?.navigationBar.translucent = false
+       
+        
         
         checkIfUserIsLoggedIn()
         
@@ -100,8 +103,18 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                                  testView.topAnchor == self.view.topAnchor,
                                  testView.leftAnchor == self.view.leftAnchor)
         
-        
+        setupLogoView()
         setupAddTaskView()
+    }
+    
+    func setupLogoView() {
+        let logoView = UIImageView()
+        logoView.frame = CGRect(x: 0, y: 0, width: 89, height: 29)
+        logoView.image = UIImage(named: "logo")
+   
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: logoView)
+
     }
     
     func setupAddTaskView() {
@@ -530,9 +543,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         })
         
     }
-    
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.Default
-    }
+  
     
 }

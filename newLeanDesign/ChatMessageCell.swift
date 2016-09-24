@@ -19,21 +19,21 @@ class ChatMessageCell: UICollectionViewCell {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.font = UIFont.systemFontOfSize(16)
         tv.backgroundColor = UIColor.clearColor()
-        tv.textColor = UIColor.whiteColor()
+        tv.textColor = UIColor.blackColor()
         tv.editable = false
         return tv
     }()
     
     let bubbleView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(r: 0, g: 137, b: 249)
+        view.backgroundColor = UIColor(r: 215, g: 235, b: 255)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         return view
     }()
     
-    static let blueColor = UIColor(r: 0, g: 137, b: 249)
+    static let blueColor = UIColor(r: 215, g: 235, b: 255)
     
     var profileImageView: UIImageView = {
         let image = UIImageView()

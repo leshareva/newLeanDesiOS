@@ -63,6 +63,7 @@ PODS:
   - Swiftstraints (2.2.2)
   - TwitterCore (2.3.0):
     - Fabric
+  - Walker (0.9.1)
 
 DEPENDENCIES:
   - Digits
@@ -75,6 +76,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - Swiftstraints
   - TwitterCore
+  - Walker
 
 SPEC CHECKSUMS:
   Digits: af82d24ec38035cc555b60f55cca5abc68a76bed
@@ -95,7 +97,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
   Swiftstraints: 7474fa4f87a3d89d99a2e52032578f0292ae48de
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
+  Walker: 9a765e7f35adb19ce59079e26d425c1e8c463241
 
-PODFILE CHECKSUM: 4e648096de9c0792daaee5ba51952eba9fbd1aab
+PODFILE CHECKSUM: 6676efc540a006dbc364973adf7d340b09b74342
 
 COCOAPODS: 1.0.0

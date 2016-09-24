@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         
         UINavigationBar.appearance().barTintColor = UIColor(r: 48, g: 140, b: 229)
-        application.statusBarStyle = .LightContent
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
         
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         

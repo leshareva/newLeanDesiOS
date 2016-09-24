@@ -18,7 +18,7 @@ class NewTaskController: UIViewController {
     
     let textDescription: UITextView = {
         let td = UITextView()
-        td.text = "Расскажите коротко о задаче. Дизайнер свяжется с вами и уточнит все детали."
+        td.text = "Расскажите коротко о задаче. Дизайнер свяжется с вами и уточнит детали."
 
         td.translatesAutoresizingMaskIntoConstraints = false
         td.backgroundColor = UIColor.clearColor()
@@ -26,6 +26,13 @@ class NewTaskController: UIViewController {
         td.userInteractionEnabled = false
         td.editable = false
         return td
+    }()
+    
+    let separator: UIView = {
+       let uv = UIView()
+        uv.translatesAutoresizingMaskIntoConstraints = false
+        uv.backgroundColor = UIColor(r: 230, g: 230, b: 230)
+        return uv
     }()
     
     //поле имя
@@ -69,7 +76,7 @@ class NewTaskController: UIViewController {
 
     
     func cancelNewTask() {
-        
+        view.endEditing(true)
         dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -79,6 +86,7 @@ class NewTaskController: UIViewController {
         view.addSubview(textDescription)
         view.addSubview(taskTextField)
         view.addSubview(attachImageView)
+        view.addSubview(separator)
         
    
         view.addConstraints(
@@ -87,7 +95,12 @@ class NewTaskController: UIViewController {
                             textDescription.leftAnchor == view.leftAnchor + 8,
                             textDescription.topAnchor == view.topAnchor,
                             
-                            taskTextField.topAnchor == textDescription.bottomAnchor,
+                            separator.heightAnchor == 1,
+                            separator.leftAnchor == textDescription.leftAnchor,
+                            separator.rightAnchor == textDescription.rightAnchor,
+                            separator.topAnchor == textDescription.bottomAnchor + 8,
+                            
+                            taskTextField.topAnchor == textDescription.bottomAnchor + 8,
                             taskTextField.leftAnchor == textDescription.leftAnchor,
                             taskTextField.rightAnchor == textDescription.rightAnchor,
                             taskTextField.heightAnchor == view.heightAnchor / 3,
@@ -95,7 +108,7 @@ class NewTaskController: UIViewController {
                             attachImageView.heightAnchor == 40,
                             attachImageView.widthAnchor == 40,
                             attachImageView.rightAnchor == taskTextField.rightAnchor,
-                            attachImageView.bottomAnchor == taskTextField.bottomAnchor)
+                            attachImageView.bottomAnchor == taskTextField.bottomAnchor - 20)
     }
 
     
