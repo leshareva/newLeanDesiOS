@@ -63,6 +63,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         {
             connectToFcm()
             
+            let taskViewController = TaskViewController()
+            taskViewController.registerUserTokenInDB(refreshedToken!)
             FIRMessaging.messaging().subscribeToTopic("/topics/topic")
             
             

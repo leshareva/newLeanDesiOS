@@ -9,7 +9,7 @@
 import UIKit
 import Swiftstraints
 
-class AcceptView: UIView {
+class ButtonView: UIView {
     
     
     override init(frame: CGRect) {
@@ -21,22 +21,18 @@ class AcceptView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
-    
+    static let blueColor = UIColor(r: 48, g: 140, b: 229)
+
     lazy var acceptTaskButtonView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(r: 172, g: 223, b: 61)
+        view.backgroundColor = blueColor
         view.userInteractionEnabled = true
         return view
     }()
-    
-    
-    
-    let acceptedLabel: UILabel = {
+
+    let buttonLabel: UILabel = {
         let label = UILabel()
-        label.text = "Согласовано"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.whiteColor()
         return label
@@ -45,15 +41,15 @@ class AcceptView: UIView {
     
     func setupViews() {
         self.addSubview(acceptTaskButtonView)
-        self.addSubview(acceptedLabel)
+        self.addSubview(buttonLabel)
         
         acceptTaskButtonView.bottomAnchor.constraintEqualToAnchor(self.bottomAnchor).active = true
         acceptTaskButtonView.heightAnchor.constraintEqualToConstant(50).active = true
         acceptTaskButtonView.leftAnchor.constraintEqualToAnchor(self.leftAnchor).active = true
         acceptTaskButtonView.rightAnchor.constraintEqualToAnchor(self.rightAnchor).active = true
         
-        self.addConstraints(acceptedLabel.centerXAnchor == acceptTaskButtonView.centerXAnchor,
-                            acceptedLabel.centerYAnchor == acceptTaskButtonView.centerYAnchor)
+        self.addConstraints(buttonLabel.centerXAnchor == acceptTaskButtonView.centerXAnchor,
+                            buttonLabel.centerYAnchor == acceptTaskButtonView.centerYAnchor)
         
     }
 }

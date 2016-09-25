@@ -23,11 +23,11 @@
 		CB39FAF41D942BC4007E9365 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAF31D942BC4007E9365 /* User.swift */; };
 		CB39FAF61D942BCF007E9365 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAF51D942BCF007E9365 /* Message.swift */; };
 		CB39FAF81D942BDA007E9365 /* Concept.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAF71D942BDA007E9365 /* Concept.swift */; };
-		CB39FAFB1D942C04007E9365 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAFA1D942C04007E9365 /* UserCell.swift */; };
+		CB39FAFB1D942C04007E9365 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAFA1D942C04007E9365 /* TaskCell.swift */; };
 		CB39FAFD1D942C18007E9365 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAFC1D942C18007E9365 /* ChatMessageCell.swift */; };
 		CB39FAFF1D942C24007E9365 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAFE1D942C24007E9365 /* SettingCell.swift */; };
 		CB39FB011D942C32007E9365 /* CompanyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB001D942C32007E9365 /* CompanyView.swift */; };
-		CB39FB031D942C3F007E9365 /* AcceptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB021D942C3F007E9365 /* AcceptView.swift */; };
+		CB39FB031D942C3F007E9365 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB021D942C3F007E9365 /* ButtonView.swift */; };
 		CB39FB061D942C6E007E9365 /* spinner-duo.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB041D942C6E007E9365 /* spinner-duo.gif */; };
 		CB39FB071D942C6E007E9365 /* spinner.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB051D942C6E007E9365 /* spinner.gif */; };
 		CB39FB0C1D94E92F007E9365 /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0B1D94E92F007E9365 /* StepsView.swift */; };
@@ -61,11 +61,11 @@
 		CB39FAF31D942BC4007E9365 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CB39FAF51D942BCF007E9365 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		CB39FAF71D942BDA007E9365 /* Concept.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Concept.swift; sourceTree = "<group>"; };
-		CB39FAFA1D942C04007E9365 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		CB39FAFA1D942C04007E9365 /* TaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		CB39FAFC1D942C18007E9365 /* ChatMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMessageCell.swift; sourceTree = "<group>"; };
 		CB39FAFE1D942C24007E9365 /* SettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		CB39FB001D942C32007E9365 /* CompanyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompanyView.swift; sourceTree = "<group>"; };
-		CB39FB021D942C3F007E9365 /* AcceptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptView.swift; sourceTree = "<group>"; };
+		CB39FB021D942C3F007E9365 /* ButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
 		CB39FB041D942C6E007E9365 /* spinner-duo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "spinner-duo.gif"; sourceTree = "<group>"; };
 		CB39FB051D942C6E007E9365 /* spinner.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = spinner.gif; sourceTree = "<group>"; };
 		CB39FB0B1D94E92F007E9365 /* StepsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
@@ -147,12 +147,12 @@
 		CB39FAF91D942BF9007E9365 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CB39FAFA1D942C04007E9365 /* UserCell.swift */,
+				CB39FAFA1D942C04007E9365 /* TaskCell.swift */,
 				CB39FAFC1D942C18007E9365 /* ChatMessageCell.swift */,
 				CB39FAFE1D942C24007E9365 /* SettingCell.swift */,
 				CB39FB001D942C32007E9365 /* CompanyView.swift */,
 				CB39FB0B1D94E92F007E9365 /* StepsView.swift */,
-				CB39FB021D942C3F007E9365 /* AcceptView.swift */,
+				CB39FB021D942C3F007E9365 /* ButtonView.swift */,
 				CB39FB0D1D952156007E9365 /* EmptyTableView.swift */,
 			);
 			name = View;
@@ -361,10 +361,10 @@
 				CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */,
 				CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */,
 				CB39FAF61D942BCF007E9365 /* Message.swift in Sources */,
-				CB39FB031D942C3F007E9365 /* AcceptView.swift in Sources */,
+				CB39FB031D942C3F007E9365 /* ButtonView.swift in Sources */,
 				CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */,
 				CB39FAF41D942BC4007E9365 /* User.swift in Sources */,
-				CB39FAFB1D942C04007E9365 /* UserCell.swift in Sources */,
+				CB39FAFB1D942C04007E9365 /* TaskCell.swift in Sources */,
 				CB39FAEC1D942B6D007E9365 /* ConceptViewController.swift in Sources */,
 				CB39FAD61D942A17007E9365 /* ArchiveViewController.swift in Sources */,
 				CB39FAF81D942BDA007E9365 /* Concept.swift in Sources */,

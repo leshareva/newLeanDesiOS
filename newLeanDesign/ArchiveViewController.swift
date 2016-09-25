@@ -32,7 +32,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.delegate      =   self
         tableView.dataSource    =   self
         
-        tableView.registerClass(UserCell.self, forCellReuseIdentifier: cellId)
+        tableView.registerClass(TaskCell.self, forCellReuseIdentifier: cellId)
         tableView.allowsMultipleSelectionDuringEditing = true
         
         navigationController?.navigationBar.translucent = false
@@ -65,7 +65,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! UserCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! TaskCell
         
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.text

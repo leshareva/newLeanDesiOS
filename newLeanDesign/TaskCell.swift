@@ -1,7 +1,7 @@
 import UIKit
 import Firebase
 
-class UserCell: UITableViewCell {
+class TaskCell: UITableViewCell {
     
     
     var task: Task? {

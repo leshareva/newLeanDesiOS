@@ -34,37 +34,41 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         guard let taskId = self.task?.taskId else {
             return
         }
-        
-        let taskMessagesRef = FIRDatabase.database().reference().child("tasks").child(taskId).child("messages")
-        taskMessagesRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
+        userMessagesRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
-            let status = snapshot.value!["status"] as? String
-            if status == "toClient" {
-                let key = snapshot.key
-                let values : [String: AnyObject] = ["status": "read"]
-                taskMessagesRef.child(key).updateChildValues(values) { (error, ref) in
-                    if error != nil {
-                        print(error)
-                        return
+            let taskMessagesRef = FIRDatabase.database().reference().child("messages").child(snapshot.key)
+            taskMessagesRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                
+                let status = snapshot.value!["status"] as? String
+                if status == "toClient" {
+                    let key = snapshot.key
+                    let values : [String: AnyObject] = ["status": "read"]
+                    taskMessagesRef.child(key).updateChildValues(values) { (error, ref) in
+                        if error != nil {
+                            print(error)
+                            return
+                        }
                     }
                 }
-            }
-            
-            
-            guard let dictionary = snapshot.value as? [String: AnyObject] else {
-                return
-            }
-            
-            self.messages.append(Message(dictionary: dictionary))
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                self.collectionView?.reloadData()
                 
-                //scroll to the last index
-                let indexPath = NSIndexPath(forItem: self.messages.count-1, inSection: 0)
-                self.collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
                 
-            })
+                guard let dictionary = snapshot.value as? [String: AnyObject] else {
+                    return
+                }
+                
+                self.messages.append(Message(dictionary: dictionary))
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.collectionView?.reloadData()
+                    
+                    //scroll to the last index
+                    let indexPath = NSIndexPath(forItem: self.messages.count-1, inSection: 0)
+                    self.collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
+                    
+                })
+                }, withCancelBlock: nil)
+            
             }, withCancelBlock: nil)
         
     }
@@ -350,24 +354,37 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     private func sendMessageWithProperties(properties: [String: AnyObject]) {
         let taskId = task?.taskId as String!
-        let ref = FIRDatabase.database().reference().child("tasks").child(taskId).child("messages")
+        let ref = FIRDatabase.database().reference().child("messages")
         let fromId = Digits.sharedInstance().session()?.userID as String!
         let childRef = ref.childByAutoId()
         let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
-       
         
-        var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": "toDesigner"]
+        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
         
-        properties.forEach({values[$0] = $1})
-        
-        childRef.updateChildValues(values) { (error, ref) in
-            if error != nil {
-                print(error)
+        taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            guard let toId = snapshot.value!["toId"] as? String else {
                 return
             }
-            self.messageField.text = nil
             
-        }
+            var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": toId]
+            
+            properties.forEach({values[$0] = $1})
+            
+            childRef.updateChildValues(values) { (error, ref) in
+                if error != nil {
+                    print(error)
+                    return
+                }
+                self.messageField.text = nil
+                
+                let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
+                let messageID = childRef.key
+                userMessagesRef.updateChildValues([messageID: 1])
+                
+            }
+            
+            }, withCancelBlock: nil)
+       
     }
     
     

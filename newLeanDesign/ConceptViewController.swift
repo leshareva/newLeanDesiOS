@@ -16,11 +16,11 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     let customCellIdentifier = "customCellIdentifier"
     
     
-    let acceptView = AcceptView()
+    let buttonView = ButtonView()
     
     var task: Task? {
         didSet {
-            observeConcept()
+          
         }
     }
     
@@ -34,7 +34,8 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закрыть", style: .Plain, target: self, action: #selector(closeView))
      
-        self.acceptView.acceptTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.acceptConcept)))
+        self.buttonView.acceptTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.acceptConcept)))
+        
     }
     
     
@@ -44,17 +45,16 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
     func setupView() {
   
-        self.view.addSubview(acceptView)
-        acceptView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraints(acceptView.widthAnchor == self.view.widthAnchor,
-                                 acceptView.bottomAnchor == self.view.bottomAnchor,
-                                 acceptView.heightAnchor == 50)
-        
+        self.view.addSubview(buttonView)
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraints(buttonView.widthAnchor == self.view.widthAnchor,
+                                 buttonView.bottomAnchor == self.view.bottomAnchor,
+                                 buttonView.heightAnchor == 50)
+        buttonView.acceptTaskButtonView.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+        buttonView.buttonLabel.text = "Согласовать"
     }
     
-    func observeConcept() {
-       
-    }
+
     
     
     func acceptConcept() {
@@ -87,8 +87,8 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                         print(error)
                         return
                     }
-                    self.acceptView.acceptedLabel.text = "Согласовано"
-                    self.acceptView.acceptTaskButtonView.backgroundColor = UIColor(r: 230, g: 230, b: 230)
+                    self.buttonView.buttonLabel.text = "Согласовано"
+                    self.buttonView.acceptTaskButtonView.backgroundColor = UIColor(r: 230, g: 230, b: 230)
                 }
                 
                 
@@ -120,7 +120,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
    
                 }, withCancelBlock: nil)
             
-                self.acceptView.userInteractionEnabled = false
+                self.buttonView.userInteractionEnabled = false
                 dismissViewControllerAnimated(true, completion: nil)
             
             

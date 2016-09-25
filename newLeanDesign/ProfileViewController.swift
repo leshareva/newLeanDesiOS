@@ -168,10 +168,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             print(logoutError)
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        
         let loginController = LoginController()
         loginController.profileViewController = self
         presentViewController(loginController, animated: true, completion: nil)
+        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     

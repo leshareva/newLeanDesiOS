@@ -25,57 +25,21 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     static let blueColor = UIColor(r: 48, g: 140, b: 229)
     
-    
-    lazy var addTaskButtonView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.userInteractionEnabled = true
-        view.backgroundColor = blueColor
-        return view
-    }()
-    
-    lazy var addButton: UIView = {
-        let view = UIView()
-        view.backgroundColor = blueColor
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 4
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    
-    let addButtonLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Добавить задачу"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.whiteColor()
-        return label
-    }()
-    
+
     let emptyTableView = EmptyTableView()
     let loaderView = UIView()
+    let buttonView = ButtonView()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "point")?.imageWithRenderingMode(.AlwaysOriginal), style: .Plain, target: self, action: #selector(handleMore))
-        
-        
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        tableView.frame         =   CGRectMake(0, 0, 320, screenSize.height);
-        tableView.delegate      =   self
-        tableView.dataSource    =   self
-        
-        tableView.registerClass(UserCell.self, forCellReuseIdentifier: cellId)
-        tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.backgroundView = emptyTableView
-        
-        
         navigationController?.navigationBar.translucent = false
+     
+        
+        checkIfUserIsLoggedIn()
         setupLogoView()
-       
+        setupTableView()
     }
     
     func setupLogoView() {
@@ -84,32 +48,12 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         logoView.image = UIImage(named: "logo")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: logoView)
     }
-    
-    func setupAddTaskView() {
-        self.view.addSubview(addTaskButtonView)
-        addTaskButtonView.bottomAnchor.constraintEqualToAnchor(self.view.bottomAnchor).active = true
-        addTaskButtonView.heightAnchor.constraintEqualToConstant(50).active = true
-        addTaskButtonView.leftAnchor.constraintEqualToAnchor(self.view.leftAnchor).active = true
-        addTaskButtonView.rightAnchor.constraintEqualToAnchor(self.view.rightAnchor).active = true
-        
-        addTaskButtonView.addSubview(addButton)
-        
-        addButton.centerYAnchor.constraintEqualToAnchor(addTaskButtonView.centerYAnchor).active = true
-        addButton.centerXAnchor.constraintEqualToAnchor(addTaskButtonView.centerXAnchor).active = true
-        addButton.widthAnchor.constraintEqualToAnchor(addTaskButtonView.widthAnchor, constant: -26).active = true
-        addButton.heightAnchor.constraintEqualToAnchor(addTaskButtonView.heightAnchor, constant: -16).active = true
-        
-        addButton.addSubview(addButtonLabel)
-        addButton.addConstraints("V:|[\(addButtonLabel)]|")
-        addButton.addConstraints(addButtonLabel.heightAnchor == addButton.heightAnchor, addButtonLabel.centerXAnchor == addButton.centerXAnchor)
-        
-    }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
-        self.addTaskButtonView.alpha = 0
-        checkIfUserIsLoggedIn()
+        self.buttonView.alpha = 0
+       
         
     }
     
@@ -117,7 +61,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidAppear(animated)
         
         UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-            self.addTaskButtonView.alpha = 1
+            self.buttonView.alpha = 1
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
@@ -179,7 +123,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! UserCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! TaskCell
         
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.text
@@ -273,7 +217,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             checkUserInBase()
         }
-        
     }
     
     func handleLogout() {
@@ -305,18 +248,44 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         clientsReference.observeEventType(.Value, withBlock: { (snapshot) in
             if snapshot.hasChild(userId) {
                 self.fetchUser()
+                
+                
                 self.view.addSubview(self.tableView)
-                self.addTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewTaskView)))
+                
+                self.buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewTaskView)))
             } else {
+                
                 self.view.addSubview(self.emptyTableView)
-                self.addTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewClientView)))
+                self.buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewClientView)))
+                
             }
-            self.setupAddTaskView()
+            
+           self.setupbuttonView()
             
         }, withCancelBlock: nil)
     }
     
+    func setupTableView() {
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        tableView.frame         =   CGRectMake(0, 0, 320, screenSize.height);
+        tableView.delegate      =   self
+        tableView.dataSource    =   self
+        
+        tableView.registerClass(TaskCell.self, forCellReuseIdentifier: cellId)
+        tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.backgroundView = emptyTableView
+    }
     
+    func setupbuttonView() {
+        self.view.addSubview(self.buttonView)
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraints(buttonView.widthAnchor == self.view.widthAnchor,
+                                 buttonView.bottomAnchor == self.view.bottomAnchor,
+                                 buttonView.heightAnchor == 50)
+        buttonView.buttonLabel.text = "Добавить задачу"
+    }
+    
+
     
     func setupLoadingView() {
         self.view.addSubview(loaderView)
@@ -337,15 +306,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         dispatch_async(dispatch_get_main_queue(), {
             self.tableView.reloadData()
         })
-        
-        registerUserTokenInDB()
+//        registerUserTokenInDB()
         observeUserTasks()
     }
     
     
     
-    func registerUserTokenInDB(){
-        guard let userId = Digits.sharedInstance().session()?.userID, let refreshedToken = FIRInstanceID.instanceID().token() else {
+    func registerUserTokenInDB(refreshedToken: String){
+        guard let userId = Digits.sharedInstance().session()?.userID else {
             return
         }
             let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
@@ -369,7 +337,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     
                         if let dictionary = snapshot.value as? [String: AnyObject] {
                             let status = snapshot.value!["status"] as? String
-                           
                                 let task = Task()
                                 task.setValuesForKeysWithDictionary(dictionary)
                                 self.tasks.append(task)
@@ -394,7 +361,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func showControllerForSetting(setting: Setting) {
         
         if setting.name == .Archive {
-        
             let archiveViewController = ArchiveViewController()
             archiveViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             archiveViewController.navigationItem.title = setting.name.rawValue

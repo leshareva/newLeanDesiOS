@@ -21,6 +21,8 @@ class StepsView: UIView {
     static let doneColor = UIColor(r: 192, g: 203, b: 214)
     static let doneTextColor = UIColor(r: 130, g: 147, b: 164)
     
+    static let greenColor = UIColor(r: 109, g: 199, b: 82)
+    
     let stepOne: UIView = {
        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
