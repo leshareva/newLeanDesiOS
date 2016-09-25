@@ -69,7 +69,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         
         view.backgroundColor = UIColor(r: 48, g: 140, b: 229)
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .Plain, target: self, action: #selector(handleLogout))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .Plain, target: self, action: #selector(dissmissController))
                 navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .Plain, target: self, action: #selector(checkUser));
         
         
@@ -79,7 +79,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     func checkUser() {
         
-        guard let userId = Digits.sharedInstance().session()?.userID, let phone = Digits.sharedInstance().session()?.phoneNumber   else {
+        guard let userId = Digits.sharedInstance().session()?.userID else {
             return
         }
         
@@ -94,8 +94,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
                 self.dismissViewControllerAnimated(true, completion: nil)
                 
             } else {
-                print("Таких не знаем")
-                
+                print("No this id in client database")
             }
             
             }, withCancelBlock: nil)
@@ -103,21 +102,8 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         
     }
     
-    func handleLogout() {
-        
-        do {
-            try Digits.sharedInstance().logOut()
-            try FIRAuth.auth()?.signOut()
-            
-        } catch let logoutError {
-            print(logoutError)
-        }
-        
-        let loginController = LoginController()
-        loginController.newClientViewController = self
-        presentViewController(loginController, animated: true, completion: nil)
-        
-        
+    func dissmissController() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     

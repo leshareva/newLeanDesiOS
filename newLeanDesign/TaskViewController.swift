@@ -29,7 +29,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     lazy var addTaskButtonView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openNewTaskView)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(checkUserInBase)))
         view.userInteractionEnabled = true
         view.backgroundColor = blueColor
         return view
@@ -80,7 +80,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         checkIfUserIsLoggedIn()
         
-        self.view.addSubview(tableView)
+        
         self.view.addSubview(loaderView)
         
         //setup loader view
@@ -155,11 +155,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let companyView = CompanyView(frame: CGRectMake(0, 0, tableView.frame.size.width, 60))
         companyView.backgroundColor = UIColor.whiteColor()
-        
-        if let companyNameFromCash = NSUserDefaults.standardUserDefaults().stringForKey("company") {
-            companyView.companyNameLabel.text = companyNameFromCash
-        }
-        
+     
         
         if let uid = Digits.sharedInstance().session()?.userID {
             let clientsRef = FIRDatabase.database().reference().child("clients")
@@ -349,7 +345,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         if digitsUid == nil {
             performSelector(#selector(handleLogout), withObject: nil, afterDelay: 0)
         } else {
-            checkUserInBase()
+            fetchUser()
         }
         
     }
@@ -369,43 +365,26 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func checkUserInBase() {
-        guard let userId = Digits.sharedInstance().session()?.userID, let phone = Digits.sharedInstance().session()?.phoneNumber   else {
+        guard let userId = Digits.sharedInstance().session()?.userID else {
             return
         }
-        
-        
-        
+
         let ref = FIRDatabase.database().reference()
         let clientsReference = ref.child("clients")
         
         clientsReference.observeEventType(.Value, withBlock: { (snapshot) in
             
             if snapshot.hasChild(userId) {
-                print("Знакомое лицо")
-                
-                clientsReference.child(userId).observeEventType(.Value, withBlock: { (snapshot) in
-                    
-                    if let name = snapshot.value!["name"] as? String {
-                        NSUserDefaults.standardUserDefaults().setObject(name, forKey: "name")
-                    }
-                    
-                    if let company = snapshot.value!["company"] as? String {
-                        NSUserDefaults.standardUserDefaults().setObject(company, forKey: "company")
-                    }
-                    
-                    }, withCancelBlock: nil)
-                
-                self.fetchUser()
-       
+                self.openNewTaskView()
             } else {
                 print("Таких не знаем")
                 
                 let newClientViewController = NewClientViewController()
-                let navController = UINavigationController(rootViewController: newClientViewController)
-                self.presentViewController(navController, animated: true, completion: nil)
+                let navigationController = UINavigationController(rootViewController: newClientViewController)
+                self.presentViewController(navigationController, animated: true, completion: nil)
                 
                 let usersReference = ref.child("requests").child("clients").child(userId)
-                let values: [String : String] = ["id": userId, "phone": phone, "state": "none"]
+                let values: [String : String] = ["id": userId, "state": "none"]
                 
                 usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
                     if err != nil {
@@ -451,32 +430,26 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             return
         }
         
-        let ref = FIRDatabase.database().reference().child("user-tasks").child(uid)
-        ref.queryLimitedToLast(20).observeEventType(.ChildAdded, withBlock: { (snapshot) in
-            
-            let taskId = snapshot.key
-            let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-            taskRef.queryOrderedByChild("timestamp").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                
-                if let dictionary = snapshot.value as? [String: AnyObject] {
-                    let status = snapshot.value!["status"] as? String
-                    if status == "done" {
-                        print("Задача сдана")
-                    } else {
-                        let task = Task()
-                        task.setValuesForKeysWithDictionary(dictionary)
-                        self.tasks.append(task)
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.tableView.reloadData()
-                        })
-                       self.loaderView.hidden = true
-                    }
+        let ref = FIRDatabase.database().reference().child("active-tasks").child(uid)
+        ref.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+                let taskId = snapshot.key
+                let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
+                taskRef.queryOrderedByChild("time").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                     
-                }
-                
-                }, withCancelBlock: nil)
-            
-           
+                        if let dictionary = snapshot.value as? [String: AnyObject] {
+                            let status = snapshot.value!["status"] as? String
+                           
+                                let task = Task()
+                                task.setValuesForKeysWithDictionary(dictionary)
+                                self.tasks.append(task)
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    self.tableView.reloadData()
+                                })
+                                self.loaderView.hidden = true
+                            
+                        }
+                  
+                    }, withCancelBlock: nil)
             
             }, withCancelBlock: nil)
         

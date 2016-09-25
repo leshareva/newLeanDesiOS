@@ -54,11 +54,6 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-            
-            self.view.layoutIfNeeded()
-            }, completion: nil)
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -123,8 +118,6 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
                     guard let status = snapshot.value!["status"] as? String else {
                         return
                     }
-                    
-                    if status == "done" {
                         let task = Task()
                         task.setValuesForKeysWithDictionary(dictionary)
                         self.tasks.append(task)
@@ -132,13 +125,9 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
                         dispatch_async(dispatch_get_main_queue(), {
                             self.tableView.reloadData()
                         })
-                    }
-                    
                 }
                 
                 }, withCancelBlock: nil)
-            
-            
             }, withCancelBlock: nil)
         
     }

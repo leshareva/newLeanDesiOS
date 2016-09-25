@@ -137,7 +137,7 @@ class StepsView: UIView {
         alertView.addSubview(alertTextView)
         self.addConstraints("H:|[\(alertView)]|")
         self.addConstraints("V:|[\(alertView)]")
-        self.addConstraints(alertView.heightAnchor == self.heightAnchor)
+        self.addConstraints(alertView.heightAnchor == self.heightAnchor + 20)
         
         alertView.addConstraints(alertTextView.centerXAnchor == alertView.centerXAnchor,
                             alertTextView.centerYAnchor == alertView.centerYAnchor)

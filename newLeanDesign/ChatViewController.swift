@@ -159,6 +159,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.alertTextView.text = "Задача закрыта, исходники лежат в вашей папке"
                 containerView.alertView.hidden = false
                 containerView.alertView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleDone)))
+
             }
             }, withCancelBlock: nil)
         
@@ -167,8 +168,19 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
     func handleDone() {
+        let taskId = task?.taskId
+        let fromId = task?.fromId
+        let activeTasksRef = FIRDatabase.database().reference().child("active-tasks").child(fromId!).child(taskId!)
+        
+        activeTasksRef.removeValue()
+        
+        let archiveRef = FIRDatabase.database().reference().child("user-tasks").child(fromId!)
+        archiveRef.updateChildValues([taskId!: 1])
+        
        let taskViewController = TaskViewController()
         navigationController?.pushViewController(taskViewController, animated: true)
+        
+        
     }
     
     func openStepInfo(sender : MyTapGesture) {

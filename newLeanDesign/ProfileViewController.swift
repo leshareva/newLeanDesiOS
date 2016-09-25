@@ -46,33 +46,47 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 2
         view.layer.masksToBounds = true
-        return view
-    }()
-    
-    let firstLabel: UITextView = {
-        let tf = UITextView()
-        tf.selectable = false
+        
+        let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.text = "Компания"
         tf.font = UIFont.systemFontOfSize(16)
-        return tf
+        tf.textColor = UIColor(r: 180, g: 180, b: 180)
+        view.addSubview(tf)
+        view.addConstraints("H:|-16-[\(tf)]")
+        view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
+        
+        return view
     }()
+ 
     
-    let firstField: UITextView = {
-        let tf = UITextView()
-        tf.selectable = false
+    let firstField: UILabel = {
+        let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.font = UIFont.systemFontOfSize(16)
         return tf
     }()
     
-    let firstSeparator: UIView = {
+    
+    let inputForPhone: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(r: 230, g: 230, b: 230)
+        view.backgroundColor = UIColor.whiteColor()
         view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+        view.layer.cornerRadius = 2
+        view.layer.masksToBounds = true
         
+        let tf = UILabel()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.text = "Телефон"
+        tf.font = UIFont.systemFontOfSize(16)
+        tf.textColor = UIColor(r: 180, g: 180, b: 180)
+        view.addSubview(tf)
+        view.addConstraints("H:|-16-[\(tf)]")
+        view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
+        
+        return view
     }()
+    
     
     lazy var logoutButton: UIView = {
         let view = UIView()
@@ -80,8 +94,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         view.translatesAutoresizingMaskIntoConstraints = false
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLogout)))
         view.userInteractionEnabled = true
+        
+        let tv = UILabel()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.text = "Выйти"
+        view.addSubview(tv)
+        
+        view.addConstraints(tv.centerXAnchor == view.centerXAnchor,
+                            tv.centerYAnchor == view.centerYAnchor)
+        
         return view
     }()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,27 +127,34 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     
     func loadUserInfo() {
-        if let userName = NSUserDefaults.standardUserDefaults().stringForKey("name") {
-            self.discriptionLabel.text = userName
+//        if let userName = NSUserDefaults.standardUserDefaults().stringForKey("name") {
+//            self.discriptionLabel.text = userName
+//        }
+//        
+//        if let userPhoto = NSUserDefaults.standardUserDefaults().stringForKey("photoUrl") {
+//            self.discriptionLabel.text = userPhoto
+//        }
+        
+        
+        guard let userId = Digits.sharedInstance().session()?.userID else {
+            return
         }
-        
-        if let userPhoto = NSUserDefaults.standardUserDefaults().stringForKey("photoUrl") {
-            self.discriptionLabel.text = userPhoto
-        }
-        
-        
-        let userId = Digits.sharedInstance().session()?.userID
-        let ref = FIRDatabase.database().reference().child("clients").child(userId!)
+        let ref = FIRDatabase.database().reference().child("clients").child(userId)
         ref.observeEventType(.Value, withBlock: { (snapshot) in
             
-            self.discriptionLabel.text = snapshot.value!["name"] as? String
-            self.firstField.text = snapshot.value!["company"] as? String
-            guard let profileImageUrl = snapshot.value!["photoUrl"] as? String else {
-                return
+            if let name = snapshot.value!["name"] as? String {
+               self.discriptionLabel.text = name
+            }
+            if let company = snapshot.value!["company"] as? String {
+                self.firstField.text = company
             }
             
-            self.profilePic.loadImageUsingCashWithUrlString(profileImageUrl)
-            NSUserDefaults.standardUserDefaults().setObject(profileImageUrl, forKey: "photoUrl")
+            if let profileImageUrl = snapshot.value!["photoUrl"] as? String  {
+                self.profilePic.loadImageUsingCashWithUrlString(profileImageUrl)
+            }
+            
+            
+//            NSUserDefaults.standardUserDefaults().setObject(profileImageUrl, forKey: "photoUrl")
             
             
             }, withCancelBlock: nil)
@@ -153,6 +185,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         view.addSubview(discriptionLabel)
         view.addSubview(profilePic)
         view.addSubview(inputForName)
+        view.addSubview(inputForPhone)
         view.addSubview(closeButton)
         view.addSubview(logoutButton)
         
@@ -160,18 +193,25 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         view.addConstraints("V:|-20-[\(closeButton)]")
         view.addConstraints("H:|-8-[\(closeButton)]")
         
-        view.addConstraints("V:|-60-[\(profilePic)][\(discriptionLabel)]-20-[\(inputForName)]")
+        view.addConstraints("V:|-60-[\(profilePic)][\(discriptionLabel)]-20-[\(inputForName)]-1-[\(inputForPhone)]")
         view.addConstraints("V:[\(logoutButton)]|")
-        view.addConstraints("H:|-8-[\(inputForName)]-8-|", "H:|-8-[\(logoutButton)]-8-|")
-        view.addConstraints(discriptionLabel.widthAnchor == view.widthAnchor, discriptionLabel.heightAnchor == 40,
-                            inputForName.heightAnchor == 40, profilePic.centerXAnchor == view.centerXAnchor, profilePic.heightAnchor == 76, profilePic.widthAnchor == 76, closeButton.widthAnchor == 30, closeButton.heightAnchor == 30,
-                            logoutButton.heightAnchor == 40)
+        view.addConstraints("H:|[\(inputForName)]|", "H:|[\(logoutButton)]|", "H:|[\(inputForPhone)]|")
+        view.addConstraints(discriptionLabel.widthAnchor == view.widthAnchor,
+                            discriptionLabel.heightAnchor == 40,
+                            inputForName.heightAnchor == 40,
+                            inputForPhone.heightAnchor == 40,
+                            profilePic.centerXAnchor == view.centerXAnchor,
+                            profilePic.heightAnchor == 76,
+                            profilePic.widthAnchor == 76,
+                            closeButton.widthAnchor == 30,
+                            closeButton.heightAnchor == 30,
+                            logoutButton.heightAnchor == 40
+                            )
         
-        inputForName.addSubview(firstLabel)
+    
         inputForName.addSubview(firstField)
-        
-        inputForName.addConstraints("H:|-8-[\(firstLabel)][\(firstField)]|")
-        inputForName.addConstraints(firstLabel.centerYAnchor == inputForName.centerYAnchor, firstLabel.heightAnchor == inputForName.heightAnchor, firstField.heightAnchor == inputForName.heightAnchor, firstField.centerYAnchor == inputForName.centerYAnchor, firstField.widthAnchor == 200 )
+        inputForName.addConstraints("H:|-100-[\(firstField)]|")
+        inputForName.addConstraints( firstField.centerYAnchor == inputForName.centerYAnchor)
         
         
         

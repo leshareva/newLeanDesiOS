@@ -68,10 +68,11 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
                 print(error)
                 return
             }
-            let userTaskRef = FIRDatabase.database().reference().child("user-tasks").child(fromId)
-            let taskId = postRef.key
-            userTaskRef.updateChildValues([taskId: 1])
             
+            let taskId = postRef.key
+            
+            let activeTaskRef = FIRDatabase.database().reference().child("active-tasks").child(fromId)
+            activeTaskRef.updateChildValues([taskId: 1])
             
         }
         
