@@ -28,5 +28,6 @@ class User: NSObject {
     var photoUrl: String?
     var token: String?
     var folder: String?
+    var status: String?
 }
 

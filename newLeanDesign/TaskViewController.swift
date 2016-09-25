@@ -21,7 +21,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     var tableView: UITableView  =  UITableView(frame: CGRectZero, style: UITableViewStyle.Grouped)
     var tasks = [Task]()
     var taskDictionary = [String: Task]()
-
+    var user: User?
     
     static let blueColor = UIColor(r: 48, g: 140, b: 229)
     
@@ -29,7 +29,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     lazy var addTaskButtonView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(checkUserInBase)))
         view.userInteractionEnabled = true
         view.backgroundColor = blueColor
         return view
@@ -75,47 +74,18 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         
         navigationController?.navigationBar.translucent = false
-       
-        
-        
-        checkIfUserIsLoggedIn()
-        
-        
-        self.view.addSubview(loaderView)
-        
-        //setup loader view
-        let options : UIViewAnimationOptions =  [UIViewAnimationOptions.Autoreverse, UIViewAnimationOptions.Repeat, UIViewAnimationOptions.CurveEaseOut]
-        
-        loaderView.backgroundColor = UIColor(r: 48, g: 140, b: 229)
-        loaderView.frame = CGRect(x: self.view.frame.width / 2, y: 0, width: 0, height: 10)
-        
-        UIView.animateWithDuration(1.0, delay: 0.0, options: options, animations: {
-             self.loaderView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 10)
-            }, completion: nil)
-
         setupLogoView()
-        setupAddTaskView()
+       
     }
     
     func setupLogoView() {
         let logoView = UIImageView()
         logoView.frame = CGRect(x: 0, y: 0, width: 89, height: 29)
         logoView.image = UIImage(named: "logo")
-   
-        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: logoView)
-
     }
     
-    
-
-    
-    
-    
-
-    
     func setupAddTaskView() {
-        
         self.view.addSubview(addTaskButtonView)
         addTaskButtonView.bottomAnchor.constraintEqualToAnchor(self.view.bottomAnchor).active = true
         addTaskButtonView.heightAnchor.constraintEqualToConstant(50).active = true
@@ -139,6 +109,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         self.addTaskButtonView.alpha = 0
+        checkIfUserIsLoggedIn()
         
     }
     
@@ -155,8 +126,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let companyView = CompanyView(frame: CGRectMake(0, 0, tableView.frame.size.width, 60))
         companyView.backgroundColor = UIColor.whiteColor()
-     
-        
+
         if let uid = Digits.sharedInstance().session()?.userID {
             let clientsRef = FIRDatabase.database().reference().child("clients")
             clientsRef.child(uid).observeEventType(.Value, withBlock: { (snapshot) in
@@ -183,8 +153,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         return companyView
     }
     
+    
     func openConceptFolder() {
-        
         if let folderUrlFromCash = NSUserDefaults.standardUserDefaults().stringForKey("folderUrl") {
            UIApplication.sharedApplication().openURL(NSURL(string: folderUrlFromCash)!)
         }
@@ -197,7 +167,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if tasks.count == 0 {
             tableView.separatorStyle = .None
             tableView.backgroundView?.hidden = false
@@ -214,54 +183,35 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.text
-        
-        
         cell.notificationsLabel.hidden = true
-        
-        
+
         let taskRef = FIRDatabase.database().reference().child("tasks").child(task.taskId!)
         taskRef.observeEventType(.Value, withBlock: { (snapshot) in
             guard let status = snapshot.value!["status"] as? String else {
                 return
             }
-            
             if status == "none" {
                 cell.detailTextLabel?.text = "Ищем дизайнера"
             } else if status == "awareness" {
                 cell.detailTextLabel?.text = "Дизайнер разбирается в задаче"
-                
             } else if status == "awarenessApprove" {
                 cell.detailTextLabel?.text = "Согласуйте понимание задачи"
-                
             } else if status == "concept" {
                 cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
-                
             } else if status == "conceptApprove" {
                 cell.detailTextLabel?.text = "Согласуйте черновик"
             } else if status == "design" {
                 cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
             } else if status == "sources" {
                 cell.detailTextLabel?.text = "Примите работу"
-            } else if status == "done" {
-                
-            }
-            
-            
+            } 
+
             if let taskImageUrl = snapshot.value!["imageUrl"] as? String {
                 cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
             } else {
                 cell.taskImageView.image = UIImage.gifWithName("spinner-duo")
             }
-            
-            guard let minPrice = snapshot.value!["minPrice"] as? NSNumber else {
-                return
-            }
-            
-            guard let maxPrice = snapshot.value!["maxPrice"] as? NSNumber else {
-                return
-            }
-            
-            cell.timeLabel.text = String(minPrice) + " — " + String(maxPrice) + "₽"
+
             
             }, withCancelBlock: nil)
         
@@ -278,36 +228,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
-    
-    
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        
-        let task = self.tasks[indexPath.row]
-        
-        let status = task.status! as String
-        if status == "done" {
-            let delete = UITableViewRowAction(style: .Default, title: "\u{267A}\n Delete") { action, index in
-                print("more button tapped")
-                
-                self.tasks.removeAtIndex(indexPath.row)
-                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            }
-            delete.backgroundColor = UIColor(r: 230, g: 230, b: 230)
-            return [delete]
-            
-        } else {
-            let nothing = UITableViewRowAction(style: .Default, title: "\u{267A}\n Delete") { action, index in
-                print("more button tapped")
-            }
-            nothing.backgroundColor = UIColor(r: 230, g: 230, b: 230)
-            
-            return [nothing]
-        }
-        
-    }
 
-    
-  
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let task = tasks[indexPath.row]
         showChatControllerForUser(task)
@@ -318,11 +239,18 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func openNewTaskView() {
-        let newTaskController = NewTaskController()
-        let navController = UINavigationController(rootViewController: newTaskController)
-        presentViewController(navController, animated: true, completion: nil)
-        
+            let newTaskController = NewTaskController()
+            let navController = UINavigationController(rootViewController: newTaskController)
+            presentViewController(navController, animated: true, completion: nil)
     }
+    
+    
+    func openNewClientView() {
+        let newClientViewController = NewClientViewController()
+        let navigationController = UINavigationController(rootViewController: newClientViewController)
+        self.presentViewController(navigationController, animated: true, completion: nil)
+    }
+    
     
     lazy var settingsLauncher: SettingsLauncher = {
         let launcher = SettingsLauncher()
@@ -336,8 +264,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    
-    
     func checkIfUserIsLoggedIn() {
         let digits = Digits.sharedInstance()
         let digitsUid = digits.session()?.userID
@@ -345,7 +271,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         if digitsUid == nil {
             performSelector(#selector(handleLogout), withObject: nil, afterDelay: 0)
         } else {
-            fetchUser()
+            checkUserInBase()
         }
         
     }
@@ -364,41 +290,46 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
+    
+    
     func checkUserInBase() {
         guard let userId = Digits.sharedInstance().session()?.userID else {
             return
         }
+        
+        setupLoadingView()
 
         let ref = FIRDatabase.database().reference()
         let clientsReference = ref.child("clients")
         
         clientsReference.observeEventType(.Value, withBlock: { (snapshot) in
-            
             if snapshot.hasChild(userId) {
-                self.openNewTaskView()
+                self.fetchUser()
+                self.view.addSubview(self.tableView)
+                self.addTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewTaskView)))
             } else {
-                print("Таких не знаем")
-                
-                let newClientViewController = NewClientViewController()
-                let navigationController = UINavigationController(rootViewController: newClientViewController)
-                self.presentViewController(navigationController, animated: true, completion: nil)
-                
-                let usersReference = ref.child("requests").child("clients").child(userId)
-                let values: [String : String] = ["id": userId, "state": "none"]
-                
-                usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                    if err != nil {
-                        print(err)
-                        return
-                    }
-                    
-                })
-                
+                self.view.addSubview(self.emptyTableView)
+                self.addTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewClientView)))
             }
+            self.setupAddTaskView()
             
-            }, withCancelBlock: nil)
+        }, withCancelBlock: nil)
     }
     
+    
+    
+    func setupLoadingView() {
+        self.view.addSubview(loaderView)
+
+        let options : UIViewAnimationOptions =  [UIViewAnimationOptions.Autoreverse, UIViewAnimationOptions.Repeat, UIViewAnimationOptions.CurveEaseOut]
+        
+        loaderView.backgroundColor = UIColor(r: 48, g: 140, b: 229)
+        loaderView.frame = CGRect(x: self.view.frame.width / 2, y: 0, width: 0, height: 10)
+        
+        UIView.animateWithDuration(1.0, delay: 0.0, options: options, animations: {
+            self.loaderView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 10)
+            }, completion: nil)
+    }
     
     
     func fetchUser() {
@@ -411,17 +342,17 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         observeUserTasks()
     }
     
+    
+    
     func registerUserTokenInDB(){
-        
         guard let userId = Digits.sharedInstance().session()?.userID, let refreshedToken = FIRInstanceID.instanceID().token() else {
             return
         }
- 
             let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
             clientsReference.updateChildValues([refreshedToken: 1])
-        
-        
     }
+    
+    
     
     func observeUserTasks() {
         self.loaderView.hidden = false
@@ -446,7 +377,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                                     self.tableView.reloadData()
                                 })
                                 self.loaderView.hidden = true
-                            
                         }
                   
                     }, withCancelBlock: nil)
@@ -454,10 +384,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             }, withCancelBlock: nil)
         
     }
-    
-    
-    
-    
     
     func showChatControllerForUser(task: Task) {
         let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
@@ -468,7 +394,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     func showControllerForSetting(setting: Setting) {
         
         if setting.name == .Archive {
-            //            handleLogout()
+        
             let archiveViewController = ArchiveViewController()
             archiveViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             archiveViewController.navigationItem.title = setting.name.rawValue
@@ -490,26 +416,5 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    
-    private func attemptReloadTable() {
-        self.timer?.invalidate()
-        
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
-    }
-    
-    var timer: NSTimer?
-    
-    func handleReloadTable() {
-        self.tasks = Array(self.taskDictionary.values)
-        self.tasks.sortInPlace({ (task1, task2) -> Bool in
-            return task1.start?.intValue > task2.start?.intValue
-        })
-        //this will crash because of background thread, so lets call this on dispatch_async main thread
-        dispatch_async(dispatch_get_main_queue(), {
-            self.tableView.reloadData()
-        })
-        
-    }
-  
-    
+
 }
