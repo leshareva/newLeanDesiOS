@@ -13,6 +13,7 @@ import Fabric
 import DigitsKit
 
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -44,6 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         application.registerForRemoteNotifications()
         application.registerUserNotificationSettings(notificationSettings)
+        
+     
         
         
         
@@ -105,17 +108,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Sandbox)
         print("In did register For remote Not with token: \(FIRInstanceID.instanceID().token())")
-        guard let refreshedToken = FIRInstanceID.instanceID().token() else {
-            return
-        }
-//        self.taskViewController?.registerUserTokenInDB(refreshedToken!)
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(refreshedToken, forKey: "userToken")
-       
-        
-       
-       
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
@@ -126,8 +118,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication)
     {
         connectToFcm()
-        
-        
+        let refreshedToken = FIRInstanceID.instanceID().token()
+        if (refreshedToken != nil) {
+            if let userId = Digits.sharedInstance().session()?.userID  {
+                let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
+                clientsReference.updateChildValues([refreshedToken!: 1])
+            }
+        }
         application.applicationIconBadgeNumber = 0;
     }
 
@@ -140,6 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("%@", userInfo)
         let refreshedToken = FIRInstanceID.instanceID().token()
         print("InstanceID token: \(refreshedToken)")
+
         
         if application.applicationState == UIApplicationState.Active {
             print("App already open")

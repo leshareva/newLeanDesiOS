@@ -316,15 +316,15 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func registerUserTokenInDB(){
         
-        guard let userId = Digits.sharedInstance().session()?.userID else {
-            return
-        }
-      
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if let userToken = defaults.stringForKey("userToken") {
-            let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
-            clientsReference.updateChildValues([userToken: 1])
-        }
+//        guard let userId = Digits.sharedInstance().session()?.userID else {
+//            return
+//        }
+//      
+//        let defaults = NSUserDefaults.standardUserDefaults()
+//        if let userToken = defaults.stringForKey("userToken") {
+//            let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
+//            clientsReference.updateChildValues([userToken: 1])
+//        }
     }
     
     
