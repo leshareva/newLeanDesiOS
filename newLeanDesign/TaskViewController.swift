@@ -40,6 +40,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         checkIfUserIsLoggedIn()
         setupLogoView()
         setupTableView()
+//        registerUserTokenInDB()
     }
     
     func setupLogoView() {
@@ -306,18 +307,24 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         dispatch_async(dispatch_get_main_queue(), {
             self.tableView.reloadData()
         })
-//        registerUserTokenInDB()
+       
         observeUserTasks()
+        registerUserTokenInDB()
     }
     
     
     
-    func registerUserTokenInDB(refreshedToken: String){
+    func registerUserTokenInDB(){
+        
         guard let userId = Digits.sharedInstance().session()?.userID else {
             return
         }
+      
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if let userToken = defaults.stringForKey("userToken") {
             let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
-            clientsReference.updateChildValues([refreshedToken: 1])
+            clientsReference.updateChildValues([userToken: 1])
+        }
     }
     
     

@@ -29,23 +29,6 @@ class StepsView: UIView {
         return view
     }()
     
-    let alertView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(r: 109, g: 199, b: 82)
-        
-        return view
-    }()
-    
-    let alertTextView: UILabel = {
-        let tv = UILabel()
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.text = "Согласуйте результаты этапа"
-        tv.font = UIFont.systemFontOfSize(14.0)
-        tv.textColor = UIColor.whiteColor()
-        return tv
-    }()
-    
     let textOne: UILabel = {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -135,24 +118,7 @@ class StepsView: UIView {
         )
         
         
-        self.addSubview(alertView)
-        alertView.addSubview(alertTextView)
-        self.addConstraints("H:|[\(alertView)]|")
-        self.addConstraints("V:|[\(alertView)]")
-        self.addConstraints(alertView.heightAnchor == self.heightAnchor + 20)
-        
-        alertView.addConstraints(alertTextView.centerXAnchor == alertView.centerXAnchor,
-                            alertTextView.centerYAnchor == alertView.centerYAnchor)
-        
-        self.alertView.hidden = true
-        
-        
-        let options : UIViewAnimationOptions =  [UIViewAnimationOptions.Autoreverse, UIViewAnimationOptions.Repeat, UIViewAnimationOptions.CurveEaseOut, UIViewAnimationOptions.AllowUserInteraction]
-        UIView.animateWithDuration(1.0, delay: 0.0, options: options, animations: {
-           self.alertView.backgroundColor = UIColor(r: 139, g: 224, b: 112)
-            }, completion: nil)
-        
-        
+                
         
     }
     

@@ -17,7 +17,7 @@ import DigitsKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var taskViewController: TaskViewController?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -63,8 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         {
             connectToFcm()
             
-            let taskViewController = TaskViewController()
-            taskViewController.registerUserTokenInDB(refreshedToken!)
+            
             FIRMessaging.messaging().subscribeToTopic("/topics/topic")
             
             
@@ -95,16 +94,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     FIRMessaging.messaging().disconnect()
                     print("Disconnected from FCM.")
         
-        let refreshedToken = FIRInstanceID.instanceID().token()
-         print("InstanceID token: \(refreshedToken)")
-        if (refreshedToken != nil)
-        {
             connectToFcm()
             
             FIRMessaging.messaging().subscribeToTopic("/topics/topic")
-           
-        }
+       
         
+    }
+    
+    func application(application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Sandbox)
+        print("In did register For remote Not with token: \(FIRInstanceID.instanceID().token())")
+        guard let refreshedToken = FIRInstanceID.instanceID().token() else {
+            return
+        }
+//        self.taskViewController?.registerUserTokenInDB(refreshedToken!)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(refreshedToken, forKey: "userToken")
+       
+        
+       
+       
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
@@ -115,6 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication)
     {
         connectToFcm()
+        
         
         application.applicationIconBadgeNumber = 0;
     }
@@ -128,6 +140,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("%@", userInfo)
         let refreshedToken = FIRInstanceID.instanceID().token()
         print("InstanceID token: \(refreshedToken)")
+        
+        if application.applicationState == UIApplicationState.Active {
+            print("App already open")
+        } else {
+            print("App opened from Notification")
+        }
+        
         
     }
     

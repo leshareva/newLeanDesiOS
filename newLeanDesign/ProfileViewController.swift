@@ -127,15 +127,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     
     func loadUserInfo() {
-//        if let userName = NSUserDefaults.standardUserDefaults().stringForKey("name") {
-//            self.discriptionLabel.text = userName
-//        }
-//        
-//        if let userPhoto = NSUserDefaults.standardUserDefaults().stringForKey("photoUrl") {
-//            self.discriptionLabel.text = userPhoto
-//        }
-        
-        
+
         guard let userId = Digits.sharedInstance().session()?.userID else {
             return
         }
@@ -154,9 +146,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
             
             
-//            NSUserDefaults.standardUserDefaults().setObject(profileImageUrl, forKey: "photoUrl")
-            
-            
             }, withCancelBlock: nil)
     }
     
@@ -168,11 +157,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             print(logoutError)
         }
         
-        
-        let loginController = LoginController()
-        loginController.profileViewController = self
-        presentViewController(loginController, animated: true, completion: nil)
         self.dismissViewControllerAnimated(true, completion: nil)
+        
+        let taskViewController = TaskViewController()
+        taskViewController.handleLogout()
+//        presentViewController(loginController, animated: true, completion: nil)
+        
         
     }
     
