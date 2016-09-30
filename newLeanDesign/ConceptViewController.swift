@@ -133,6 +133,8 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.collectionViewLayout.invalidateLayout()
     }
     
+    
+    
     var day = 0;
     var dayname = ["день", "дня", "дней"]
     
@@ -146,6 +148,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             cell.priceLabel.hidden = true
             cell.timeLabel.hidden = true
             cell.myActivityIndicator.stopAnimating()
+            
         } else if let text = concept.text {
             cell.imageView.hidden = true
             cell.textView.hidden = false
@@ -185,7 +188,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let concept = concepts[indexPath.item]
-        var height: CGFloat = 80
+        var height: CGFloat = 280
         if concept.imgUrl != nil {
             height = 200
         } else if concept.text != nil {
@@ -211,6 +214,8 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
     var conceptViewController: ConceptViewController?
     
     var myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var imageWidthAnchor: NSLayoutConstraint?
+    
     
     lazy var imageView: UIImageView = {
         let iv = UIImageView()
@@ -266,6 +271,9 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
                        priceLabel.widthAnchor == self.widthAnchor / 2,
                        priceLabel.heightAnchor == 40
         )
+        
+        imageWidthAnchor = imageView.widthAnchor.constraintEqualToConstant(200)
+        imageWidthAnchor?.active = true
         
          addSubview(timeLabel)
         addConstraints(timeLabel.leftAnchor == priceLabel.rightAnchor,

@@ -12,8 +12,7 @@ import Firebase
 import AVFoundation
 import DigitsKit
 import Swiftstraints
-
-
+import AVFoundation
 
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -22,6 +21,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     var tasks = [Task]()
     var taskDictionary = [String: Task]()
     var user: User?
+    
+    var beepSoundEffect: AVAudioPlayer!
+    
     
     static let blueColor = UIColor(r: 48, g: 140, b: 229)
     
@@ -35,7 +37,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "point")?.imageWithRenderingMode(.AlwaysOriginal), style: .Plain, target: self, action: #selector(handleMore))
         navigationController?.navigationBar.translucent = false
-     
+        self.view.backgroundColor = UIColor.whiteColor()
         
         checkIfUserIsLoggedIn()
         setupLogoView()
@@ -138,7 +140,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             if status == "none" {
                 cell.detailTextLabel?.text = "Ищем дизайнера"
             } else if status == "awareness" {
-                cell.detailTextLabel?.text = "Дизайнер разбирается в задаче"
+                cell.detailTextLabel?.text = "Дизайнер принял задачу"
             } else if status == "awarenessApprove" {
                 cell.detailTextLabel?.text = "Согласуйте понимание задачи"
             } else if status == "concept" {
@@ -160,13 +162,36 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             }, withCancelBlock: nil)
         
-        let ref = FIRDatabase.database().reference().child("tasks").child(task.taskId!).child("messages")
-        ref.observeEventType(.ChildAdded, withBlock: { (snapshot) in
-            let status = snapshot.value!["status"] as? String
-            if status == "toClient" {
-                cell.notificationsLabel.hidden = false
-            }
+        
+        let messageRef = FIRDatabase.database().reference().child("task-messages").child(task.taskId!)
+        messageRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+            
+            
+            
+            let ref = FIRDatabase.database().reference().child("messages").child(snapshot.key)
+            ref.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                let status = snapshot.value!["status"] as? String
+                if status == task.fromId {
+                    print("we have new message")
+                    cell.notificationsLabel.hidden = false
+                    
+                    let path = NSBundle.mainBundle().pathForResource("beep.mp3", ofType:nil)!
+                    let url = NSURL(fileURLWithPath: path)
+                    
+                    do {
+                        let sound = try AVAudioPlayer(contentsOfURL: url)
+                        self.beepSoundEffect = sound
+                        sound.play()
+                    } catch {
+                        // couldn't load file :(
+                    }
+                }
+                }, withCancelBlock: nil)
+            
+            
             }, withCancelBlock: nil)
+        
+        
         return cell
     }
 
@@ -309,25 +334,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         })
        
         observeUserTasks()
-        registerUserTokenInDB()
     }
     
-    
-    
-    func registerUserTokenInDB(){
-        
-//        guard let userId = Digits.sharedInstance().session()?.userID else {
-//            return
-//        }
-//      
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        if let userToken = defaults.stringForKey("userToken") {
-//            let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
-//            clientsReference.updateChildValues([userToken: 1])
-//        }
-    }
-    
-    
+
     
     func observeUserTasks() {
         self.loaderView.hidden = false

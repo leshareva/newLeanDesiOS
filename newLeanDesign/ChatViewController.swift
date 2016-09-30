@@ -41,10 +41,10 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             taskMessagesRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                 
                 let status = snapshot.value!["status"] as? String
-                if status == "toClient" {
+                if status == self.task!.fromId {
                     let key = snapshot.key
                     let values : [String: AnyObject] = ["status": "read"]
-                    taskMessagesRef.child(key).updateChildValues(values) { (error, ref) in
+                    taskMessagesRef.updateChildValues(values) { (error, ref) in
                         if error != nil {
                             print(error)
                             return
@@ -389,6 +389,9 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 userMessagesRef.updateChildValues([messageID: 1])
                 
                 self.messageField.text = nil
+                
+                let notificationRef = FIRDatabase.database().reference().child("notifications").child(toId).childByAutoId()
+                notificationRef.updateChildValues(["taskId": taskId])
                 
             }
             

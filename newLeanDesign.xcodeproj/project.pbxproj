@@ -33,6 +33,7 @@
 		CB39FB0C1D94E92F007E9365 /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0B1D94E92F007E9365 /* StepsView.swift */; };
 		CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0D1D952156007E9365 /* EmptyTableView.swift */; };
 		CB39FB101D954FB4007E9365 /* loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB0F1D954FB4007E9365 /* loader.gif */; };
+		CBE23C021D9E783D00D88041 /* beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBE23C011D9E783D00D88041 /* beep.mp3 */; };
 		CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */; };
 		CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682BF1D93EBD400CB3679 /* Main.storyboard */; };
 		CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C21D93EBD400CB3679 /* Assets.xcassets */; };
@@ -73,6 +74,7 @@
 		CB39FB0F1D954FB4007E9365 /* loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loader.gif; sourceTree = "<group>"; };
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CB6C74201D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		CBE23C011D9E783D00D88041 /* beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beep.mp3; sourceTree = "<group>"; };
 		CBE682B81D93EBD300CB3679 /* newLeanDesign.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newLeanDesign.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBE682C01D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				CB39FB0F1D954FB4007E9365 /* loader.gif */,
 				CBE682BF1D93EBD400CB3679 /* Main.storyboard */,
 				CB39FB041D942C6E007E9365 /* spinner-duo.gif */,
+				CBE23C011D9E783D00D88041 /* beep.mp3 */,
 				CB39FB051D942C6E007E9365 /* spinner.gif */,
 				CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */,
 				CBE682C71D93EBD400CB3679 /* Info.plist */,
@@ -284,6 +287,7 @@
 				CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */,
 				CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */,
 				CB39FB101D954FB4007E9365 /* loader.gif in Resources */,
+				CBE23C021D9E783D00D88041 /* beep.mp3 in Resources */,
 				CB39FB071D942C6E007E9365 /* spinner.gif in Resources */,
 				CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */,
 			);
