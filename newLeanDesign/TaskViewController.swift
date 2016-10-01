@@ -12,7 +12,7 @@ import Firebase
 import AVFoundation
 import DigitsKit
 import Swiftstraints
-import AVFoundation
+//import AVFoundation
 
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -22,7 +22,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     var taskDictionary = [String: Task]()
     var user: User?
     
-    var beepSoundEffect: AVAudioPlayer!
+//    var beepSoundEffect: AVAudioPlayer!
     
     
     static let blueColor = UIColor(r: 48, g: 140, b: 229)
@@ -42,7 +42,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         checkIfUserIsLoggedIn()
         setupLogoView()
         setupTableView()
-//        registerUserTokenInDB()
     }
     
     func setupLogoView() {
@@ -143,15 +142,26 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.detailTextLabel?.text = "Дизайнер принял задачу"
             } else if status == "awarenessApprove" {
                 cell.detailTextLabel?.text = "Согласуйте понимание задачи"
+                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.notificationsLabel.hidden = false
             } else if status == "concept" {
                 cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
             } else if status == "conceptApprove" {
                 cell.detailTextLabel?.text = "Согласуйте черновик"
+                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.notificationsLabel.hidden = false
             } else if status == "design" {
                 cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
+                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
             } else if status == "sources" {
                 cell.detailTextLabel?.text = "Примите работу"
-            } 
+                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.notificationsLabel.hidden = false
+            } else if status == "done" {
+                cell.detailTextLabel?.text = "Закройте задачу"
+                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.notificationsLabel.hidden = false
+            }
 
             if let taskImageUrl = snapshot.value!["imageUrl"] as? String {
                 cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
@@ -174,17 +184,17 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 if status == task.fromId {
                     print("we have new message")
                     cell.notificationsLabel.hidden = false
-                    
-                    let path = NSBundle.mainBundle().pathForResource("beep.mp3", ofType:nil)!
-                    let url = NSURL(fileURLWithPath: path)
-                    
-                    do {
-                        let sound = try AVAudioPlayer(contentsOfURL: url)
-                        self.beepSoundEffect = sound
-                        sound.play()
-                    } catch {
-                        // couldn't load file :(
-                    }
+//                    
+//                    let path = NSBundle.mainBundle().pathForResource("beep.mp3", ofType:nil)!
+//                    let url = NSURL(fileURLWithPath: path)
+//                    
+//                    do {
+//                        let sound = try AVAudioPlayer(contentsOfURL: url)
+//                        self.beepSoundEffect = sound
+//                        sound.play()
+//                    } catch {
+//                        // couldn't load file :(
+//                    }
                 }
                 }, withCancelBlock: nil)
             
@@ -293,7 +303,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func setupTableView() {
         let screenSize: CGRect = UIScreen.mainScreen().bounds
-        tableView.frame         =   CGRectMake(0, 0, 320, screenSize.height);
+        tableView.frame         =   CGRectMake(0, 0, 320, screenSize.height - 70);
         tableView.delegate      =   self
         tableView.dataSource    =   self
         

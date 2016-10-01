@@ -77,7 +77,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         }
         
         
-        let messageRef = FIRDatabase.database().reference().child("tasks").child(taskId).child("messages")
+        let messageRef = FIRDatabase.database().reference().child("messages")
         let messageРostRef = messageRef.childByAutoId()
         let messageValues = ["text": taskText, "taskId": taskId, "fromId": fromId, "toId": toId]
         messageРostRef.updateChildValues(messageValues) { (error, ref) in
@@ -87,6 +87,10 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
             }
             
         }
+        
+        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
+        let messageID = messageРostRef.key
+        userMessagesRef.updateChildValues([messageID: 1])
         
         view.endEditing(true)
         self.sendTaskImageToChat(fromId, taskId: taskId)
@@ -125,7 +129,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
     
     private func sendMessageWithProperties(properties: [String: AnyObject], taskId: String) {
 //        let taskId = task?.taskId as String!
-        let ref = FIRDatabase.database().reference().child("tasks").child(taskId).child("messages")
+        let ref = FIRDatabase.database().reference().child("messages")
         let fromId = Digits.sharedInstance().session()?.userID as String!
         let childRef = ref.childByAutoId()
         let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
@@ -142,6 +146,11 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
             }
             
         }
+        
+        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
+        let messageID = childRef.key
+        userMessagesRef.updateChildValues([messageID: 1])
+        
     }
  
 }

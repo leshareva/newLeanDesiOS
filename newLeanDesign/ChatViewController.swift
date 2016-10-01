@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import DigitsKit
 import DKImagePickerController
+import Realm
 
 class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     
@@ -135,8 +136,8 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textTwo.textColor = StepsView.doneTextColor
                 buttonView.hidden = true
             } else if status == "conceptApprove" {
-                buttonView.alertTextView.text = "Согласуйте черновик"
                 buttonView.alertButton.hidden = false
+                buttonView.alertTextView.text = "Согласуйте черновик"
                 buttonView.alertButton.addGestureRecognizer(tappy)
                 tappy.status = "concept"
             }else if status == "design" {
