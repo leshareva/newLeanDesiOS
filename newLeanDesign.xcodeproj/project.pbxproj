@@ -144,6 +144,7 @@
 				CB39FAF31D942BC4007E9365 /* User.swift */,
 				CB39FAF51D942BCF007E9365 /* Message.swift */,
 				CB39FAF71D942BDA007E9365 /* Concept.swift */,
+				CB9917CF1DA0276200DE30FF /* LocalMessage.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -197,7 +198,6 @@
 				CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */,
 				CBE682C71D93EBD400CB3679 /* Info.plist */,
 				CBE682CD1D93ECF000CB3679 /* GoogleService-Info.plist */,
-				CB9917CF1DA0276200DE30FF /* LocalMessage.swift */,
 			);
 			path = newLeanDesign;
 			sourceTree = "<group>";

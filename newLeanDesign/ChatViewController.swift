@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import DigitsKit
 import DKImagePickerController
-import Realm
+import RealmSwift
 
 class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     
@@ -369,35 +369,63 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
         
+        
+        
         taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
             guard let toId = snapshot.value!["toId"] as? String else {
                 return
             }
             
-            var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": toId]
-            
-            properties.forEach({values[$0] = $1})
-            
-            childRef.updateChildValues(values) { (error, ref) in
-                if error != nil {
-                    print(error)
-                    return
-                }
-                
-                
-                let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
-                let messageID = childRef.key
-                userMessagesRef.updateChildValues([messageID: 1])
-                
-                self.messageField.text = nil
-                
-                let notificationRef = FIRDatabase.database().reference().child("notifications").child(toId).childByAutoId()
-                notificationRef.updateChildValues(["taskId": taskId])
-                
-            }
-            
+            let userRef = FIRDatabase.database().reference().child("clients").child(fromId)
+                userRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                    guard let photoUrl = snapshot.value!["photoUrl"] as? String else {
+                        return
+                    }
+                    
+                    guard let name = snapshot.value!["name"] as? String else {
+                        return
+                    }
+                    
+                    var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": toId, "photoUrl": photoUrl, "name": name]
+                    
+                    properties.forEach({values[$0] = $1})
+
+                    childRef.updateChildValues(values) { (error, ref) in
+                        if error != nil {
+                            print(error)
+                            return
+                        }
+                        
+                        
+                        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
+                        let messageID = childRef.key
+                        userMessagesRef.updateChildValues([messageID: 1])
+                        
+                        self.messageField.text = nil
+                        
+                        let notificationRef = FIRDatabase.database().reference().child("notifications").child(toId).childByAutoId()
+                        notificationRef.updateChildValues(["taskId": taskId])
+                        
+                        }
+                    
+                    }, withCancelBlock: nil)
+
             }, withCancelBlock: nil)
        
+        
+        let newMessage = LocalMessage()
+        newMessage.taskId = taskId
+        
+        do {
+            let realm = try Realm();
+            try realm.write({ () -> Void in
+                realm.add(newMessage)
+                print("Save Message")
+            })
+        }
+        catch {
+            
+        }
     }
     
     

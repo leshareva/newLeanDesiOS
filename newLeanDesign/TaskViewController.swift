@@ -303,7 +303,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func setupTableView() {
         let screenSize: CGRect = UIScreen.mainScreen().bounds
-        tableView.frame         =   CGRectMake(0, 0, 320, screenSize.height - 70);
+        tableView.frame         =   CGRectMake(0, 0, screenSize.width, screenSize.height - 70);
         tableView.delegate      =   self
         tableView.dataSource    =   self
         
