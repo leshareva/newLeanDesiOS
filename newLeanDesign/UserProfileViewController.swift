@@ -38,23 +38,35 @@ class UserProfileViewController: UIViewController {
         return label
     }()
     
-    let phoneLabel: UILabel = {
-        let label = UILabel()
+    lazy var phoneLabel: UITextView = {
+        let label = UITextView()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFontOfSize(16)
         label.textColor = UIColor.blackColor()
+        label.backgroundColor = UIColor.clearColor()
         label.textAlignment = .Left
+        label.userInteractionEnabled = true
+        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleCall)))
+        label.editable = false
         return label
     }()
     
-    let emailLabel: UILabel = {
-        let label = UILabel()
+    let emailLabel: UITextView = {
+        let label = UITextView()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFontOfSize(16)
         label.textColor = UIColor.blackColor()
         label.textAlignment = .Left
+        label.editable = false
         return label
     }()
+    
+    
+    func handleCall() {
+        if let url = NSURL(string: "tel://\(self.phoneLabel.text)") {
+            UIApplication.sharedApplication().openURL(url)
+        }
+    }
     
     
     override func viewDidLoad() {
@@ -69,7 +81,11 @@ class UserProfileViewController: UIViewController {
         view.addConstraints(taskImageView.heightAnchor == 80, taskImageView.widthAnchor == 80, taskImageView.centerXAnchor == view.centerXAnchor,
                             nameLabel.centerXAnchor == view.centerXAnchor,
                             phoneLabel.leftAnchor == view.leftAnchor + 16,
-                            emailLabel.leftAnchor == view.leftAnchor + 16
+                            phoneLabel.heightAnchor == 40,
+                            emailLabel.heightAnchor == 40,
+                            emailLabel.leftAnchor == view.leftAnchor + 16,
+                            emailLabel.rightAnchor == view.rightAnchor - 16,
+                            phoneLabel.rightAnchor == view.rightAnchor - 16
         )
     }
     

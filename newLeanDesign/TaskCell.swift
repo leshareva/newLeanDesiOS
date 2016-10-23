@@ -59,7 +59,7 @@ class TaskCell: UITableViewCell {
         let view = UIView()
         view.backgroundColor = UIColor(r: 48, g: 140, b: 229)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 5
+        view.layer.cornerRadius = 7
         view.layer.masksToBounds = true
         return view
     }()
@@ -87,10 +87,10 @@ class TaskCell: UITableViewCell {
         
         
         addSubview(notificationsLabel)
-        notificationsLabel.bottomAnchor.constraintEqualToAnchor(self.bottomAnchor, constant: -16).active = true
-        notificationsLabel.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -8).active = true
-        notificationsLabel.widthAnchor.constraintEqualToConstant(10).active = true
-        notificationsLabel.heightAnchor.constraintEqualToConstant(10).active = true
+        notificationsLabel.topAnchor.constraintEqualToAnchor(taskImageView.topAnchor, constant: 2).active = true
+        notificationsLabel.leftAnchor.constraintEqualToAnchor(taskImageView.leftAnchor, constant: 2).active = true
+        notificationsLabel.widthAnchor.constraintEqualToConstant(14).active = true
+        notificationsLabel.heightAnchor.constraintEqualToConstant(14).active = true
         
     }
     
@@ -101,7 +101,7 @@ class TaskCell: UITableViewCell {
         detailTextLabel?.frame = CGRect(x: 66, y: detailTextLabel!.frame.origin.y + 2, width: detailTextLabel!.frame.width, height: detailTextLabel!.frame.height)
         textLabel?.numberOfLines = 2
         textLabel?.font = UIFont.systemFontOfSize(14)
-        detailTextLabel?.textColor = UIColor(r: 180, g: 180, b: 180)
+        detailTextLabel?.textColor = UIColor(r: 140, g: 140, b: 140)
         detailTextLabel?.font = UIFont.systemFontOfSize(12)
         
         

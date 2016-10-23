@@ -154,7 +154,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
             } else if status == "sources" {
-                cell.detailTextLabel?.text = "Примите работу"
+                cell.detailTextLabel?.text = "Дизайнер готовит исходники"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
                 cell.notificationsLabel.hidden = false
             } else if status == "done" {

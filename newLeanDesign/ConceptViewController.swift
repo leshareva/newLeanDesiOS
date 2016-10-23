@@ -32,9 +32,9 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.backgroundColor = UIColor.whiteColor()
         collectionView?.registerClass(CustomCell.self, forCellWithReuseIdentifier: customCellIdentifier)
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закрыть", style: .Plain, target: self, action: #selector(closeView))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Обсудить", style: .Plain, target: self, action: #selector(closeView))
      
-        self.buttonView.acceptTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.acceptConcept)))
+        self.buttonView.acceptTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleApproveView)))
         
     }
     
@@ -59,72 +59,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
     func acceptConcept() {
         
-        if let taskId = task!.taskId {
-            let taskRef = ref.child("tasks").child(taskId)
-            
-            taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                let status = snapshot.value!["status"] as? String
-                let time = snapshot.value!["time"] as? Int
-                
-                var newstatus = ""
-                if status == "awarenessApprove" {
-                    newstatus = "concept"
-                } else if status == "conceptApprove" {
-                    newstatus = "design"
-                } else if status == "designApprove" {
-                    newstatus = "sources"
-                }
-                
-                let startDate : NSNumber = Int(NSDate().timeIntervalSince1970)
-                let calculatedDate = NSCalendar.currentCalendar().dateByAddingUnit(NSCalendarUnit.Day, value: time!, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
-                
-                let endDate : NSNumber = Int(calculatedDate!.timeIntervalSince1970)
-                print(endDate)
-                
-                let values : [String: AnyObject] = ["status": newstatus, "start": startDate, "end": endDate]
-                taskRef.updateChildValues(values) { (error, ref) in
-                    if error != nil {
-                        print(error)
-                        return
-                    }
-                    self.buttonView.buttonLabel.text = "Согласовано"
-                    self.buttonView.acceptTaskButtonView.backgroundColor = UIColor(r: 230, g: 230, b: 230)
-                }
-                
-                
-                let statusLength = status!.characters.count
-                var step = ""
-                
-                if statusLength <= 7 {
-                    step = status!
-                } else {
-                    let index1 = status!.endIndex.advancedBy(-7)
-                    step = status!.substringToIndex(index1)
-                }
-                
-                let awStatus : [String: AnyObject] = ["status": "accept"]
-                taskRef.child(step).updateChildValues(awStatus, withCompletionBlock: { (err, ref) in
-                    if err != nil {
-                        print(err)
-                        return
-                    }
-                })
-                
-                let stepStatus : [String: AnyObject] = ["status": "none"]
-                self.ref.child("tasks").child(taskId).child(newstatus).updateChildValues(stepStatus, withCompletionBlock: { (error, ref) in
-                    if error != nil {
-                        print(error)
-                        return
-                    }
-                })
-   
-                }, withCancelBlock: nil)
-            
-                self.buttonView.userInteractionEnabled = false
-                dismissViewControllerAnimated(true, completion: nil)
-            
-            
-        }
+        
         
     }
     
@@ -152,7 +87,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         } else if let text = concept.text {
             cell.imageView.hidden = true
             cell.textView.hidden = false
-            cell.priceLabel.hidden = false
+            cell.priceLabel.hidden = true
             cell.textView.text = text
             let price = concept.price
             let time = concept.time
@@ -203,7 +138,158 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         setupView()
     }
     
+    
+    
+    
+    
+    func handleApproveView() {
+        if let taskId = task!.taskId {
+            ref.child("tasks").child(taskId).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                
+                let status = snapshot.value!["status"] as? String
+                let time = snapshot.value!["time"] as? Int
+                if let price = snapshot.value!["price"] {
+                    
+                var newstatus = ""
+                if status == "awarenessApprove" {
+                    newstatus = "concept"
+                    
+                    
+                        let alert = UIAlertController(title: "Стоимость работы — \(String(price!)) руб", message: "После принятия задачи", preferredStyle: UIAlertControllerStyle.Alert)
+                        
+                        alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
+                            self.navigationController?.popToRootViewControllerAnimated(true)
+                            
+                            self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
+                        }))
+                        
+                        alert.addAction(UIAlertAction(title: "Отмена", style: .Default, handler: { (action: UIAlertAction!) in
+                            
+                            alert.dismissViewControllerAnimated(true, completion: nil)
+    
+                        }))
+                        
+                        self.presentViewController(alert, animated: true, completion: nil)
+                   
+                    
+                    
+                } else if status == "conceptApprove" {
+                    newstatus = "design"
+                    
+                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия черновика, вы не сможете вносить глобальные изменения в черновик", preferredStyle: UIAlertControllerStyle.Alert)
+                    
+                    alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
+                        self.navigationController?.popToRootViewControllerAnimated(true)
+                        
+                        self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
+                    }))
+                    
+                    alert.addAction(UIAlertAction(title: "Отмена", style: .Default, handler: { (action: UIAlertAction!) in
+                        
+                        alert.dismissViewControllerAnimated(true, completion: nil)
+                        
+                    }))
+                    
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    
+                    
+                } else if status == "designApprove" {
+                    newstatus = "sources"
+                    
+                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия чистовика, вы не сможете вносить глобальные изменения в чистовик", preferredStyle: UIAlertControllerStyle.Alert)
+                    
+                    alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
+                        self.navigationController?.popToRootViewControllerAnimated(true)
+                        
+                        self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
+                    }))
+                    
+                    alert.addAction(UIAlertAction(title: "Отмена", style: .Default, handler: { (action: UIAlertAction!) in
+                        
+                        alert.dismissViewControllerAnimated(true, completion: nil)
+                        
+                    }))
+                    
+                    self.presentViewController(alert, animated: true, completion: nil)
+                    
+                }
+                    
+                }
+                
+                }, withCancelBlock: nil)
+            
+        }
+        
+        
+        
+    }
+    
+    
+    func sendApproveToDB(taskId: String, status: String, newstatus: String, time: Int) {
+        let taskRef = self.ref.child("tasks").child(taskId)
+        
+        taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            
+            let startDate : NSNumber = Int(NSDate().timeIntervalSince1970)
+            let calculatedDate = NSCalendar.currentCalendar().dateByAddingUnit(NSCalendarUnit.Day, value: time, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
+            
+            let endDate : NSNumber = Int(calculatedDate!.timeIntervalSince1970)
+            print(endDate)
+            
+            let values : [String: AnyObject] = ["status": newstatus, "start": startDate, "end": endDate]
+            taskRef.updateChildValues(values) { (error, ref) in
+                if error != nil {
+                    print(error)
+                    return
+                }
+                self.buttonView.buttonLabel.text = "Согласовано"
+                self.buttonView.acceptTaskButtonView.backgroundColor = UIColor(r: 230, g: 230, b: 230)
+            }
+            
+            
+            let statusLength = status.characters.count
+            var step = ""
+            
+            if statusLength <= 7 {
+                step = status
+            } else {
+                let index1 = status.endIndex.advancedBy(-7)
+                step = status.substringToIndex(index1)
+            }
+            
+            let awStatus : [String: AnyObject] = ["status": "accept"]
+            taskRef.child(step).updateChildValues(awStatus, withCompletionBlock: { (err, ref) in
+                if err != nil {
+                    print(err)
+                    return
+                }
+            })
+            
+            let stepStatus : [String: AnyObject] = ["status": "none"]
+            self.ref.child("tasks").child(taskId).child(newstatus).updateChildValues(stepStatus, withCompletionBlock: { (error, ref) in
+                if error != nil {
+                    print(error)
+                    return
+                }
+            })
+            
+            }, withCancelBlock: nil)
+        
+        
+        
+        self.buttonView.userInteractionEnabled = false
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+  
 }
+
+
+
+
+
+
+
+
 
 class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
     override init(frame: CGRect) {
@@ -286,6 +372,8 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
         myActivityIndicator.center = imageView.center
         myActivityIndicator.hidesWhenStopped = true
         myActivityIndicator.startAnimating()
+        
+        
         
     }
     

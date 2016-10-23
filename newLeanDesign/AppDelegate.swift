@@ -65,11 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (refreshedToken != nil)
         {
             connectToFcm()
-            
-            
-            FIRMessaging.messaging().subscribeToTopic("/topics/topic")
-            
-            
+            FIRMessaging.messaging().subscribeToTopic("/topics/topic")   
         }
         
     }

@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import DigitsKit
 import DKImagePickerController
-import RealmSwift
+
 
 class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     
@@ -29,14 +29,14 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
     var messages = [Message]()
-    
-    
+   
+
     func observeMessages() {
         guard let taskId = self.task?.taskId else {
             return
         }
         let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
-        userMessagesRef.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+        userMessagesRef.queryLimitedToLast(10).observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
             let taskMessagesRef = FIRDatabase.database().reference().child("messages").child(snapshot.key)
             taskMessagesRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
@@ -136,6 +136,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textTwo.textColor = StepsView.doneTextColor
                 buttonView.hidden = true
             } else if status == "conceptApprove" {
+                buttonView.hidden = false
                 buttonView.alertButton.hidden = false
                 buttonView.alertTextView.text = "Согласуйте черновик"
                 buttonView.alertButton.addGestureRecognizer(tappy)
@@ -149,6 +150,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textThree.textColor = StepsView.doneTextColor
                 buttonView.hidden = true
             } else if status == "designApprove" {
+                buttonView.hidden = false
                 buttonView.alertTextView.text = "Согласуйте чистовик"
                 buttonView.alertButton.hidden = false
                 buttonView.alertButton.addGestureRecognizer(tappy)
@@ -164,6 +166,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textFour.textColor = StepsView.doneTextColor
                 buttonView.hidden = true
             } else if status == "done" {
+                buttonView.hidden = false
                 buttonView.alertTextView.text = "Задача закрыта, исходники лежат в вашей папке"
                 buttonView.alertButton.hidden = false
                 buttonView.alertButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleDone)))
@@ -303,9 +306,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         
         pickerController.didSelectAssets = { (assets: [DKAsset]) in
-            print("didSelectAssets")
-            print(assets)
-            
+
             for each in assets {
                 each.fetchOriginalImage(false) {
                     (image: UIImage?, info: [NSObject : AnyObject]?) in
@@ -378,15 +379,23 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             
             let userRef = FIRDatabase.database().reference().child("clients").child(fromId)
                 userRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                    guard let photoUrl = snapshot.value!["photoUrl"] as? String else {
-                        return
+                    
+                    var photoUrl: String?
+                    var name: String?
+                    
+                   if snapshot.hasChild("photoUrl") {
+                     photoUrl = snapshot.value!["photoUrl"] as? String
+                   } else {
+                        photoUrl = "none"
                     }
                     
-                    guard let name = snapshot.value!["name"] as? String else {
-                        return
+                    if snapshot.hasChild("name") {
+                       name = snapshot.value!["name"] as? String
+                    } else {
+                        name = "none"
                     }
                     
-                    var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": toId, "photoUrl": photoUrl, "name": name]
+                    var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": toId, "photoUrl": photoUrl!, "name": name!]
                     
                     properties.forEach({values[$0] = $1})
 
@@ -407,25 +416,12 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                         notificationRef.updateChildValues(["taskId": taskId])
                         
                         }
-                    
+
                     }, withCancelBlock: nil)
 
             }, withCancelBlock: nil)
        
         
-        let newMessage = LocalMessage()
-        newMessage.taskId = taskId
-        
-        do {
-            let realm = try Realm();
-            try realm.write({ () -> Void in
-                realm.add(newMessage)
-                print("Save Message")
-            })
-        }
-        catch {
-            
-        }
     }
     
     
@@ -459,7 +455,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
 //    func handleKeyboardDidShow() {
-//        if messages.count >= 0 {
+//        if messages.count >= 3 {
 //            let indexPath = NSIndexPath(forItem: messages.count - 1, inSection: 0)
 //            collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
 //        }
@@ -519,9 +515,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
         return cell
     }
-    
 
-    
     
     private func setupCell(cell: ChatMessageCell, message: Message) {
         if let messageImageUrl = message.imageUrl {
@@ -533,6 +527,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
            
         } else {
             cell.messageImageView.hidden = true
+            cell.textView.dataDetectorTypes = UIDataDetectorTypes.All
         }
         
         if message.fromId == Digits.sharedInstance().session()?.userID {
@@ -552,8 +547,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
     }
     
-    
-    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         collectionView?.collectionViewLayout.invalidateLayout()
     }
@@ -564,7 +557,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         let message = messages[indexPath.item]
         if let text = message.text {
-            height = estimateFrameForText(text).height + 14
+            height = estimateFrameForText(text).height + 20
         } else if let imageWidth = message.imageWidth?.floatValue, imageHeight = message.imageHeight?.floatValue {
             //h1 / w1 = h2 / w2
             //solve for h1
@@ -639,41 +632,47 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     var startingFrame: CGRect?
     var blackBackgroundView: UIView?
     var startingImageView: UIImageView?
+   
     
     func performZoomInForImageView(startingImageView: UIImageView) {
+    
         self.startingImageView = startingImageView
         self.startingImageView?.hidden = true
         
         startingFrame = startingImageView.superview?.convertRect(startingImageView.frame, toView: nil)
-        let zoomingImageView = UIImageView(frame: startingFrame!)
-        
-        zoomingImageView.image = startingImageView.image
+        let zoomingImageView = ZoomingImageView(frame: startingFrame!)
+    
+        zoomingImageView.imageView.image = startingImageView.image
+       
+        zoomingImageView.scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         zoomingImageView.userInteractionEnabled = true
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
+        
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             blackBackgroundView = UIView(frame: keyWindow.frame)
             blackBackgroundView?.backgroundColor = UIColor.blackColor()
             blackBackgroundView?.alpha = 0
             inputContainerView.alpha = 1
             keyWindow.addSubview(blackBackgroundView!)
-            
             keyWindow.addSubview(zoomingImageView)
             
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: {
-                //math?
-                
-                // h2 / w1 = h1 / w1
-                //h2 = h1 / w1 * w1
-                self.blackBackgroundView!.alpha = 1
+            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { 
+                self.blackBackgroundView?.alpha = 1
                 self.inputContainerView.alpha = 0
+                
+                
                 
                 let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
                 
-                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-                zoomingImageView.center = keyWindow.center
+                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: keyWindow.frame.height)
+                
+                zoomingImageView.imageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+                
+                
+                
+                zoomingImageView.imageView.center = keyWindow.center
+                
                 }, completion: nil)
-            
-            
         }
     }
     

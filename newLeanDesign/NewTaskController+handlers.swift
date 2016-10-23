@@ -42,8 +42,6 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
     
     
     func addNewTask() {
-        
-        
         guard let fromId = Digits.sharedInstance().session()?.userID else {
             return
         }
@@ -51,8 +49,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         guard let taskText = taskTextField.text where !taskText.isEmpty else {
             return
         }
-        
-        
+
         let ref = FIRDatabase.database().reference().child("tasks")
         let postRef = ref.childByAutoId()
         let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)

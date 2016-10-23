@@ -16,6 +16,6 @@ pod 'Firebase/Storage'
 pod 'Firebase/Messaging'
 pod 'DKImagePickerController'
 pod 'Swiftstraints'
-pod 'RealmSwift'
+pod 'SlackTextViewController'
 
 end
