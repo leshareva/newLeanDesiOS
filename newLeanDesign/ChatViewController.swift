@@ -36,7 +36,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             return
         }
         let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
-        userMessagesRef.queryLimitedToLast(10).observeEventType(.ChildAdded, withBlock: { (snapshot) in
+        userMessagesRef.queryLimitedToLast(20).observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
             let taskMessagesRef = FIRDatabase.database().reference().child("messages").child(snapshot.key)
             taskMessagesRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in

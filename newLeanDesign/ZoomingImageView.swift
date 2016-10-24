@@ -26,17 +26,12 @@ class ZoomingImageView: UIView, UIScrollViewDelegate {
         scrollView.backgroundColor = UIColor.clearColor()
         
 
-        scrollView.contentSize = imageView.bounds.size
+        scrollView.contentSize = self.bounds.size
         
        
         
         scrollView.addSubview(imageView)
         addSubview(scrollView)
-        
-//        scrollView.addConstraints(imageView.widthAnchor == scrollView.widthAnchor,
-//                                  imageView.heightAnchor == scrollView.heightAnchor,
-//                                  imageView.leftAnchor == scrollView.leftAnchor,
-//                                  imageView.topAnchor == scrollView.topAnchor)
         
         
         scrollView.delegate = self
