@@ -81,12 +81,20 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         tf.font = UIFont.systemFontOfSize(16)
         tf.textColor = UIColor(r: 180, g: 180, b: 180)
         view.addSubview(tf)
+        
         view.addConstraints("H:|-16-[\(tf)]")
         view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
         
         return view
     }()
     
+    let phoneField: UILabel = {
+        let tf = UILabel()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.font = UIFont.systemFontOfSize(16)
+        return tf
+    }()
+
     
     lazy var logoutButton: UIView = {
         let view = UIView()
@@ -145,13 +153,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 self.profilePic.loadImageUsingCashWithUrlString(profileImageUrl)
             }
             
+            if let phone = snapshot.value!["phone"] as? String  {
+                self.phoneField.text = phone
+            }
             
             }, withCancelBlock: nil)
     }
     
     func handleLogout() {
-        do {
-            try Digits.sharedInstance().logOut()
+        Digits.sharedInstance().logOut()
+        
+       do {
             try FIRAuth.auth()?.signOut()
         } catch let logoutError {
             print(logoutError)
@@ -179,7 +191,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         view.addSubview(inputForPhone)
         view.addSubview(closeButton)
         view.addSubview(logoutButton)
-        
+       
         
         view.addConstraints("V:|-20-[\(closeButton)]")
         view.addConstraints("H:|-8-[\(closeButton)]")
@@ -203,7 +215,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         inputForName.addSubview(firstField)
         inputForName.addConstraints("H:|-100-[\(firstField)]|")
         inputForName.addConstraints( firstField.centerYAnchor == inputForName.centerYAnchor)
-        
+        inputForPhone.addSubview(phoneField)
+        inputForPhone.addConstraints("H:|-100-[\(phoneField)]|")
+        inputForPhone.addConstraints( phoneField.centerYAnchor == inputForPhone.centerYAnchor)
         
         
         
@@ -212,7 +226,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var assets: [DKAsset]?
     
     
-    public func handleSelectProfileImageView() {
+    internal func handleSelectProfileImageView() {
         let pickerController = DKImagePickerController()
         
         
@@ -222,7 +236,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 each.fetchOriginalImage(false) {
                     (image: UIImage?, info: [NSObject : AnyObject]?) in
                     self.profilePic.image = image
-                    let imageData: NSData = UIImagePNGRepresentation(image!)!
+//                    let imageData: NSData = UIImagePNGRepresentation(image!)!
                     self.uploadToFirebaseStorageUsingImage(image!)
                 }
             }

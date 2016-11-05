@@ -72,14 +72,20 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .Plain, target: self, action: #selector(dissmissController))
                 navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .Plain, target: self, action: #selector(checkUser));
         
-        
+        checkUser()
         
         setupInputsForLogin()
     }
     
     func checkUser() {
         
-        guard let userId = Digits.sharedInstance().session()?.userID else {
+        let digits = Digits.sharedInstance()
+
+        
+        guard let userId = digits.session()?.userID else {
+            return
+        }
+        guard let phone = digits.session()?.phoneNumber else {
             return
         }
         
@@ -95,6 +101,18 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
                 
             } else {
                 print("No this id in client database")
+                
+                let requestsReference = ref.child("requests").child("clients").child(userId)
+                let values : [String: AnyObject] = ["phone": phone, "state": "none", "id": userId]
+               
+                
+                requestsReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                    if err != nil {
+                        print(err)
+                        return
+                    }
+                })
+                
             }
             
             }, withCancelBlock: nil)

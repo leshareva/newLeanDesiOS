@@ -37,7 +37,6 @@ class ChatMessageCell: UICollectionViewCell {
     
     var profileImageView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "dog")
         image.translatesAutoresizingMaskIntoConstraints = false
         image.layer.cornerRadius = 16
         image.layer.masksToBounds = true
@@ -56,10 +55,6 @@ class ChatMessageCell: UICollectionViewCell {
         return image
     }()
     
-
-    
-  
-    
     func handleZoomTap(tapGesture: UITapGestureRecognizer) {
         //Pro Tip: don't perform a lot of custom logic inside of a view class
         if let imageView = tapGesture.view as? UIImageView {
@@ -77,26 +72,26 @@ class ChatMessageCell: UICollectionViewCell {
         
         addSubview(bubbleView)
         addSubview(textView)
-        addSubview(profileImageView)
         bubbleView.addSubview(messageImageView)
        
-             
-        
         
         messageImageView.leftAnchor.constraintEqualToAnchor(bubbleView.leftAnchor).active = true
         messageImageView.rightAnchor.constraintEqualToAnchor(bubbleView.rightAnchor).active = true
         messageImageView.widthAnchor.constraintEqualToAnchor(bubbleView.widthAnchor).active = true
         messageImageView.heightAnchor.constraintEqualToAnchor(bubbleView.heightAnchor).active = true
         
-        profileImageView.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 8).active = true
-        profileImageView.bottomAnchor.constraintEqualToAnchor(self.bottomAnchor).active = true
+        addSubview(profileImageView)
         profileImageView.widthAnchor.constraintEqualToConstant(32).active = true
         profileImageView.heightAnchor.constraintEqualToConstant(32).active = true
+        profileImageView.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 8).active = true
+        profileImageView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
+        
         
         bubleViewRightAnchor = bubbleView.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -8)
         bubleViewRightAnchor?.active = true
         
-        bubbleViewLeftAnchor = bubbleView.leftAnchor.constraintEqualToAnchor(profileImageView.rightAnchor, constant: 8)
+        bubbleViewLeftAnchor = bubbleView.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 48)
+        bubbleViewLeftAnchor?.active = true
         
         bubbleView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
         bubbleWidthAnchor = bubbleView.widthAnchor.constraintEqualToConstant(200)
@@ -113,10 +108,6 @@ class ChatMessageCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
-    
     
 }
 

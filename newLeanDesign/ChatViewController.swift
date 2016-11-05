@@ -29,21 +29,22 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
     var messages = [Message]()
-   
+    var sentMessages = [String]()
 
     func observeMessages() {
         guard let taskId = self.task?.taskId else {
             return
         }
+       
         let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
         userMessagesRef.queryLimitedToLast(20).observeEventType(.ChildAdded, withBlock: { (snapshot) in
             
             let taskMessagesRef = FIRDatabase.database().reference().child("messages").child(snapshot.key)
             taskMessagesRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                
-                let status = snapshot.value!["status"] as? String
+            
+            let status = snapshot.value!["status"] as? String
                 if status == self.task!.fromId {
-                    let key = snapshot.key
+                    
                     let values : [String: AnyObject] = ["status": "read"]
                     taskMessagesRef.updateChildValues(values) { (error, ref) in
                         if error != nil {
@@ -53,21 +54,37 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                     }
                 }
                 
-                
-                guard let dictionary = snapshot.value as? [String: AnyObject] else {
+                guard var dictionary = snapshot.value as? [String: AnyObject] else {
                     return
                 }
+
                 
-                self.messages.append(Message(dictionary: dictionary))
+                
+                if let text = dictionary["text"] as? String {
+                    if self.sentMessages.contains(text){
+                        print("we alrady have this message")
+                    } else {
+                        self.messages.append(Message(dictionary: dictionary))
+                    }
+                }
+
+                if let imageUrl = dictionary["imageUrl"] as? String {
+                    if self.sentMessages.contains(imageUrl){
+                        print("we alrady have this message")
+                    } else {
+                        self.messages.append(Message(dictionary: dictionary))
+                    }
+                }
+                
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     self.collectionView?.reloadData()
-                    
                     //scroll to the last index
                     let indexPath = NSIndexPath(forItem: self.messages.count-1, inSection: 0)
                     self.collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
                     
                 })
+
                 }, withCancelBlock: nil)
             
             }, withCancelBlock: nil)
@@ -88,6 +105,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         
         collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 8, right: 0)
         collectionView?.alwaysBounceVertical = true
@@ -310,7 +328,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             for each in assets {
                 each.fetchOriginalImage(false) {
                     (image: UIImage?, info: [NSObject : AnyObject]?) in
-                    let imageData: NSData = UIImagePNGRepresentation(image!)!
+                   
                     self.uploadToFirebaseStorageUsingImage(image!)
                 }
             }
@@ -342,10 +360,22 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
     }
     
+    let sendMessageController = SendMessageController()
+    
     private func sendMessageWithImageUrl(imageUrl: String, image: UIImage) {
-        let properties: [String: AnyObject] = ["imageUrl": imageUrl, "imageWidth": image.size.width, "imageHeight": image.size.height]
+         let taskId = task?.taskId as String!
+         let fromId = Digits.sharedInstance().session()?.userID as String!
+        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+        let properties: [String: AnyObject] = ["imageUrl": imageUrl, "imageWidth": image.size.width, "imageHeight": image.size.height, "taskId": taskId, "timestamp": timestamp, "fromId": fromId]
         
-        sendMessageWithProperties(properties)
+        self.sentMessages.append(String(imageUrl))
+        self.messages.append(Message(dictionary: properties))
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.collectionView?.reloadData()
+        })
+       
+        self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId)
     }
     
     func handleSend() {
@@ -354,75 +384,35 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
         
         if messageText != "" {
+            let taskId = task?.taskId as String!
+           
+            let fromId = Digits.sharedInstance().session()?.userID as String!
+            
+            let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+
+            let dictionary: [String: AnyObject] = ["text": messageText, "taskId": taskId, "timestamp": timestamp, "fromId": fromId]
+            self.sentMessages.append(String(messageText))
+            
+            self.messages.append(Message(dictionary: dictionary))
+            
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self.collectionView?.reloadData()
+            })
+            
+            
             let properties: [String: AnyObject] = ["text": messageText]
-            sendMessageWithProperties(properties)
+            self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId)
+            
+            self.messageField.text = nil
+//            let properties: [String: AnyObject] = ["text": messageText]
+//            sendMessageWithProperties(properties)
         }
         
         
     }
     
-    private func sendMessageWithProperties(properties: [String: AnyObject]) {
-        let taskId = task?.taskId as String!
-        let ref = FIRDatabase.database().reference().child("messages")
-        let fromId = Digits.sharedInstance().session()?.userID as String!
-        let childRef = ref.childByAutoId()
-        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
-        
-        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-        
-        
-        
-        taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-            guard let toId = snapshot.value!["toId"] as? String else {
-                return
-            }
-            
-            let userRef = FIRDatabase.database().reference().child("clients").child(fromId)
-                userRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                    
-                    var photoUrl: String?
-                    var name: String?
-                    
-                   if snapshot.hasChild("photoUrl") {
-                     photoUrl = snapshot.value!["photoUrl"] as? String
-                   } else {
-                        photoUrl = "none"
-                    }
-                    
-                    if snapshot.hasChild("name") {
-                       name = snapshot.value!["name"] as? String
-                    } else {
-                        name = "none"
-                    }
-                    
-                    var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": toId, "photoUrl": photoUrl!, "name": name!]
-                    
-                    properties.forEach({values[$0] = $1})
-
-                    childRef.updateChildValues(values) { (error, ref) in
-                        if error != nil {
-                            print(error)
-                            return
-                        }
-                        
-                        
-                        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
-                        let messageID = childRef.key
-                        userMessagesRef.updateChildValues([messageID: 1])
-                        
-                        self.messageField.text = nil
-                        
-                        let notificationRef = FIRDatabase.database().reference().child("notifications").child(toId).childByAutoId()
-                        notificationRef.updateChildValues(["taskId": taskId])
-                        
-                        }
-
-                    }, withCancelBlock: nil)
-
-            }, withCancelBlock: nil)
-       
-        
-    }
+    
     
     
     
@@ -478,7 +468,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
     func handleKeyboardWillHide(notification: NSNotification) {
-        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
+//        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
         let keyboardDuration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue
         containerViewBottomAnchor?.constant = 0
         UIView.animateWithDuration(keyboardDuration!) {
@@ -667,9 +657,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: keyWindow.frame.height)
                 
                 zoomingImageView.imageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-                
-                
-                
+                 
                 zoomingImageView.imageView.center = keyWindow.center
                 
                 }, completion: nil)

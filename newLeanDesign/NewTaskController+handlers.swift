@@ -52,7 +52,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
 
         let ref = FIRDatabase.database().reference().child("tasks")
         let postRef = ref.childByAutoId()
-        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+//        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
         let taskId = postRef.key
         let toId = "designStudio"
         let phone = Digits.sharedInstance().session()?.phoneNumber
@@ -95,7 +95,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
     }
     
     func sendTaskImageToChat(fromId: String, taskId: String) {
-        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+//        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
         let image = attachImageView.image
         let imageName = NSUUID().UUIDString
         let imageref = FIRStorage.storage().reference().child("task_image").child(imageName)

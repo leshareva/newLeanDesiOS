@@ -14,7 +14,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
     let ref = FIRDatabase.database().reference()
     let customCellIdentifier = "customCellIdentifier"
-    
+ 
     
     let buttonView = ButtonView()
     
@@ -57,13 +57,6 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
 
     
     
-    func acceptConcept() {
-        
-        
-        
-    }
-    
-    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         collectionView?.collectionViewLayout.invalidateLayout()
     }
@@ -76,13 +69,17 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(customCellIdentifier, forIndexPath: indexPath) as! CustomCell
         
+       
+        
         let concept = concepts[indexPath.item]
+        
         if let imageUrl = concept.imgUrl {
             cell.imageView.loadImageUsingCashWithUrlString(imageUrl)
             cell.textView.hidden = true
             cell.priceLabel.hidden = true
             cell.timeLabel.hidden = true
             cell.myActivityIndicator.stopAnimating()
+//            cell.imageWidthAnchor?.constant = s
             
         } else if let text = concept.text {
             cell.imageView.hidden = true
@@ -92,9 +89,16 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             let price = concept.price
             let time = concept.time
             cell.priceLabel.text = String(price!) + " ₽"
- 
-            checkNumberOfDays(Int(time!))
-            cell.timeLabel.text = String(time!) + " " + String(dayname[day])
+//            checkNumberOfDays(Int(time!))
+//            cell.timeLabel.text = String(time!) + " " + String(dayname[day])
+            if Int(time!) <= 3 {
+                cell.timeLabel.text = "1 день"
+            } else if Int(time!) > 3 && Int(time!) <= 6 {
+                 cell.timeLabel.text = "2 дня"
+            } else if Int(time!) > 6 && Int(time!) <= 9 {
+                cell.timeLabel.text = "3 дня"
+            }
+            
 
         }
         return cell
@@ -122,14 +126,27 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     }
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let concept = concepts[indexPath.item]
         var height: CGFloat = 280
+        
+        let concept = concepts[indexPath.item]
+        let width = UIScreen.mainScreen().bounds.width
+        let screenWidth: CGFloat = view.frame.width
+        
         if concept.imgUrl != nil {
-            height = 200
+            if let imageWidth = concept.imageWidth?.floatValue, imageHeight = concept.imageHeight?.floatValue {
+                //h1 / w1 = h2 / w2
+                //solve for h1
+                //h1 = h2 / w2 * w1
+                height = CGFloat(imageHeight / imageWidth * Float(screenWidth))
+            }
         } else if concept.text != nil {
             height = view.frame.height
         }
-        return CGSizeMake(view.frame.width, height)
+        
+        
+
+        
+        return CGSize(width: width, height: height)
     }
     
     
@@ -145,9 +162,9 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     func handleApproveView() {
         if let taskId = task!.taskId {
             ref.child("tasks").child(taskId).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                
+                var time : Int?
                 let status = snapshot.value!["status"] as? String
-                let time = snapshot.value!["time"] as? Int
+                time = snapshot.value!["time"] as? Int
                 if let price = snapshot.value!["price"] {
                     
                 var newstatus = ""
@@ -155,7 +172,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                     newstatus = "concept"
                     
                     
-                        let alert = UIAlertController(title: "Стоимость работы — \(String(price!)) руб", message: "После принятия задачи", preferredStyle: UIAlertControllerStyle.Alert)
+                        let alert = UIAlertController(title: "Стоимость работы — \(String(price!)) руб", message: "", preferredStyle: UIAlertControllerStyle.Alert)
                         
                         alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
                             self.navigationController?.popToRootViewControllerAnimated(true)
@@ -196,7 +213,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                 } else if status == "designApprove" {
                     newstatus = "sources"
                     
-                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия чистовика, вы не сможете вносить глобальные изменения в чистовик", preferredStyle: UIAlertControllerStyle.Alert)
+                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия чистовика вы не сможете вносить в него корректировки. Дизайнер будет готовить исходники.", preferredStyle: UIAlertControllerStyle.Alert)
                     
                     alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
                         self.navigationController?.popToRootViewControllerAnimated(true)
@@ -228,10 +245,19 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     func sendApproveToDB(taskId: String, status: String, newstatus: String, time: Int) {
         let taskRef = self.ref.child("tasks").child(taskId)
         
+        var days: Int?
+        if Int(time) <= 3 {
+            days = 1
+        } else if Int(time) > 3 && Int(time) <= 6 {
+            days = 2
+        } else if Int(time) > 6 && Int(time) <= 9 {
+            days = 3
+        }
+        
         taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
             
             let startDate : NSNumber = Int(NSDate().timeIntervalSince1970)
-            let calculatedDate = NSCalendar.currentCalendar().dateByAddingUnit(NSCalendarUnit.Day, value: time, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
+            let calculatedDate = NSCalendar.currentCalendar().dateByAddingUnit(NSCalendarUnit.Day, value: days!, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
             
             let endDate : NSNumber = Int(calculatedDate!.timeIntervalSince1970)
             print(endDate)
@@ -335,15 +361,15 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
         return ul
     }()
     
-    
+ 
     
     func setupView() {
         backgroundColor = UIColor.whiteColor()
         addSubview(imageView)
         addSubview(textView)
         addConstraints(imageView.leftAnchor == self.leftAnchor,
-                       imageView.widthAnchor == self.widthAnchor,
                        imageView.topAnchor == self.topAnchor,
+                       imageView.widthAnchor == self.widthAnchor,
                        imageView.heightAnchor == self.heightAnchor,
                        textView.leftAnchor == self.leftAnchor + 8,
                        textView.widthAnchor == self.widthAnchor - 16,
@@ -358,8 +384,9 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
                        priceLabel.heightAnchor == 40
         )
         
-        imageWidthAnchor = imageView.widthAnchor.constraintEqualToConstant(200)
-        imageWidthAnchor?.active = true
+//        imageWidthAnchor = imageView.widthAnchor.constraintEqualToConstant(200)
+//        imageWidthAnchor?.active = true
+        
         
          addSubview(timeLabel)
         addConstraints(timeLabel.leftAnchor == priceLabel.rightAnchor,
@@ -394,49 +421,43 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
     var blackBackgroundView: UIView?
     var startingImageView: UIImageView?
     
+    
     func performZoomInForImageView(startingImageView: UIImageView) {
+        
         self.startingImageView = startingImageView
         self.startingImageView?.hidden = true
         
         startingFrame = startingImageView.superview?.convertRect(startingImageView.frame, toView: nil)
-        let zoomingImageView = UIImageView(frame: startingFrame!)
+        let zoomingImageView = ZoomingImageView(frame: startingFrame!)
         
-        zoomingImageView.image = startingImageView.image
+        zoomingImageView.imageView.image = startingImageView.image
+        
+        zoomingImageView.scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         zoomingImageView.userInteractionEnabled = true
-       
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
+        
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             blackBackgroundView = UIView(frame: keyWindow.frame)
             blackBackgroundView?.backgroundColor = UIColor.blackColor()
             blackBackgroundView?.alpha = 0
-            //            inputContainerView.alpha = 1
-            keyWindow.addSubview(blackBackgroundView!)
             
+            keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
             
             UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: {
-                //math?
-                
-                // h2 / w1 = h1 / w1
-                //h2 = h1 / w1 * w1
-                self.blackBackgroundView!.alpha = 1
-               
-                
+                self.blackBackgroundView?.alpha = 1
+
                 let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
                 
-                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-                zoomingImageView.center = keyWindow.center
+                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: keyWindow.frame.height)
                 
-             
-               
+                zoomingImageView.imageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+                
+                zoomingImageView.imageView.center = keyWindow.center
                 
                 }, completion: nil)
-            
-            
-            
         }
     }
-    
     
   
     

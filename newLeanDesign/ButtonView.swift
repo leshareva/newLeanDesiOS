@@ -21,7 +21,7 @@ class ButtonView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    static let blueColor = UIColor(r: 48, g: 140, b: 229)
+    static let blueColor = UIColor(r: 0, g: 127, b: 255)
 
     lazy var acceptTaskButtonView: UIView = {
         let view = UIView()

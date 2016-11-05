@@ -115,9 +115,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
             taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                 
                 if let dictionary = snapshot.value as? [String: AnyObject] {
-                    guard let status = snapshot.value!["status"] as? String else {
-                        return
-                    }
+                 
                         let task = Task()
                         task.setValuesForKeysWithDictionary(dictionary)
                         self.tasks.append(task)

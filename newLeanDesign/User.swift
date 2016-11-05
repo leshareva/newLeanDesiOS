@@ -27,7 +27,10 @@ class User: NSObject {
     var rate: NSNumber?
     var photoUrl: String?
     var token: String?
-    var folder: String?
     var status: String?
+    var firstName: String?
+    var lastName: String?
+    var otherName: String?
+    var conceptUrl: String?
 }
 

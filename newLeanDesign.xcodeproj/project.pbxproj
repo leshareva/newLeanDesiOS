@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
+		CB34A1851DC714260020F53E /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* NotificationView.swift */; };
 		CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD31D942944007E9365 /* TaskViewController.swift */; };
 		CB39FAD61D942A17007E9365 /* ArchiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD51D942A17007E9365 /* ArchiveViewController.swift */; };
 		CB39FAD91D942A48007E9365 /* NewTaskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD81D942A48007E9365 /* NewTaskController.swift */; };
@@ -46,6 +48,8 @@
 		0AFFFEE0C8819E37C5607F30 /* Pods-newLeanDesign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newLeanDesign.debug.xcconfig"; path = "Pods/Target Support Files/Pods-newLeanDesign/Pods-newLeanDesign.debug.xcconfig"; sourceTree = "<group>"; };
 		C16FCC02EBD3B69D56B8BEB1 /* Pods-newLeanDesign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newLeanDesign.release.xcconfig"; path = "Pods/Target Support Files/Pods-newLeanDesign/Pods-newLeanDesign.release.xcconfig"; sourceTree = "<group>"; };
 		C8E799A76A4D5AA8B5DF3D87 /* Pods_newLeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_newLeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
+		CB34A1841DC714260020F53E /* NotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		CB39FAD31D942944007E9365 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		CB39FAD51D942A17007E9365 /* ArchiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveViewController.swift; sourceTree = "<group>"; };
 		CB39FAD81D942A48007E9365 /* NewTaskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTaskController.swift; sourceTree = "<group>"; };
@@ -117,6 +121,7 @@
 				CB39FAE21D942AD9007E9365 /* ProfileViewController.swift */,
 				CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */,
 				CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */,
+				CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -159,6 +164,7 @@
 				CB39FB021D942C3F007E9365 /* ButtonView.swift */,
 				CB39FB0D1D952156007E9365 /* EmptyTableView.swift */,
 				CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */,
+				CB34A1841DC714260020F53E /* NotificationView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -361,12 +367,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
+				CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */,
 				CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */,
 				CB39FAFD1D942C18007E9365 /* ChatMessageCell.swift in Sources */,
 				CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */,
 				CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */,
 				CB39FAF61D942BCF007E9365 /* Message.swift in Sources */,
 				CB39FB031D942C3F007E9365 /* ButtonView.swift in Sources */,
+				CB34A1851DC714260020F53E /* NotificationView.swift in Sources */,
 				CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */,
 				CB39FAF41D942BC4007E9365 /* User.swift in Sources */,
 				CB39FAFB1D942C04007E9365 /* TaskCell.swift in Sources */,
@@ -507,6 +515,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -520,6 +529,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

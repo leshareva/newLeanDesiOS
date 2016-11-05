@@ -11,7 +11,7 @@ import Firebase
 import FirebaseMessaging
 import Fabric
 import DigitsKit
-
+//import Flurry_iOS_SDK
 
 
 @UIApplicationMain
@@ -19,17 +19,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var taskViewController: TaskViewController?
-
+    var tasks = [Task]()
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+//        Flurry.setDebugLogEnabled(true);
+//        Flurry.startSession("ZXPZJMMTYDFZRBRHW339");
         
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window?.makeKeyAndVisible()
         
         window?.rootViewController = UINavigationController(rootViewController: TaskViewController())
         
-       
         
-        UINavigationBar.appearance().barTintColor = UIColor(r: 48, g: 140, b: 229)
+        UINavigationBar.appearance().barTintColor = UIColor(r: 0, g: 140, b: 255)
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
         
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
@@ -128,6 +131,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
+    var navController: UINavigationController?
+    
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         print("MessageID: \(userInfo["gcm.message_id"])")
         print("%@", userInfo)
@@ -139,6 +144,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("App already open")
         } else {
             print("App opened from Notification")
+            
+            if let taskId = userInfo["gcm.notification.taskId"] as? String {
+//                print(taskId)
+   //             let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
+                
+                let taskViewController = TaskViewController()
+                
+                let dictionary: [String: AnyObject] = ["taskId": taskId]
+                let task = Task()
+                
+                task.setValuesForKeysWithDictionary(dictionary)
+                taskViewController.showChatControllerForUser(task)
+            }
+            
+            
+            
         }
         
         

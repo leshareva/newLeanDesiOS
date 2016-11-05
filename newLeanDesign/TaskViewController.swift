@@ -83,12 +83,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     companyView.priceLabel.text = String(sum) + " ₽"
                 }
                 
-                guard let folderUrl = snapshot.value!["folderUrl"] as? String else {
+                guard let conceptUrl = snapshot.value!["conceptUrl"] as? String else {
                     return
                 }
-                 NSUserDefaults.standardUserDefaults().setObject(folderUrl, forKey: "folderUrl")
-                
-                
+                 NSUserDefaults.standardUserDefaults().setObject(conceptUrl, forKey: "conceptUrl")
+
                 companyView.conceptButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
                 
                 }, withCancelBlock: nil)
@@ -101,7 +100,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func openConceptFolder() {
-        if let folderUrlFromCash = NSUserDefaults.standardUserDefaults().stringForKey("folderUrl") {
+        if let folderUrlFromCash = NSUserDefaults.standardUserDefaults().stringForKey("conceptUrl") {
            UIApplication.sharedApplication().openURL(NSURL(string: folderUrlFromCash)!)
         }
         
@@ -153,8 +152,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             } else if status == "design" {
                 cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
-            } else if status == "sources" {
-                cell.detailTextLabel?.text = "Дизайнер готовит исходники"
+            } else if status == "designApprove" {
+                cell.detailTextLabel?.text = "Согласуйте чистовик"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
                 cell.notificationsLabel.hidden = false
             } else if status == "done" {
@@ -256,9 +255,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func handleLogout() {
+        Digits.sharedInstance().logOut()
+        
         do {
             try FIRAuth.auth()?.signOut()
-            try Digits.sharedInstance().logOut()
         } catch let logoutError {
             print(logoutError)
         }
@@ -362,7 +362,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 taskRef.queryOrderedByChild("time").observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                     
                         if let dictionary = snapshot.value as? [String: AnyObject] {
-                            let status = snapshot.value!["status"] as? String
+//                            let status = snapshot.value!["status"] as? String
                                 let task = Task()
                                 task.setValuesForKeysWithDictionary(dictionary)
                                 self.tasks.append(task)
