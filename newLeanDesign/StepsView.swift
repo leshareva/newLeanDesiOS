@@ -16,7 +16,7 @@ class StepsView: UIView {
         setupView()
     }
     
-    static let activeColor = UIColor(r: 237, g: 186, b: 10)
+    static let activeColor = UIColor(r: 0, g: 127, b: 255)
     static let activeTextColor = UIColor.whiteColor()
     static let doneColor = UIColor(r: 192, g: 203, b: 214)
     static let doneTextColor = UIColor(r: 130, g: 147, b: 164)

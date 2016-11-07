@@ -12,7 +12,8 @@ import Firebase
 
 class LoginController: UIViewController {
     
-    //    var tasksListController: TasksListController?
+        var startViewController: StartViewController?
+    
     var taskViewController: TaskViewController?
     var newClientViewController: NewClientViewController?
     var profileViewController: ProfileViewController?
@@ -22,7 +23,7 @@ class LoginController: UIViewController {
         
         // Set up your own button to call Digits
         let loginButton = UIButton()
-        loginButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        loginButton.setTitleColor(UIColor(r: 0, g: 127, b: 255), forState: .Normal)
         loginButton.setTitle("Войти", forState: .Normal)
         loginButton.addTarget(self, action: #selector(self.didTapLoginButton(_:)), forControlEvents: .TouchUpInside)
         loginButton.sizeToFit()
@@ -32,7 +33,7 @@ class LoginController: UIViewController {
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         
         
-        view.backgroundColor = UIColor(r: 48, g: 140, b: 229)
+        view.backgroundColor = UIColor(r: 0, g: 127, b: 255)
         
         loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         loginButton.layer.cornerRadius = 5
@@ -58,7 +59,7 @@ class LoginController: UIViewController {
         configuration.appearance.bodyFont = UIFont(name: "HelveticaNeue-Italic", size: 16)
         
         configuration.appearance.accentColor = UIColor.whiteColor()
-        configuration.appearance.backgroundColor = UIColor(r: 48, g: 140, b: 229)
+        configuration.appearance.backgroundColor = UIColor(r: 0, g: 127, b: 255)
         
         // Change color properties to customize the look:
         
@@ -70,7 +71,7 @@ class LoginController: UIViewController {
                             print(error)
                             return
                         }
-                        self.taskViewController?.checkUserInBase()
+                        self.startViewController?.checkUserInBase()
                         self.dismissViewControllerAnimated(true, completion: nil)
                     }
                     

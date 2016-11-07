@@ -88,14 +88,15 @@ class ChatMessageCell: UICollectionViewCell {
         
         
         bubleViewRightAnchor = bubbleView.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -8)
-        bubleViewRightAnchor?.active = true
+//        bubleViewRightAnchor?.active = false
         
         bubbleViewLeftAnchor = bubbleView.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 48)
-        bubbleViewLeftAnchor?.active = true
+//        bubbleViewLeftAnchor?.active = false
         
         bubbleView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
         bubbleWidthAnchor = bubbleView.widthAnchor.constraintEqualToConstant(200)
         bubbleWidthAnchor?.active = true
+        
         bubbleView.heightAnchor.constraintEqualToAnchor(self.heightAnchor).active = true
         
         textView.leftAnchor.constraintEqualToAnchor(bubbleView.leftAnchor, constant: 8).active = true

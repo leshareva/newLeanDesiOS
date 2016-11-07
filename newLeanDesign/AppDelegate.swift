@@ -11,7 +11,7 @@ import Firebase
 import FirebaseMessaging
 import Fabric
 import DigitsKit
-//import Flurry_iOS_SDK
+import Flurry_iOS_SDK
 
 
 @UIApplicationMain
@@ -23,13 +23,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-//        Flurry.setDebugLogEnabled(true);
-//        Flurry.startSession("ZXPZJMMTYDFZRBRHW339");
+        Flurry.setDebugLogEnabled(true);
+        Flurry.startSession("ZXPZJMMTYDFZRBRHW339");
         
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window?.makeKeyAndVisible()
         
-        window?.rootViewController = UINavigationController(rootViewController: TaskViewController())
+        window?.rootViewController = UINavigationController(rootViewController: StartViewController())
+        
+//        var rootView: StartViewController = StartViewController()
+//        
+//        if let window = self.window{
+//            window.rootViewController = rootView
+//        }
         
         
         UINavigationBar.appearance().barTintColor = UIColor(r: 0, g: 140, b: 255)

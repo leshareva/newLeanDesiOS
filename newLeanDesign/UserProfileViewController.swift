@@ -90,28 +90,32 @@ class UserProfileViewController: UIViewController {
     }
     
     func obserUserInfo() {
-        guard let userId = self.task?.toId else {
+        
+        guard let taskId = self.task?.taskId else {
             return
         }
-
-        let ref = FIRDatabase.database().reference().child("designers").child(userId)
-        ref.observeEventType(.Value, withBlock: { (snapshot) in
-            
-            if let imageUrl = snapshot.value!["photoUrl"] as? String {
-                self.taskImageView.loadImageUsingCashWithUrlString(imageUrl)
-            }
-            
-            if let name = snapshot.value!["name"] as? String {
-                self.nameLabel.text = name
-            }
-            
-            if let email = snapshot.value!["email"] as? String {
-               self.emailLabel.text = email
-                
-            }
-            
-            if let phone = snapshot.value!["phone"] as? String {
-               self.phoneLabel.text = phone
+        
+        let ref = FIRDatabase.database().reference()
+        ref.child("tasks").child(taskId).observeEventType(.Value, withBlock: { (snapshot) in
+            if let designerId = snapshot.value!["toId"] as? String {
+                ref.child("designers").child(designerId).observeEventType(.Value, withBlock: { (snap) in
+                    if let imageUrl = snap.value!["photoUrl"] as? String {
+                        self.taskImageView.loadImageUsingCashWithUrlString(imageUrl)
+                    }
+                    if let name = snap.value!["name"] as? String {
+                        self.nameLabel.text = name
+                    }
+                    
+                    if let email = snap.value!["email"] as? String {
+                        self.emailLabel.text = email
+                        
+                    }
+                    
+                    if let phone = snap.value!["phone"] as? String {
+                        self.phoneLabel.text = phone
+                    }
+                    
+                    }, withCancelBlock: nil)
             }
 
             }, withCancelBlock: nil)

@@ -15,6 +15,7 @@ import DKImagePickerController
 class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     
     let cashe = NSCache()
+    var designerPic: String?
     
     var task: Task? {
         didSet {
@@ -138,8 +139,8 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 buttonView.alertButton.backgroundColor = StepsView.activeColor
                 buttonView.alertTextView.text = "Мы подбираем дизайнера"
             } else  if status == "awareness" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
-                containerView.textOne.textColor = StepsView.doneTextColor
+                containerView.stepOne.backgroundColor = StepsView.activeColor
+                containerView.textOne.textColor = StepsView.activeTextColor
                 buttonView.hidden = true
             } else if status == "awarenessApprove" {
                 buttonView.alertTextView.text = "Согласуйте понимание задачи"
@@ -150,8 +151,8 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             } else if status == "concept" {
                 containerView.stepOne.backgroundColor = StepsView.doneColor
                 containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.doneColor
-                containerView.textTwo.textColor = StepsView.doneTextColor
+                containerView.stepTwo.backgroundColor = StepsView.activeColor
+                containerView.textTwo.textColor = StepsView.activeTextColor
                 buttonView.hidden = true
             } else if status == "conceptApprove" {
                 buttonView.hidden = false
@@ -164,8 +165,8 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textOne.textColor = StepsView.doneTextColor
                 containerView.stepTwo.backgroundColor = StepsView.doneColor
                 containerView.textTwo.textColor = StepsView.doneTextColor
-                containerView.stepThree.backgroundColor = StepsView.doneColor
-                containerView.textThree.textColor = StepsView.doneTextColor
+                containerView.stepThree.backgroundColor = StepsView.activeColor
+                containerView.textThree.textColor = StepsView.activeTextColor
                 buttonView.hidden = true
             } else if status == "designApprove" {
                 buttonView.hidden = false
@@ -180,8 +181,8 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textTwo.textColor = StepsView.doneTextColor
                 containerView.stepThree.backgroundColor = StepsView.doneColor
                 containerView.textThree.textColor = StepsView.doneTextColor
-                containerView.stepFour.backgroundColor = StepsView.doneColor
-                containerView.textFour.textColor = StepsView.doneTextColor
+                containerView.stepFour.backgroundColor = StepsView.activeColor
+                containerView.textFour.textColor = StepsView.activeTextColor
                 buttonView.hidden = true
             } else if status == "done" {
                 buttonView.hidden = false
@@ -244,15 +245,24 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     func setupNavbarWithUser() {
         let titleView = UIImageView()
         titleView.frame = CGRect(x: 0, y: 0, width: 36, height: 36)
-        
-        
+
         titleView.layer.cornerRadius = 18
         titleView.layer.masksToBounds = true
         titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openDesignerProfile)))
         titleView.userInteractionEnabled = true
         
-        if let imageUrl = task!.imageUrl {
-            titleView.loadImageUsingCashWithUrlString(imageUrl)
+        
+        
+        
+        if let taskId = task!.taskId {
+            
+            let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
+            ref.observeEventType(.Value, withBlock: { (snapshot) in
+                if let imageUrl = snapshot.value!["imageUrl"] as? String {
+                    self.designerPic = imageUrl
+                     titleView.loadImageUsingCashWithUrlString(imageUrl)
+                }
+                }, withCancelBlock: nil)
         }
         
         
@@ -500,9 +510,12 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             
         }
         
-        if let photoUrl = message.photoUrl {
-            cell.profileImageView.loadImageUsingCashWithUrlString(photoUrl)
-        }
+        
+        cell.profileImageView.loadImageUsingCashWithUrlString(self.designerPic!)
+        
+//        if let photoUrl = message.photoUrl {
+//            cell.profileImageView.loadImageUsingCashWithUrlString(photoUrl)
+//        }
         return cell
     }
 
@@ -519,6 +532,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             cell.messageImageView.hidden = true
             cell.textView.dataDetectorTypes = UIDataDetectorTypes.All
         }
+        
         
         if message.fromId == Digits.sharedInstance().session()?.userID {
             //outgoing blue

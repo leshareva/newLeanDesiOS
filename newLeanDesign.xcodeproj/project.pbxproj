@@ -35,6 +35,7 @@
 		CB39FB0C1D94E92F007E9365 /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0B1D94E92F007E9365 /* StepsView.swift */; };
 		CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0D1D952156007E9365 /* EmptyTableView.swift */; };
 		CB39FB101D954FB4007E9365 /* loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB0F1D954FB4007E9365 /* loader.gif */; };
+		CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */; };
 		CB5F4D0E1DBCC12600530341 /* ZoomingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */; };
 		CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */; };
 		CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682BF1D93EBD400CB3679 /* Main.storyboard */; };
@@ -76,6 +77,7 @@
 		CB39FB0B1D94E92F007E9365 /* StepsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
 		CB39FB0D1D952156007E9365 /* EmptyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyTableView.swift; sourceTree = "<group>"; };
 		CB39FB0F1D954FB4007E9365 /* loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loader.gif; sourceTree = "<group>"; };
+		CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CB6C74201D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */,
 				CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */,
 				CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */,
+				CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
+				CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */,
 				CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */,
 				CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */,
 				CB39FAFD1D942C18007E9365 /* ChatMessageCell.swift in Sources */,

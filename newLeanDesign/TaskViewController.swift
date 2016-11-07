@@ -39,7 +39,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationController?.navigationBar.translucent = false
         self.view.backgroundColor = UIColor.whiteColor()
         
-        checkIfUserIsLoggedIn()
+
+        fetchUser()
+        view.addSubview(tableView)
+        buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewTaskView)))
+
+        setupLoadingView()
+        setupbuttonView()
         setupLogoView()
         setupTableView()
     }
@@ -55,8 +61,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         self.buttonView.alpha = 0
-       
-        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -181,7 +185,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             ref.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                 let status = snapshot.value!["status"] as? String
                 if status == task.fromId {
-                    print("we have new message")
                     cell.notificationsLabel.hidden = false
 //                    
 //                    let path = NSBundle.mainBundle().pathForResource("beep.mp3", ofType:nil)!
@@ -242,17 +245,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    
-    func checkIfUserIsLoggedIn() {
-        let digits = Digits.sharedInstance()
-        let digitsUid = digits.session()?.userID
-        
-        if digitsUid == nil {
-            performSelector(#selector(handleLogout), withObject: nil, afterDelay: 0)
-        } else {
-            checkUserInBase()
-        }
-    }
+
     
     func handleLogout() {
         Digits.sharedInstance().logOut()
@@ -269,39 +262,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    
-    
-    func checkUserInBase() {
-        guard let userId = Digits.sharedInstance().session()?.userID else {
-            return
-        }
-        
-        setupLoadingView()
-
-        let ref = FIRDatabase.database().reference()
-        let clientsReference = ref.child("clients")
-        
-        clientsReference.observeEventType(.Value, withBlock: { (snapshot) in
-            if snapshot.hasChild(userId) {
-                self.fetchUser()
-                
-                
-                self.view.addSubview(self.tableView)
-                
-                self.buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewTaskView)))
-            } else {
-                
-                self.view.addSubview(self.emptyTableView)
-                self.buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewClientView)))
-                
-            }
-            
-           self.setupbuttonView()
-            
-        }, withCancelBlock: nil)
-    }
-    
-    func setupTableView() {
+     func setupTableView() {
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         tableView.frame         =   CGRectMake(0, 0, screenSize.width, screenSize.height - 70);
         tableView.delegate      =   self
