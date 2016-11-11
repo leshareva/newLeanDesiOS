@@ -510,8 +510,10 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             
         }
         
+        if self.designerPic != nil {
+           cell.profileImageView.loadImageUsingCashWithUrlString(self.designerPic!)
+        }
         
-        cell.profileImageView.loadImageUsingCashWithUrlString(self.designerPic!)
         
 //        if let photoUrl = message.photoUrl {
 //            cell.profileImageView.loadImageUsingCashWithUrlString(photoUrl)
@@ -522,18 +524,15 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     private func setupCell(cell: ChatMessageCell, message: Message) {
         if let messageImageUrl = message.imageUrl {
-          
             cell.messageImageView.loadImageUsingCashWithUrlString(messageImageUrl)
             cell.messageImageView.hidden = false
             cell.textView.hidden = true
             cell.bubbleView.backgroundColor = UIColor.clearColor()
-           
         } else {
             cell.messageImageView.hidden = true
             cell.textView.dataDetectorTypes = UIDataDetectorTypes.All
         }
-        
-        
+
         if message.fromId == Digits.sharedInstance().session()?.userID {
             //outgoing blue
             cell.bubbleView.backgroundColor = ChatMessageCell.blueColor

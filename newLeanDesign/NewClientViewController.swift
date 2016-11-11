@@ -46,6 +46,34 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         return tf
     }()
     
+    let inputForSecondName: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(r: 0, g: 140, b: 255)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 2
+        view.layer.masksToBounds = true
+        
+        let tf = UILabel()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.text = "Фамилия"
+        tf.font = UIFont.systemFontOfSize(16)
+        tf.textColor = .whiteColor()
+        view.addSubview(tf)
+        view.addConstraints("H:|-16-[\(tf)]")
+        view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
+        return view
+    }()
+    
+    let secondNameField: UITextView = {
+        let tf = UITextView()
+        tf.backgroundColor = .clearColor()
+        tf.textColor = .whiteColor()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.font = UIFont.systemFontOfSize(18, weight: UIFontWeightThin)
+        tf.selectable = true
+        return tf
+    }()
+    
     
     let inputForEmail: UIView = {
         let view = UIView()
@@ -201,6 +229,12 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
             return
         }
         
+        guard let sename = secondNameField.text where !sename.isEmpty else {
+            alertView.hidden = false
+            alertLabel.text = "Укажите Фамилию"
+            return
+        }
+        
         guard let email = emailField.text where !email.isEmpty else {
             alertView.hidden = false
             alertLabel.text = "Укажите почту"
@@ -215,7 +249,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         
         let ref = FIRDatabase.database().reference()
         let requestReference = ref.child("requests").child("clients")
-        let values: [String: AnyObject] = ["phone": phone, "id": userId, "email": email, "company": company, "name": name, "state": "none"]
+        let values: [String: AnyObject] = ["phone": phone, "lastName": sename, "id": userId, "email": email, "company": company, "firstName": name, "state": "none", "rate": 0.6, "sum": 0]
         
         requestReference.child(userId).updateChildValues(values) { (error, ref) in
             if error != nil {
@@ -223,6 +257,13 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
                 return
             }
         }
+        
+        inputForCompany.hidden = true
+        inputForName.hidden = true
+        inputForEmail.hidden = true
+        inputForSecondName.hidden = true
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .Plain, target: self, action: #selector(self.handleRefresh));
         
         let startViewController = StartViewController()
         startViewController.checkUserInBase()
@@ -232,7 +273,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     
     func setupWaitingView() {
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .Plain, target: self, action: #selector(self.handleRefresh))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .Plain, target: self, action: #selector(self.handleRefresh))
         view.addSubview(discriptionLabel)
         discriptionLabel.text = "Мы рассматриваем вашу заявку"
         view.addConstraints("V:|-80-[\(discriptionLabel)]")
@@ -246,22 +287,29 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         view.addSubview(inputForName)
         view.addSubview(inputForEmail)
         view.addSubview(inputForCompany)
+        view.addSubview(inputForSecondName)
         view.addSubview(alertView)
         
-        view.addConstraints("V:|-80-[\(discriptionLabel)]-10-[\(inputForName)]-1-[\(inputForEmail)]-1-[\(inputForCompany)]-1-[\(alertView)]")
+        view.addConstraints("V:|-80-[\(discriptionLabel)]-10-[\(inputForName)]-1-[\(inputForSecondName)]-1-[\(inputForEmail)]-1-[\(inputForCompany)]-1-[\(alertView)]")
         view.addConstraints("H:|-10-[\(discriptionLabel)]-10-|","H:|[\(inputForName)]|","H:|[\(inputForEmail)]|","H:|[\(inputForCompany)]|",
-                            "H:|[\(alertView)]|")
-        view.addConstraints(inputForName.heightAnchor == 40, inputForEmail.heightAnchor == 40, inputForCompany.heightAnchor == 40, alertView.heightAnchor == 40)
+                            "H:|[\(alertView)]|", "H:|[\(inputForSecondName)]|")
+        view.addConstraints(inputForName.heightAnchor == 40, inputForEmail.heightAnchor == 40, inputForCompany.heightAnchor == 40, alertView.heightAnchor == 40, inputForSecondName.heightAnchor == 40)
        
         inputForName.addSubview(nameField)
         inputForEmail.addSubview(emailField)
         inputForCompany.addSubview(companyField)
+        inputForSecondName.addSubview(secondNameField)
         
         inputForName.addConstraints(nameField.centerYAnchor == inputForName.centerYAnchor,
                                     nameField.heightAnchor == inputForName.heightAnchor,
                                     nameField.leftAnchor == inputForName.leftAnchor + 100,
                                     nameField.rightAnchor == inputForName.rightAnchor
                                     )
+        
+        inputForSecondName.addConstraints(secondNameField.centerYAnchor == inputForSecondName.centerYAnchor,
+                                       secondNameField.heightAnchor == inputForSecondName.heightAnchor,
+                                       secondNameField.leftAnchor == inputForSecondName.leftAnchor + 100,
+                                       secondNameField.rightAnchor == inputForSecondName.rightAnchor)
         
         inputForEmail.addConstraints(emailField.centerYAnchor == inputForEmail.centerYAnchor,
                                      emailField.heightAnchor == inputForEmail.heightAnchor,

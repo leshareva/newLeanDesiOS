@@ -152,16 +152,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("App opened from Notification")
             
             if let taskId = userInfo["gcm.notification.taskId"] as? String {
-//                print(taskId)
+                print(taskId)
    //             let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
                 
-                let taskViewController = TaskViewController()
-                
-                let dictionary: [String: AnyObject] = ["taskId": taskId]
-                let task = Task()
-                
-                task.setValuesForKeysWithDictionary(dictionary)
-                taskViewController.showChatControllerForUser(task)
+//                let taskViewController = TaskViewController()
+//                
+//                let dictionary: [String: AnyObject] = ["taskId": taskId]
+//                let task = Task()
+//                
+//                task.setValuesForKeysWithDictionary(dictionary)
+//                taskViewController.showChatControllerForUser(task)
             }
             
             

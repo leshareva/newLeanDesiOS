@@ -64,9 +64,7 @@ class NewTaskController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.whiteColor()
-       
-        
-        
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .Plain, target: self, action: #selector(cancelNewTask))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить", style: .Plain, target: self, action: #selector(addNewTask));
         
@@ -109,9 +107,7 @@ class NewTaskController: UIViewController {
                             attachImageView.widthAnchor == 40,
                             attachImageView.rightAnchor == taskTextField.rightAnchor,
                             attachImageView.bottomAnchor == taskTextField.bottomAnchor - 20)
-    }
-
-    
+    } 
     
 }
 

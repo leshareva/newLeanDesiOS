@@ -84,22 +84,13 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         } else if let text = concept.text {
             cell.imageView.hidden = true
             cell.textView.hidden = false
-            cell.priceLabel.hidden = true
+            cell.priceLabel.hidden = false
             cell.textView.text = text
             let price = concept.price
             let time = concept.time
             cell.priceLabel.text = String(price!) + " ₽"
-//            checkNumberOfDays(Int(time!))
-//            cell.timeLabel.text = String(time!) + " " + String(dayname[day])
-            if Int(time!) <= 3 {
-                cell.timeLabel.text = "1 день"
-            } else if Int(time!) > 3 && Int(time!) <= 6 {
-                 cell.timeLabel.text = "2 дня"
-            } else if Int(time!) > 6 && Int(time!) <= 9 {
-                cell.timeLabel.text = "3 дня"
-            }
-            
-
+            checkNumberOfDays(Int(time!))
+            cell.timeLabel.text = String(time!) + " " + String(dayname[day])
         }
         return cell
     }
@@ -172,7 +163,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                     newstatus = "concept"
                     
                     
-                        let alert = UIAlertController(title: "Стоимость работы — \(String(price!)) руб", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+                        let alert = UIAlertController(title: "Внимание", message: "После согласования понимания задачи дизайнер начнет работу над черновиком", preferredStyle: UIAlertControllerStyle.Alert)
                         
                         alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
                             self.navigationController?.popToRootViewControllerAnimated(true)

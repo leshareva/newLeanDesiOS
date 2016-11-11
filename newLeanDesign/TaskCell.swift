@@ -23,13 +23,11 @@ class TaskCell: UITableViewCell {
             let ref = FIRDatabase.database().reference().child("tasks").child(Id)
             ref.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
                 
-                
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                     self.textLabel?.text = dictionary["text"] as? String
                     
                     if let taskImageUrl = dictionary["taskImageUrl"] as? String {
                         self.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
-                        
                     }
                 }
                 }, withCancelBlock: nil)
