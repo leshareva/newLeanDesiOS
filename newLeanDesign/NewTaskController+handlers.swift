@@ -52,12 +52,12 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
 
         let ref = FIRDatabase.database().reference().child("tasks")
         let postRef = ref.childByAutoId()
-//        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
         let taskId = postRef.key
         let toId = "designStudio"
         let phone = Digits.sharedInstance().session()?.phoneNumber
         
-        let values : [String : AnyObject] = ["fromId": fromId, "text": taskText, "taskId": taskId, "status": "none", "toId": toId, "price": 0, "phone": phone!, "rate": 0.5]
+        let values : [String : AnyObject] = ["fromId": fromId, "text": taskText, "taskId": taskId, "status": "none", "toId": toId, "price": 0, "phone": phone!, "rate": 0.5, "timestamp": timestamp]
         
         postRef.setValue(values)
         postRef.updateChildValues(values) { (error, ref) in

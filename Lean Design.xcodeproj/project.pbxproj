@@ -41,7 +41,8 @@
 		CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682BF1D93EBD400CB3679 /* Main.storyboard */; };
 		CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C21D93EBD400CB3679 /* Assets.xcassets */; };
 		CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */; };
-		CBE682CE1D93ECF000CB3679 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBE682CD1D93ECF000CB3679 /* GoogleService-Info.plist */; };
+		CBFDCB061DD6F41C0038BE90 /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */; };
+		CBFDCB081DD6F5A30038BE90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */; };
 		CF962A58B47B68443E58D8ED /* Pods_newLeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E799A76A4D5AA8B5DF3D87 /* Pods_newLeanDesign.framework */; };
 /* End PBXBuildFile section */
 
@@ -81,13 +82,14 @@
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CB6C74201D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		CBE682B81D93EBD300CB3679 /* newLeanDesign.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newLeanDesign.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBE682B81D93EBD300CB3679 /* Lean Design.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lean Design.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBE682C01D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CBE682C21D93EBD400CB3679 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBE682C51D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBE682C71D93EBD400CB3679 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CBE682CD1D93ECF000CB3679 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
+		CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,7 +187,7 @@
 		CBE682B91D93EBD300CB3679 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CBE682B81D93EBD300CB3679 /* newLeanDesign.app */,
+				CBE682B81D93EBD300CB3679 /* Lean Design.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -206,7 +208,8 @@
 				CB39FB051D942C6E007E9365 /* spinner.gif */,
 				CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */,
 				CBE682C71D93EBD400CB3679 /* Info.plist */,
-				CBE682CD1D93ECF000CB3679 /* GoogleService-Info.plist */,
+				CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */,
+				CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */,
 			);
 			path = newLeanDesign;
 			sourceTree = "<group>";
@@ -223,9 +226,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CBE682B71D93EBD300CB3679 /* newLeanDesign */ = {
+		CBE682B71D93EBD300CB3679 /* Lean Design */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CBE682CA1D93EBD400CB3679 /* Build configuration list for PBXNativeTarget "newLeanDesign" */;
+			buildConfigurationList = CBE682CA1D93EBD400CB3679 /* Build configuration list for PBXNativeTarget "Lean Design" */;
 			buildPhases = (
 				82D13ED936FAF17E7CFE8E36 /* 📦 Check Pods Manifest.lock */,
 				CBE682B41D93EBD300CB3679 /* Sources */,
@@ -239,9 +242,9 @@
 			);
 			dependencies = (
 			);
-			name = newLeanDesign;
+			name = "Lean Design";
 			productName = newLeanDesign;
-			productReference = CBE682B81D93EBD300CB3679 /* newLeanDesign.app */;
+			productReference = CBE682B81D93EBD300CB3679 /* Lean Design.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -268,7 +271,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CBE682B31D93EBD300CB3679 /* Build configuration list for PBXProject "newLeanDesign" */;
+			buildConfigurationList = CBE682B31D93EBD300CB3679 /* Build configuration list for PBXProject "Lean Design" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -281,7 +284,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CBE682B71D93EBD300CB3679 /* newLeanDesign */,
+				CBE682B71D93EBD300CB3679 /* Lean Design */,
 			);
 		};
 /* End PBXProject section */
@@ -291,9 +294,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBE682CE1D93ECF000CB3679 /* GoogleService-Info.plist in Resources */,
+				CBFDCB061DD6F41C0038BE90 /* GoogleService-Info-prod.plist in Resources */,
 				CB39FB061D942C6E007E9365 /* spinner-duo.gif in Resources */,
 				CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */,
+				CBFDCB081DD6F5A30038BE90 /* GoogleService-Info.plist in Resources */,
 				CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */,
 				CB39FB101D954FB4007E9365 /* loader.gif in Resources */,
 				CB39FB071D942C6E007E9365 /* spinner.gif in Resources */,
@@ -518,7 +522,7 @@
 				INFOPLIST_FILE = newLeanDesign/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Lean Design";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -532,7 +536,7 @@
 				INFOPLIST_FILE = newLeanDesign/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Lean Design";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -540,7 +544,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CBE682B31D93EBD300CB3679 /* Build configuration list for PBXProject "newLeanDesign" */ = {
+		CBE682B31D93EBD300CB3679 /* Build configuration list for PBXProject "Lean Design" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CBE682C81D93EBD400CB3679 /* Debug */,
@@ -549,7 +553,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CBE682CA1D93EBD400CB3679 /* Build configuration list for PBXNativeTarget "newLeanDesign" */ = {
+		CBE682CA1D93EBD400CB3679 /* Build configuration list for PBXNativeTarget "Lean Design" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CBE682CB1D93EBD400CB3679 /* Debug */,

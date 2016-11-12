@@ -60,10 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerForRemoteNotifications()
         application.registerUserNotificationSettings(notificationSettings)
         
-     
-        
-        
-        
+
         // Override point for customization after application launch.
         return true
     }

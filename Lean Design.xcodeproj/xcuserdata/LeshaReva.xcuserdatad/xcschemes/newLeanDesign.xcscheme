@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CBE682B71D93EBD300CB3679"
-               BuildableName = "newLeanDesign.app"
-               BlueprintName = "newLeanDesign"
-               ReferencedContainer = "container:newLeanDesign.xcodeproj">
+               BuildableName = "Lean Design.app"
+               BlueprintName = "Lean Design"
+               ReferencedContainer = "container:Lean Design.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CBE682B71D93EBD300CB3679"
-            BuildableName = "newLeanDesign.app"
-            BlueprintName = "newLeanDesign"
-            ReferencedContainer = "container:newLeanDesign.xcodeproj">
+            BuildableName = "Lean Design.app"
+            BlueprintName = "Lean Design"
+            ReferencedContainer = "container:Lean Design.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CBE682B71D93EBD300CB3679"
-            BuildableName = "newLeanDesign.app"
-            BlueprintName = "newLeanDesign"
-            ReferencedContainer = "container:newLeanDesign.xcodeproj">
+            BuildableName = "Lean Design.app"
+            BlueprintName = "Lean Design"
+            ReferencedContainer = "container:Lean Design.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CBE682B71D93EBD300CB3679"
-            BuildableName = "newLeanDesign.app"
-            BlueprintName = "newLeanDesign"
-            ReferencedContainer = "container:newLeanDesign.xcodeproj">
+            BuildableName = "Lean Design.app"
+            BlueprintName = "Lean Design"
+            ReferencedContainer = "container:Lean Design.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

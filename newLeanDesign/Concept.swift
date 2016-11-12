@@ -18,6 +18,7 @@ class Concept: NSObject {
     var price: NSNumber?
     var imageWidth: NSNumber?
     var imageHeight: NSNumber?
+    var timestamp: NSNumber?
     
     init(dictionary: [String: AnyObject]) {
         super.init()
@@ -27,6 +28,7 @@ class Concept: NSObject {
         time = dictionary["time"] as? NSNumber
         imageWidth = dictionary["imageWidth"] as? NSNumber
         imageHeight = dictionary["imageHeight"] as? NSNumber
+        timestamp = dictionary["timestamp"] as? NSNumber
     }
     
     

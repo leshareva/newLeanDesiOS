@@ -30,6 +30,7 @@ class Task: NSObject {
     var end: NSNumber?
     var toId: String?
     var time: NSNumber?
+    var timestamp: NSNumber?
     
     func chatPartnerId() -> String? {
         return fromId == Digits.sharedInstance().session()?.userID ? toId : fromId
