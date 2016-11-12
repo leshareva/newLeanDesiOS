@@ -1,4 +1,6 @@
 PODS:
+  - Crashlytics (3.8.3):
+    - Fabric (~> 1.6.3)
   - Digits (2.3.0):
     - TwitterCore (= 2.3.0)
   - DKImagePickerController (3.3.2):
@@ -69,6 +71,7 @@ PODS:
     - Fabric
 
 DEPENDENCIES:
+  - Crashlytics
   - Digits
   - DKImagePickerController
   - Fabric
@@ -84,6 +87,7 @@ DEPENDENCIES:
   - TwitterCore
 
 SPEC CHECKSUMS:
+  Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
   Digits: af82d24ec38035cc555b60f55cca5abc68a76bed
   DKImagePickerController: 416dab2d42caaf4ca681baca9c2d533895a8c1a2
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
@@ -105,6 +109,6 @@ SPEC CHECKSUMS:
   Swiftstraints: 7474fa4f87a3d89d99a2e52032578f0292ae48de
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: c1058f0917d6502f6e344bb5272b91dc03522e8f
+PODFILE CHECKSUM: 17465843df930ae1f57611b1a25acebbdd8a1256
 
 COCOAPODS: 1.0.0

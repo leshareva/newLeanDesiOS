@@ -19,5 +19,6 @@ pod 'Swiftstraints'
 pod 'SlackTextViewController'
 pod 'Flurry-iOS-SDK/FlurrySDK'
 pod 'Flurry-iOS-SDK/FlurryAds'
+pod 'Crashlytics'
 
 end

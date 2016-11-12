@@ -12,6 +12,8 @@ import FirebaseMessaging
 import Fabric
 import DigitsKit
 import Flurry_iOS_SDK
+import Crashlytics
+
 
 
 @UIApplicationMain
@@ -22,6 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tasks = [Task]()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        Fabric.with([Digits.self, Crashlytics.self])
+
         
         Flurry.setDebugLogEnabled(true);
         Flurry.startSession("ZXPZJMMTYDFZRBRHW339");
