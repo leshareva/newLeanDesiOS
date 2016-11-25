@@ -19,7 +19,8 @@ pod 'Swiftstraints'
 pod 'Flurry-iOS-SDK/FlurrySDK'
 pod 'Flurry-iOS-SDK/FlurryAds'
 pod 'Crashlytics'
-pod 'Caishen'
+pod 'Caishen', :git => 'https://github.com/prolificinteractive/Caishen.git', :branch => 'swift-3.0'
+pod 'CardIO'
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|
