@@ -23,7 +23,7 @@ class UserProfileViewController: UIViewController {
         let iv = UIImageView()
         iv.image = UIImage.gifWithName("spinner-duo")
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .ScaleAspectFill
+        iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = 40
         iv.clipsToBounds = true
         return iv
@@ -32,39 +32,39 @@ class UserProfileViewController: UIViewController {
     let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFontOfSize(16)
-        label.textColor = UIColor.blackColor()
-        label.textAlignment = .Center
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = UIColor.black
+        label.textAlignment = .center
         return label
     }()
     
     lazy var phoneLabel: UITextView = {
         let label = UITextView()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFontOfSize(16)
-        label.textColor = UIColor.blackColor()
-        label.backgroundColor = UIColor.clearColor()
-        label.textAlignment = .Left
-        label.userInteractionEnabled = true
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = UIColor.black
+        label.backgroundColor = UIColor.clear
+        label.textAlignment = .left
+        label.isUserInteractionEnabled = true
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleCall)))
-        label.editable = false
+        label.isEditable = false
         return label
     }()
     
     let emailLabel: UITextView = {
         let label = UITextView()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFontOfSize(16)
-        label.textColor = UIColor.blackColor()
-        label.textAlignment = .Left
-        label.editable = false
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = UIColor.black
+        label.textAlignment = .left
+        label.isEditable = false
         return label
     }()
     
     
     func handleCall() {
-        if let url = NSURL(string: "tel://\(self.phoneLabel.text)") {
-            UIApplication.sharedApplication().openURL(url)
+        if let url = URL(string: "tel://\(self.phoneLabel.text)") {
+            UIApplication.shared.openURL(url)
         }
     }
     
@@ -96,29 +96,29 @@ class UserProfileViewController: UIViewController {
         }
         
         let ref = FIRDatabase.database().reference()
-        ref.child("tasks").child(taskId).observeEventType(.Value, withBlock: { (snapshot) in
-            if let designerId = snapshot.value!["toId"] as? String {
-                ref.child("designers").child(designerId).observeEventType(.Value, withBlock: { (snap) in
-                    if let imageUrl = snap.value!["photoUrl"] as? String {
+        ref.child("tasks").child(taskId).observe(.value, with: { (snapshot) in
+            if let designerId = (snapshot.value as? NSDictionary)!["toId"] as? String {
+                ref.child("designers").child(designerId).observe(.value, with: { (snap) in
+                    if let imageUrl = (snap.value as? NSDictionary)!["photoUrl"] as? String {
                         self.taskImageView.loadImageUsingCashWithUrlString(imageUrl)
                     }
-                    if let name = snap.value!["name"] as? String {
+                    if let name = (snap.value as? NSDictionary)!["name"] as? String {
                         self.nameLabel.text = name
                     }
                     
-                    if let email = snap.value!["email"] as? String {
+                    if let email = (snap.value as? NSDictionary)!["email"] as? String {
                         self.emailLabel.text = email
                         
                     }
                     
-                    if let phone = snap.value!["phone"] as? String {
+                    if let phone = (snap.value as? NSDictionary)!["phone"] as? String {
                         self.phoneLabel.text = phone
                     }
                     
-                    }, withCancelBlock: nil)
+                    }, withCancel: nil)
             }
 
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
     }
     
 }

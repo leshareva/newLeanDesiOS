@@ -29,10 +29,10 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView?.backgroundColor = UIColor.whiteColor()
-        collectionView?.registerClass(CustomCell.self, forCellWithReuseIdentifier: customCellIdentifier)
+        collectionView?.backgroundColor = UIColor.white
+        collectionView?.register(CustomCell.self, forCellWithReuseIdentifier: customCellIdentifier)
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Обсудить", style: .Plain, target: self, action: #selector(closeView))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Обсудить", style: .plain, target: self, action: #selector(closeView))
      
         self.buttonView.acceptTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleApproveView)))
         
@@ -40,7 +40,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
     
     func closeView() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     func setupView() {
@@ -57,7 +57,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
 
     
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         collectionView?.collectionViewLayout.invalidateLayout()
     }
     
@@ -66,8 +66,11 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     var day = 0;
     var dayname = ["день", "дня", "дней"]
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(customCellIdentifier, forIndexPath: indexPath) as! CustomCell
+    
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: customCellIdentifier, for: indexPath) as! CustomCell
         
        
         
@@ -75,29 +78,34 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         
         if let imageUrl = concept.imgUrl {
             cell.imageView.loadImageUsingCashWithUrlString(imageUrl)
-            cell.textView.hidden = true
-            cell.priceLabel.hidden = true
-            cell.timeLabel.hidden = true
-            cell.myActivityIndicator.stopAnimating()
+            cell.textView.isHidden = true
+            cell.priceLabel.isHidden = true
+            cell.timeLabel.isHidden = true
+            cell.descriptView.isHidden = true
 //            cell.imageWidthAnchor?.constant = s
             
         } else if let text = concept.text {
-            cell.imageView.hidden = true
-            cell.textView.hidden = false
-            cell.priceLabel.hidden = false
+           
+            
+            cell.imageView.isHidden = true
+            cell.textView.isHidden = false
+            cell.priceLabel.isHidden = false
+            cell.descriptView.isHidden = false
             cell.textView.text = text
-            let price = concept.price
-            let time = concept.time
-            cell.priceLabel.text = String(price!) + " ₽"
-            checkNumberOfDays(Int(time!))
-            cell.timeLabel.text = String(time!) + " " + String(dayname[day])
+//            let price = concept.price
+//            let time = concept.time
+            
+            buttonView.buttonLabel.text = "Все верно!"
+//            cell.priceLabel.text = String(price!) + " ₽"
+//            checkNumberOfDays(Int(time!))
+//            cell.timeLabel.text = String(time!) + " " + String(dayname[day])
         }
         return cell
     }
     
     
     
-    func checkNumberOfDays(number: Int) -> Int {
+    func checkNumberOfDays(_ number: Int) -> Int {
         let b = number % 10
         let a = (number % 100 - b) / 10
         if (a == 0 || a > 2) {
@@ -112,19 +120,19 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
    
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return concepts.count
     }
 
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 280
         
         let concept = concepts[indexPath.item]
-        let width = UIScreen.mainScreen().bounds.width
+        let width = UIScreen.main.bounds.width
         let screenWidth: CGFloat = view.frame.width
         
         if concept.imgUrl != nil {
-            if let imageWidth = concept.imageWidth?.floatValue, imageHeight = concept.imageHeight?.floatValue {
+            if let imageWidth = concept.imageWidth?.floatValue, let imageHeight = concept.imageHeight?.floatValue {
                 //h1 / w1 = h2 / w2
                 //solve for h1
                 //h1 = h2 / w2 * w1
@@ -142,7 +150,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         setupView()
     }
     
@@ -151,80 +159,92 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
     
     func handleApproveView() {
+        
+        
         if let taskId = task!.taskId {
-            ref.child("tasks").child(taskId).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            let taskRef:FIRDatabaseReference    = ref.child("tasks").child(taskId)
+            let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
+            let value: [String: AnyObject] = ["approveTime": timestamp]
+            taskRef.child("awareness").updateChildValues(value, withCompletionBlock: { (err, ref) in
+                if err != nil {
+                    print(err)
+                    return
+                }
+            })
+            
+            taskRef.observeSingleEvent(of: .value, with: { (snapshot:FIRDataSnapshot) in
                 var time : Int?
-                let status = snapshot.value!["status"] as? String
-                time = snapshot.value!["time"] as? Int
-                if let price = snapshot.value!["price"] {
+                let status = (snapshot.value as? NSDictionary)!["status"] as? String
+                time =  (snapshot.value as? NSDictionary)!["time"] as? Int
+                if let price = (snapshot.value as? NSDictionary)!["price"] {
+                    self.checkNumberOfDays(Int(time!))
+                    
                     
                 var newstatus = ""
                 if status == "awarenessApprove" {
                     newstatus = "concept"
-                    
-                    
-                        let alert = UIAlertController(title: "Внимание", message: "После согласования понимания задачи дизайнер начнет работу над черновиком", preferredStyle: UIAlertControllerStyle.Alert)
+                        let alert = UIAlertController(title: "Стоимость работ — \(price) руб.", message: "", preferredStyle: UIAlertControllerStyle.alert)
                         
-                        alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
-                            self.navigationController?.popToRootViewControllerAnimated(true)
+                        alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
+                            self.navigationController?.popToRootViewController(animated: true)
                             
                             self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
                         }))
                         
-                        alert.addAction(UIAlertAction(title: "Отмена", style: .Default, handler: { (action: UIAlertAction!) in
+                        alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
                             
-                            alert.dismissViewControllerAnimated(true, completion: nil)
+                            alert.dismiss(animated: true, completion: nil)
     
                         }))
                         
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        self.present(alert, animated: true, completion: nil)
                    
                     
                     
                 } else if status == "conceptApprove" {
                     newstatus = "design"
                     
-                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия черновика, вы не сможете вносить глобальные изменения в черновик", preferredStyle: UIAlertControllerStyle.Alert)
+                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия черновика, вы не сможете вносить глобальные изменения в черновик", preferredStyle: UIAlertControllerStyle.alert)
                     
-                    alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
-                        self.navigationController?.popToRootViewControllerAnimated(true)
+                    alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
+                        self.navigationController?.popToRootViewController(animated: true)
                         
                         self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
                     }))
                     
-                    alert.addAction(UIAlertAction(title: "Отмена", style: .Default, handler: { (action: UIAlertAction!) in
+                    alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
                         
-                        alert.dismissViewControllerAnimated(true, completion: nil)
+                        alert.dismiss(animated: true, completion: nil)
                         
                     }))
                     
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    self.present(alert, animated: true, completion: nil)
                     
                     
                 } else if status == "designApprove" {
                     newstatus = "sources"
                     
-                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия чистовика вы не сможете вносить в него корректировки. Дизайнер будет готовить исходники.", preferredStyle: UIAlertControllerStyle.Alert)
+                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия чистовика вы не сможете вносить в него корректировки. Дизайнер будет готовить исходники.", preferredStyle: UIAlertControllerStyle.alert)
                     
-                    alert.addAction(UIAlertAction(title: "Подтверждаю", style: .Default, handler: { (action: UIAlertAction!) in
-                        self.navigationController?.popToRootViewControllerAnimated(true)
+                    alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
+                        self.navigationController?.popToRootViewController(animated: true)
                         
                         self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
                     }))
                     
-                    alert.addAction(UIAlertAction(title: "Отмена", style: .Default, handler: { (action: UIAlertAction!) in
+                    alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
                         
-                        alert.dismissViewControllerAnimated(true, completion: nil)
+                        alert.dismiss(animated: true, completion: nil)
                         
                     }))
                     
-                    self.presentViewController(alert, animated: true, completion: nil)
+                    self.present(alert, animated: true, completion: nil)
                     
                 }
                     
                 }
                 
-                }, withCancelBlock: nil)
+                }, withCancel: nil)
             
         }
         
@@ -233,7 +253,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     }
     
     
-    func sendApproveToDB(taskId: String, status: String, newstatus: String, time: Int) {
+    func sendApproveToDB(_ taskId: String, status: String, newstatus: String, time: Int) {
         let taskRef = self.ref.child("tasks").child(taskId)
         
         var days: Int?
@@ -245,18 +265,18 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             days = 3
         }
         
-        taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+        taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
             
-            let startDate : NSNumber = Int(NSDate().timeIntervalSince1970)
-            let calculatedDate = NSCalendar.currentCalendar().dateByAddingUnit(NSCalendarUnit.Day, value: days!, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
+            let startDate = NSNumber(value: Int(Date().timeIntervalSince1970))
+            let calculatedDate = (Calendar.current as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: days!, to: Date(), options: NSCalendar.Options.init(rawValue: 0))
             
-            let endDate : NSNumber = Int(calculatedDate!.timeIntervalSince1970)
+            let endDate = NSNumber(value: Int(calculatedDate!.timeIntervalSince1970))
             print(endDate)
             
-            let values : [String: AnyObject] = ["status": newstatus, "start": startDate, "end": endDate]
+            let values : [String: AnyObject] = ["status": newstatus as AnyObject, "start": startDate as AnyObject, "end": endDate as AnyObject]
             taskRef.updateChildValues(values) { (error, ref) in
                 if error != nil {
-                    print(error)
+                    print(error!)
                     return
                 }
                 self.buttonView.buttonLabel.text = "Согласовано"
@@ -270,11 +290,11 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             if statusLength <= 7 {
                 step = status
             } else {
-                let index1 = status.endIndex.advancedBy(-7)
-                step = status.substringToIndex(index1)
+                let index1 = status.characters.index(status.endIndex, offsetBy: -7)
+                step = status.substring(to: index1)
             }
             
-            let awStatus : [String: AnyObject] = ["status": "accept"]
+            let awStatus : [String: AnyObject] = ["status": "accept" as AnyObject]
             taskRef.child(step).updateChildValues(awStatus, withCompletionBlock: { (err, ref) in
                 if err != nil {
                     print(err)
@@ -282,7 +302,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                 }
             })
             
-            let stepStatus : [String: AnyObject] = ["status": "none"]
+            let stepStatus : [String: AnyObject] = ["status": "none" as AnyObject]
             self.ref.child("tasks").child(taskId).child(newstatus).updateChildValues(stepStatus, withCompletionBlock: { (error, ref) in
                 if error != nil {
                     print(error)
@@ -290,12 +310,12 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                 }
             })
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
         
         
-        self.buttonView.userInteractionEnabled = false
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.buttonView.isUserInteractionEnabled = false
+        self.dismiss(animated: true, completion: nil)
     }
   
 }
@@ -316,15 +336,15 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
     
     var conceptViewController: ConceptViewController?
     
-    var myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    var myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     var imageWidthAnchor: NSLayoutConstraint?
     
     
     lazy var imageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .ScaleAspectFit
-        iv.userInteractionEnabled = true
+        iv.contentMode = .scaleAspectFit
+        iv.isUserInteractionEnabled = true
         iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
         return iv
     }()
@@ -333,71 +353,77 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
        let tv = UITextView()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Какой-то текст"
-        tv.font = UIFont.systemFontOfSize(16)
-        tv.editable = false
+        tv.font = UIFont.systemFont(ofSize: 18)
+        tv.isEditable = false
         return tv
     }()
     
     let priceLabel: UILabel = {
        let ul = UILabel()
         ul.translatesAutoresizingMaskIntoConstraints = false
-        ul.font = UIFont.systemFontOfSize(32)
+        ul.font = UIFont.systemFont(ofSize: 32)
         return ul
     }()
     
     let timeLabel: UILabel = {
         let ul = UILabel()
         ul.translatesAutoresizingMaskIntoConstraints = false
-        ul.font = UIFont.systemFontOfSize(32)
+        ul.font = UIFont.systemFont(ofSize: 32)
         return ul
     }()
     
- 
+    let descriptView: UIView = {
+       let uv = UIView()
+        uv.backgroundColor = UIColor(r: 239, g: 239, b: 239)
+        uv.translatesAutoresizingMaskIntoConstraints = false
+        return uv
+    }()
     
+    let descriptLabel: UITextView = {
+        let td = UITextView()
+        td.text = "Изучите понимание задачи. Если дизайнер что-то не так понял, обсудите с ним. По нашему опыту, согласованное понимание ускоряет выполнение задачи"
+        td.translatesAutoresizingMaskIntoConstraints = false
+        td.backgroundColor = UIColor.clear
+        td.font = UIFont.systemFont(ofSize: 14)
+        td.textColor = UIColor(r: 125, g: 125, b: 125)
+        td.isUserInteractionEnabled = false
+        td.isEditable = false
+        return td
+    }()
+    
+
     func setupView() {
-        backgroundColor = UIColor.whiteColor()
+        
+        
+        backgroundColor = UIColor.white
         addSubview(imageView)
         addSubview(textView)
+        addSubview(descriptView)
+        
+        
+        addConstraints("H:|[\(descriptView)]|", "H:|-16-[\(textView)]-16-|")
+        addConstraints("V:|[\(descriptView)]-8-[\(textView)]")
+
+        
+        
         addConstraints(imageView.leftAnchor == self.leftAnchor,
                        imageView.topAnchor == self.topAnchor,
                        imageView.widthAnchor == self.widthAnchor,
                        imageView.heightAnchor == self.heightAnchor,
-                       textView.leftAnchor == self.leftAnchor + 8,
-                       textView.widthAnchor == self.widthAnchor - 16,
-                       textView.topAnchor == self.topAnchor,
-                       textView.heightAnchor == self.heightAnchor - 160
+                       textView.heightAnchor == self.heightAnchor - 160,
+                       descriptView.heightAnchor == 110
         )
         
-        addSubview(priceLabel)
-        addConstraints( priceLabel.leftAnchor == self.leftAnchor + 16,
-                        priceLabel.topAnchor == textView.bottomAnchor,
-                       priceLabel.widthAnchor == self.widthAnchor / 2,
-                       priceLabel.heightAnchor == 40
-        )
-        
-//        imageWidthAnchor = imageView.widthAnchor.constraintEqualToConstant(200)
-//        imageWidthAnchor?.active = true
-        
-        
-         addSubview(timeLabel)
-        addConstraints(timeLabel.leftAnchor == priceLabel.rightAnchor,
-                        timeLabel.topAnchor == priceLabel.topAnchor,
-                       timeLabel.widthAnchor == self.widthAnchor / 2,
-                       timeLabel.heightAnchor == 40
-                       )
-        imageView.addSubview(myActivityIndicator)
-        
-        myActivityIndicator.center = imageView.center
-        myActivityIndicator.hidesWhenStopped = true
-        myActivityIndicator.startAnimating()
-        
-        
+        descriptView.addSubview(descriptLabel)
+        descriptView.addConstraints("H:|-16-[\(descriptLabel)]-16-|")
+        descriptView.addConstraints("V:|-8-[\(descriptLabel)]-8-|")
+    
         
     }
     
     
     
-    func handleZoomTap(tapGesture: UITapGestureRecognizer) {
+    func handleZoomTap(_ tapGesture: UITapGestureRecognizer) {
        
         //Pro Tip: don't perform a lot of custom logic inside of a view class
         if let imageView = tapGesture.view as? UIImageView {
@@ -413,29 +439,29 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
     var startingImageView: UIImageView?
     
     
-    func performZoomInForImageView(startingImageView: UIImageView) {
+    func performZoomInForImageView(_ startingImageView: UIImageView) {
         
         self.startingImageView = startingImageView
-        self.startingImageView?.hidden = true
+        self.startingImageView?.isHidden = true
         
-        startingFrame = startingImageView.superview?.convertRect(startingImageView.frame, toView: nil)
+        startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
         let zoomingImageView = ZoomingImageView(frame: startingFrame!)
         
         zoomingImageView.imageView.image = startingImageView.image
         
-        zoomingImageView.scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        zoomingImageView.userInteractionEnabled = true
+        zoomingImageView.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        zoomingImageView.isUserInteractionEnabled = true
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
         
-        if let keyWindow = UIApplication.sharedApplication().keyWindow {
+        if let keyWindow = UIApplication.shared.keyWindow {
             blackBackgroundView = UIView(frame: keyWindow.frame)
-            blackBackgroundView?.backgroundColor = UIColor.blackColor()
+            blackBackgroundView?.backgroundColor = UIColor.black
             blackBackgroundView?.alpha = 0
             
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
             
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.blackBackgroundView?.alpha = 1
 
                 let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
@@ -452,19 +478,19 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
     
   
     
-    func handleZoomOut(tapGesture: UITapGestureRecognizer ) {
+    func handleZoomOut(_ tapGesture: UITapGestureRecognizer ) {
         
         if let zoomOutImageView = tapGesture.view {
             
             zoomOutImageView.layer.cornerRadius = 16
             zoomOutImageView.clipsToBounds = true
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 zoomOutImageView.frame  = self.startingFrame!
                 self.blackBackgroundView?.alpha = 0
                 //                self.inputContainerView.alpha = 1
                 }, completion: { (completed: Bool) in
                     zoomOutImageView.removeFromSuperview()
-                    self.startingImageView?.hidden = false
+                    self.startingImageView?.isHidden = false
             })
         }
     }

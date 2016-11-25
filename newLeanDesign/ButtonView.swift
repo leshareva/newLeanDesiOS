@@ -27,14 +27,14 @@ class ButtonView: UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = blueColor
-        view.userInteractionEnabled = true
+        view.isUserInteractionEnabled = true
         return view
     }()
 
     let buttonLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.whiteColor()
+        label.textColor = UIColor.white
         return label
     }()
     
@@ -42,7 +42,7 @@ class ButtonView: UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(r: 109, g: 199, b: 82)
-        view.userInteractionEnabled = true
+        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -50,8 +50,8 @@ class ButtonView: UIView {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Согласуйте результаты этапа"
-        tv.font = UIFont.systemFontOfSize(14.0)
-        tv.textColor = UIColor.whiteColor()
+        tv.font = UIFont.systemFont(ofSize: 14.0)
+        tv.textColor = UIColor.white
         return tv
     }()
     
@@ -60,10 +60,10 @@ class ButtonView: UIView {
         self.addSubview(acceptTaskButtonView)
         self.addSubview(buttonLabel)
         
-        acceptTaskButtonView.bottomAnchor.constraintEqualToAnchor(self.bottomAnchor).active = true
-        acceptTaskButtonView.heightAnchor.constraintEqualToConstant(50).active = true
-        acceptTaskButtonView.leftAnchor.constraintEqualToAnchor(self.leftAnchor).active = true
-        acceptTaskButtonView.rightAnchor.constraintEqualToAnchor(self.rightAnchor).active = true
+        acceptTaskButtonView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        acceptTaskButtonView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        acceptTaskButtonView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        acceptTaskButtonView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         
         self.addConstraints(buttonLabel.centerXAnchor == acceptTaskButtonView.centerXAnchor,
                             buttonLabel.centerYAnchor == acceptTaskButtonView.centerYAnchor)
@@ -77,15 +77,16 @@ class ButtonView: UIView {
         alertButton.addConstraints(alertTextView.centerXAnchor == alertButton.centerXAnchor,
                                  alertTextView.centerYAnchor == alertButton.centerYAnchor)
         
-        self.alertButton.hidden = true
+        self.alertButton.isHidden = true
 
-        let options : UIViewAnimationOptions =  [UIViewAnimationOptions.Autoreverse, UIViewAnimationOptions.Repeat, UIViewAnimationOptions.CurveEaseOut, UIViewAnimationOptions.AllowUserInteraction]
-        UIView.animateWithDuration(1.0, delay: 0.0, options: options, animations: {
+        let options : UIViewAnimationOptions =  [UIViewAnimationOptions.autoreverse, UIViewAnimationOptions.repeat, UIViewAnimationOptions.curveEaseOut, UIViewAnimationOptions.allowUserInteraction]
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: options, animations: {
             self.alertButton.backgroundColor = UIColor(r: 139, g: 224, b: 112)
             }, completion: nil)
-        
-
-        
-        
     }
+    
+    func greenButton() {
+        self.backgroundColor = UIColor(r: 0, g: 0, b: 0)
+    }
+    
 }

@@ -12,8 +12,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     let discriptionLabel: UILabel = {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.textColor = UIColor.blackColor()
-        tv.textAlignment = .Center
+        tv.textColor = UIColor.black
+        tv.textAlignment = .center
         return tv
     }()
     
@@ -21,9 +21,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let imageView = UIImageView()
         imageView.image = UIImage(named: "close")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .scaleAspectFill
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handelCancel)))
-        imageView.userInteractionEnabled = true
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -31,9 +31,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let imageView = UIImageView()
         imageView.image = UIImage.gifWithName("spinner-duo")
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .scaleAspectFill
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
-        imageView.userInteractionEnabled = true
+        imageView.isUserInteractionEnabled = true
         imageView.layer.cornerRadius = 38
         imageView.layer.masksToBounds = true
         return imageView
@@ -42,7 +42,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     let inputForName: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 2
         view.layer.masksToBounds = true
@@ -50,7 +50,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.text = "Компания"
-        tf.font = UIFont.systemFontOfSize(16)
+        tf.font = UIFont.systemFont(ofSize: 16)
         tf.textColor = UIColor(r: 180, g: 180, b: 180)
         view.addSubview(tf)
         view.addConstraints("H:|-16-[\(tf)]")
@@ -63,14 +63,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     let firstField: UILabel = {
         let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFontOfSize(16)
+        tf.font = UIFont.systemFont(ofSize: 16)
         return tf
     }()
     
     
     let inputForPhone: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 2
         view.layer.masksToBounds = true
@@ -78,7 +78,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.text = "Телефон"
-        tf.font = UIFont.systemFontOfSize(16)
+        tf.font = UIFont.systemFont(ofSize: 16)
         tf.textColor = UIColor(r: 180, g: 180, b: 180)
         view.addSubview(tf)
         
@@ -91,17 +91,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     let phoneField: UILabel = {
         let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFontOfSize(16)
+        tf.font = UIFont.systemFont(ofSize: 16)
         return tf
     }()
 
     
     lazy var logoutButton: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
         view.translatesAutoresizingMaskIntoConstraints = false
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLogout)))
-        view.userInteractionEnabled = true
+        view.isUserInteractionEnabled = true
         
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -119,16 +119,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
         
         setupView()
         loadUserInfo()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         
     }
     
@@ -140,24 +140,24 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             return
         }
         let ref = FIRDatabase.database().reference().child("clients").child(userId)
-        ref.observeEventType(.Value, withBlock: { (snapshot) in
+        ref.observe(.value, with: { (snapshot) in
             
-            if let name = snapshot.value!["name"] as? String {
+            if let name = (snapshot.value as? NSDictionary)!["name"] as? String {
                self.discriptionLabel.text = name
             }
-            if let company = snapshot.value!["company"] as? String {
+            if let company = (snapshot.value as? NSDictionary)!["company"] as? String {
                 self.firstField.text = company
             }
             
-            if let profileImageUrl = snapshot.value!["photoUrl"] as? String  {
+            if let profileImageUrl = (snapshot.value as? NSDictionary)!["photoUrl"] as? String  {
                 self.profilePic.loadImageUsingCashWithUrlString(profileImageUrl)
             }
             
-            if let phone = snapshot.value!["phone"] as? String  {
+            if let phone = (snapshot.value as? NSDictionary)!["phone"] as? String  {
                 self.phoneField.text = phone
             }
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
     }
     
     func handleLogout() {
@@ -170,14 +170,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
 
         let loginController = LoginController()
-        presentViewController(loginController, animated: true, completion: nil)
+        present(loginController, animated: true, completion: nil)
         
         
         
     }
     
     func handelCancel() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     
@@ -232,7 +232,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             
             for each in assets {
                 each.fetchOriginalImage(false) {
-                    (image: UIImage?, info: [NSObject : AnyObject]?) in
+                    (image: UIImage?, info: [AnyHashable: Any]?) in
                     self.profilePic.image = image
 //                    let imageData: NSData = UIImagePNGRepresentation(image!)!
                     self.uploadToFirebaseStorageUsingImage(image!)
@@ -241,16 +241,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             
         }
         
-        self.presentViewController(pickerController, animated: true, completion: nil)
+        self.present(pickerController, animated: true, completion: nil)
     }
     
-    private func uploadToFirebaseStorageUsingImage(image: UIImage) {
-        let imageName = NSUUID().UUIDString
+    fileprivate func uploadToFirebaseStorageUsingImage(_ image: UIImage) {
+        let imageName = UUID().uuidString
         print(imageName)
         let ref = FIRStorage.storage().reference().child("user-image").child(imageName)
         
         if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
-            ref.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+            ref.put(uploadData, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
                     print("Faild upload image:", error)
                     return
@@ -265,10 +265,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
     
-    private func sendMessageWithImageUrl(imageUrl: String, image: UIImage) {
+    fileprivate func sendMessageWithImageUrl(_ imageUrl: String, image: UIImage) {
         let userId = Digits.sharedInstance().session()?.userID
         let ref = FIRDatabase.database().reference().child("clients").child(userId!)
-        let values: [String: AnyObject] = ["photoUrl": imageUrl]
+        let values: [String: AnyObject] = ["photoUrl": imageUrl as AnyObject]
         
         ref.updateChildValues(values) { (error, ref) in
             if error != nil {

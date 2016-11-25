@@ -10,11 +10,11 @@ import UIKit
 import Firebase
 import DigitsKit
 import DKImagePickerController
-
+import Swiftstraints
 
 class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     
-    let cashe = NSCache()
+    let cashe = NSCache<AnyObject, AnyObject>()
     var designerPic: String?
     
     var task: Task? {
@@ -38,18 +38,18 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
        
         let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
-        userMessagesRef.queryLimitedToLast(20).observeEventType(.ChildAdded, withBlock: { (snapshot) in
+        userMessagesRef.queryLimited(toLast: 20).observe(.childAdded, with: { (snapshot) in
             
             let taskMessagesRef = FIRDatabase.database().reference().child("messages").child(snapshot.key)
-            taskMessagesRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            taskMessagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             
-            let status = snapshot.value!["status"] as? String
+            let status = (snapshot.value as? NSDictionary)!["status"] as? String
                 if status == self.task!.fromId {
                     
-                    let values : [String: AnyObject] = ["status": "read"]
+                    let values : [String: AnyObject] = ["status": "read" as AnyObject]
                     taskMessagesRef.updateChildValues(values) { (error, ref) in
                         if error != nil {
-                            print(error)
+                            print(error!)
                             return
                         }
                     }
@@ -78,17 +78,17 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 }
                 
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.collectionView?.reloadData()
                     //scroll to the last index
-                    let indexPath = NSIndexPath(forItem: self.messages.count-1, inSection: 0)
-                    self.collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
+                    let indexPath = IndexPath(item: self.messages.count-1, section: 0)
+                    self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
                     
                 })
 
-                }, withCancelBlock: nil)
+                }, withCancel: nil)
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
     }
     
@@ -110,9 +110,9 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 8, right: 0)
         collectionView?.alwaysBounceVertical = true
-        collectionView?.backgroundColor = UIColor.whiteColor()
-        collectionView?.registerClass(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView?.keyboardDismissMode = .Interactive
+        collectionView?.backgroundColor = UIColor.white
+        collectionView?.register(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView?.keyboardDismissMode = .interactive
         
         setupNavbarWithUser()
         setupStepsView()
@@ -121,31 +121,42 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     
     func setupStepsView() {
-        let containerView = StepsView(frame: CGRectMake(0, 0, self.view.frame.size.width, 30))
+        
+        
+        let chatBannerView = ChatBannerView()
+        view.addSubview(chatBannerView)
+        chatBannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraints("H:|[\(chatBannerView)]|")
+        view.addConstraints("V:[\(chatBannerView)]-40-|")
+        view.addConstraints(chatBannerView.heightAnchor == 110)
+        chatBannerView.isHidden = true
+        
+        let containerView = StepsView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 30))
         view.addSubview(containerView)
         
-        let buttonView = ButtonView(frame: CGRectMake(0, 0, self.view.frame.size.width, 50))
+        let buttonView = ButtonView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 50))
         view.addSubview(buttonView)
         
         let taskId = task?.taskId
         let ref = FIRDatabase.database().reference().child("tasks").child(taskId!)
-        ref.observeEventType(.Value, withBlock: { (snapshot) in
-            let status = snapshot.value!["status"] as! String
+        ref.observe(.value, with: { (snapshot) in
+            let status = (snapshot.value as? NSDictionary)!["status"] as! String
             
             let tappy = MyTapGesture(target: self, action: #selector(self.openStepInfo(_:)))
 
             if status == "none" {
-                buttonView.alertButton.hidden = false
+                buttonView.alertButton.isHidden = false
                 buttonView.alertButton.backgroundColor = StepsView.activeColor
                 buttonView.alertTextView.text = "Мы подбираем дизайнера"
             } else  if status == "awareness" {
                 containerView.stepOne.backgroundColor = StepsView.activeColor
                 containerView.textOne.textColor = StepsView.activeTextColor
-                buttonView.hidden = true
+                buttonView.isHidden = true
+                chatBannerView.isHidden = false
             } else if status == "awarenessApprove" {
                 buttonView.alertTextView.text = "Согласуйте понимание задачи"
-                buttonView.alertButton.hidden = false
-                buttonView.hidden = false
+                buttonView.alertButton.isHidden = false
+                buttonView.isHidden = false
                 buttonView.alertButton.addGestureRecognizer(tappy)
                 tappy.status = "awareness"
             } else if status == "concept" {
@@ -153,10 +164,10 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textOne.textColor = StepsView.doneTextColor
                 containerView.stepTwo.backgroundColor = StepsView.activeColor
                 containerView.textTwo.textColor = StepsView.activeTextColor
-                buttonView.hidden = true
+                buttonView.isHidden = true
             } else if status == "conceptApprove" {
-                buttonView.hidden = false
-                buttonView.alertButton.hidden = false
+                buttonView.isHidden = false
+                buttonView.alertButton.isHidden = false
                 buttonView.alertTextView.text = "Согласуйте черновик"
                 buttonView.alertButton.addGestureRecognizer(tappy)
                 tappy.status = "concept"
@@ -167,11 +178,11 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textTwo.textColor = StepsView.doneTextColor
                 containerView.stepThree.backgroundColor = StepsView.activeColor
                 containerView.textThree.textColor = StepsView.activeTextColor
-                buttonView.hidden = true
+                buttonView.isHidden = true
             } else if status == "designApprove" {
-                buttonView.hidden = false
+                buttonView.isHidden = false
                 buttonView.alertTextView.text = "Согласуйте чистовик"
-                buttonView.alertButton.hidden = false
+                buttonView.alertButton.isHidden = false
                 buttonView.alertButton.addGestureRecognizer(tappy)
                 tappy.status = "design"
             } else if status == "sources" {
@@ -183,14 +194,14 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.textThree.textColor = StepsView.doneTextColor
                 containerView.stepFour.backgroundColor = StepsView.activeColor
                 containerView.textFour.textColor = StepsView.activeTextColor
-                buttonView.hidden = true
+                buttonView.isHidden = true
             } else if status == "done" {
-                buttonView.hidden = false
+                buttonView.isHidden = false
                 buttonView.alertTextView.text = "Задача закрыта, исходники лежат в вашей папке"
-                buttonView.alertButton.hidden = false
+                buttonView.alertButton.isHidden = false
                 buttonView.alertButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleDone)))
             }
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
         
         
@@ -212,32 +223,32 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
     }
     
-    func openStepInfo(sender : MyTapGesture) {
+    func openStepInfo(_ sender : MyTapGesture) {
         let status = sender.status
 
         let flowLayout = UICollectionViewFlowLayout()
         let conceptViewController = ConceptViewController(collectionViewLayout: flowLayout)
-        conceptViewController.view.backgroundColor = UIColor.whiteColor()
+        conceptViewController.view.backgroundColor = UIColor.white
         conceptViewController.task = task
         
         if let taskId = self.task?.taskId {
             let ref = FIRDatabase.database().reference().child("tasks").child(taskId).child(status!)
-            ref.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+            ref.observe(.childAdded, with: { (snapshot) in
                 guard let dictionary = snapshot.value as? [String : AnyObject] else {
                     return
                 }
 
                 conceptViewController.concepts.append(Concept(dictionary: dictionary))
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     conceptViewController.collectionView?.reloadData()
                 })
                 
-                }, withCancelBlock: nil)
+                }, withCancel: nil)
             
         }
         
         let navController = UINavigationController(rootViewController: conceptViewController)
-        presentViewController(navController, animated: true, completion: nil)
+        present(navController, animated: true, completion: nil)
         
     }
     
@@ -249,7 +260,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         titleView.layer.cornerRadius = 18
         titleView.layer.masksToBounds = true
         titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openDesignerProfile)))
-        titleView.userInteractionEnabled = true
+        titleView.isUserInteractionEnabled = true
         
         
         
@@ -257,12 +268,12 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         if let taskId = task!.taskId {
             
             let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
-            ref.observeEventType(.Value, withBlock: { (snapshot) in
-                if let imageUrl = snapshot.value!["imageUrl"] as? String {
+            ref.observe(.value, with: { (snapshot) in
+                if let imageUrl = (snapshot.value as? NSDictionary)!["imageUrl"] as? String {
                     self.designerPic = imageUrl
                      titleView.loadImageUsingCashWithUrlString(imageUrl)
                 }
-                }, withCancelBlock: nil)
+                }, withCancel: nil)
         }
         
         
@@ -280,36 +291,36 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     lazy var inputContainerView: UIView = {
         let containerView = UIView()
         containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
-        containerView.backgroundColor = UIColor.whiteColor()
+        containerView.backgroundColor = UIColor.white
         
         let uploadImage = UIImageView()
-        uploadImage.userInteractionEnabled = true
+        uploadImage.isUserInteractionEnabled = true
         uploadImage.image = UIImage(named: "addimage")
         uploadImage.translatesAutoresizingMaskIntoConstraints = false
         uploadImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadTap)))
         
         containerView.addSubview(uploadImage)
-        uploadImage.leftAnchor.constraintEqualToAnchor(containerView.leftAnchor, constant: 8).active = true
-        uploadImage.centerYAnchor.constraintEqualToAnchor(containerView.centerYAnchor).active = true
-        uploadImage.widthAnchor.constraintEqualToConstant(32).active = true
-        uploadImage.heightAnchor.constraintEqualToConstant(32).active = true
+        uploadImage.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
+        uploadImage.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        uploadImage.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        uploadImage.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
-        let sendButton = UIButton(type: .System)
-        sendButton.setTitle("Send", forState: .Normal)
+        let sendButton = UIButton(type: .system)
+        sendButton.setTitle("Send", for: UIControlState())
         sendButton.translatesAutoresizingMaskIntoConstraints = false
-        sendButton.addTarget(self, action: #selector(handleSend), forControlEvents: .TouchUpInside)
+        sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         
         containerView.addSubview(sendButton)
-        sendButton.centerYAnchor.constraintEqualToAnchor(containerView.centerYAnchor).active = true
-        sendButton.rightAnchor.constraintEqualToAnchor(containerView.rightAnchor).active = true
-        sendButton.widthAnchor.constraintEqualToConstant(80).active = true
-        sendButton.heightAnchor.constraintEqualToAnchor(containerView.heightAnchor).active = true
+        sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
         
         containerView.addSubview(self.messageField)
-        self.messageField.centerYAnchor.constraintEqualToAnchor(containerView.centerYAnchor).active = true
-        self.messageField.leftAnchor.constraintEqualToAnchor(uploadImage.rightAnchor, constant: 8).active = true
-        self.messageField.rightAnchor.constraintEqualToAnchor(sendButton.leftAnchor).active = true
-        self.messageField.heightAnchor.constraintEqualToAnchor(containerView.heightAnchor, constant: -10).active = true
+        self.messageField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        self.messageField.leftAnchor.constraint(equalTo: uploadImage.rightAnchor, constant: 8).isActive = true
+        self.messageField.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
+        self.messageField.heightAnchor.constraint(equalTo: containerView.heightAnchor, constant: -10).isActive = true
         
         let separator = UIView()
         separator.backgroundColor = UIColor(r: 240, g: 240, b: 240)
@@ -317,10 +328,10 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         containerView.addSubview(separator)
         
-        separator.bottomAnchor.constraintEqualToAnchor(containerView.topAnchor).active = true
-        separator.leftAnchor.constraintEqualToAnchor(containerView.leftAnchor).active = true
-        separator.rightAnchor.constraintEqualToAnchor(containerView.rightAnchor).active = true
-        separator.heightAnchor.constraintEqualToConstant(0.5).active = true
+        separator.bottomAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        separator.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        separator.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        separator.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         
         
         return containerView
@@ -337,7 +348,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
 
             for each in assets {
                 each.fetchOriginalImage(false) {
-                    (image: UIImage?, info: [NSObject : AnyObject]?) in
+                    (image: UIImage?, info: [AnyHashable: Any]?) in
                    
                     self.uploadToFirebaseStorageUsingImage(image!)
                 }
@@ -345,17 +356,17 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             
         }
         
-        self.presentViewController(pickerController, animated: true, completion: nil)
+        self.present(pickerController, animated: true, completion: nil)
     }
     
     
     
-    private func uploadToFirebaseStorageUsingImage(image: UIImage) {
-        let imageName = NSUUID().UUIDString
+    fileprivate func uploadToFirebaseStorageUsingImage(_ image: UIImage) {
+        let imageName = UUID().uuidString
         let ref = FIRStorage.storage().reference().child("message_image").child(imageName)
         
         if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
-            ref.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+            ref.put(uploadData, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
                     print("Faild upload image:", error)
                     return
@@ -372,20 +383,20 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     let sendMessageController = SendMessageController()
     
-    private func sendMessageWithImageUrl(imageUrl: String, image: UIImage) {
+    fileprivate func sendMessageWithImageUrl(_ imageUrl: String, image: UIImage) {
          let taskId = task?.taskId as String!
          let fromId = Digits.sharedInstance().session()?.userID as String!
-        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
-        let properties: [String: AnyObject] = ["imageUrl": imageUrl, "imageWidth": image.size.width, "imageHeight": image.size.height, "taskId": taskId, "timestamp": timestamp, "fromId": fromId]
+        let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
+        let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": image.size.width as AnyObject, "imageHeight": image.size.height as AnyObject, "taskId": taskId as AnyObject, "timestamp": timestamp as AnyObject, "fromId": fromId as AnyObject]
         
         self.sentMessages.append(String(imageUrl))
         self.messages.append(Message(dictionary: properties))
         
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             self.collectionView?.reloadData()
         })
        
-        self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId)
+        self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId!)
     }
     
     func handleSend() {
@@ -398,21 +409,21 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
            
             let fromId = Digits.sharedInstance().session()?.userID as String!
             
-            let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+            let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
 
-            let dictionary: [String: AnyObject] = ["text": messageText, "taskId": taskId, "timestamp": timestamp, "fromId": fromId]
+            let dictionary: [String: AnyObject] = ["text": messageText as AnyObject, "taskId": taskId as AnyObject, "timestamp": timestamp, "fromId": fromId as AnyObject]
             self.sentMessages.append(String(messageText))
             
             self.messages.append(Message(dictionary: dictionary))
             
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.collectionView?.reloadData()
             })
             
             
-            let properties: [String: AnyObject] = ["text": messageText]
-            self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId)
+            let properties: [String: AnyObject] = ["text": messageText as AnyObject]
+            self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId!)
             
             self.messageField.text = nil
 //            let properties: [String: AnyObject] = ["text": messageText]
@@ -426,8 +437,8 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
     
     
@@ -441,16 +452,16 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
 
     
-    override func canBecomeFirstResponder() -> Bool {
+    override var canBecomeFirstResponder : Bool {
         return true
     }
     
     
     func setupKeyboardObservers() {
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardDidShow), name: UIKeyboardDidShowNotification, object: nil)
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIKeyboardWillShowNotification, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIKeyboardWillHideNotification, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
     }
     
@@ -462,34 +473,34 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
 //        
 //    }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    func handleKeyboardWillShow(notification: NSNotification) {
-        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
-        let keyboardDuration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue
+    func handleKeyboardWillShow(_ notification: Notification) {
+        let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
+        let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
         containerViewBottomAnchor?.constant = -keyboardFrame!.height
-        UIView.animateWithDuration(keyboardDuration!) {
+        UIView.animate(withDuration: keyboardDuration!, animations: {
             self.view.layoutIfNeeded()
-        }
+        }) 
     }
     
-    func handleKeyboardWillHide(notification: NSNotification) {
+    func handleKeyboardWillHide(_ notification: Notification) {
 //        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
-        let keyboardDuration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue
+        let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
         containerViewBottomAnchor?.constant = 0
-        UIView.animateWithDuration(keyboardDuration!) {
+        UIView.animate(withDuration: keyboardDuration!, animations: {
             self.view.layoutIfNeeded()
-        }
+        }) 
     }
     
     
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellId, forIndexPath: indexPath) as! ChatMessageCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatMessageCell
         
         cell.chatLogController = self
         
@@ -502,11 +513,11 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         // lets modify the bubble width somehow??
         if let text = message.text {
             cell.bubbleWidthAnchor?.constant = estimateFrameForText(text).width + 32
-            cell.textView.hidden = false
+            cell.textView.isHidden = false
         } else if message.imageUrl != nil {
             //fall in here if its an image message
             cell.bubbleWidthAnchor?.constant = 200
-            cell.textView.hidden = true
+            cell.textView.isHidden = true
             
         }
         
@@ -522,62 +533,62 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
 
     
-    private func setupCell(cell: ChatMessageCell, message: Message) {
+    fileprivate func setupCell(_ cell: ChatMessageCell, message: Message) {
         if let messageImageUrl = message.imageUrl {
             cell.messageImageView.loadImageUsingCashWithUrlString(messageImageUrl)
-            cell.messageImageView.hidden = false
-            cell.textView.hidden = true
-            cell.bubbleView.backgroundColor = UIColor.clearColor()
+            cell.messageImageView.isHidden = false
+            cell.textView.isHidden = true
+            cell.bubbleView.backgroundColor = UIColor.clear
         } else {
-            cell.messageImageView.hidden = true
-            cell.textView.dataDetectorTypes = UIDataDetectorTypes.All
+            cell.messageImageView.isHidden = true
+            cell.textView.dataDetectorTypes = UIDataDetectorTypes.all
         }
 
         if message.fromId == Digits.sharedInstance().session()?.userID {
             //outgoing blue
             cell.bubbleView.backgroundColor = ChatMessageCell.blueColor
-            cell.textView.textColor = UIColor.blackColor()
-            cell.profileImageView.hidden = true
-            cell.bubleViewRightAnchor?.active = true
-            cell.bubbleViewLeftAnchor?.active = false
+            cell.textView.textColor = UIColor.black
+            cell.profileImageView.isHidden = true
+            cell.bubleViewRightAnchor?.isActive = true
+            cell.bubbleViewLeftAnchor?.isActive = false
         } else {
             //incominug gray
             cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-            cell.textView.textColor = UIColor.blackColor()
-            cell.profileImageView.hidden = false
-            cell.bubleViewRightAnchor?.active = false
-            cell.bubbleViewLeftAnchor?.active = true
+            cell.textView.textColor = UIColor.black
+            cell.profileImageView.isHidden = false
+            cell.bubleViewRightAnchor?.isActive = false
+            cell.bubbleViewLeftAnchor?.isActive = true
         }
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         collectionView?.collectionViewLayout.invalidateLayout()
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         var height: CGFloat = 80
         
         let message = messages[indexPath.item]
         if let text = message.text {
             height = estimateFrameForText(text).height + 20
-        } else if let imageWidth = message.imageWidth?.floatValue, imageHeight = message.imageHeight?.floatValue {
+        } else if let imageWidth = message.imageWidth?.floatValue, let imageHeight = message.imageHeight?.floatValue {
             //h1 / w1 = h2 / w2
             //solve for h1
             //h1 = h2 / w2 * w1
             height = CGFloat(imageHeight / imageWidth * 200)
         }
-        let width = UIScreen.mainScreen().bounds.width
+        let width = UIScreen.main.bounds.width
         return CGSize(width: width, height: height)
     }
     
-    private func estimateFrameForText(text: String) -> CGRect {
+    fileprivate func estimateFrameForText(_ text: String) -> CGRect {
         let size = CGSize(width: 200, height: 1000)
-        let options = NSStringDrawingOptions.UsesFontLeading.union(.UsesLineFragmentOrigin)
-        return NSString(string: text).boundingRectWithSize(size, options: options, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(16)], context: nil)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 16)], context: nil)
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
     }
     
@@ -586,33 +597,33 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     func setupInputComponents() {
         let containerView = UIView()
         
-        containerView.backgroundColor = UIColor.whiteColor()
+        containerView.backgroundColor = UIColor.white
         containerView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(containerView)
         
         
-        containerView.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-        containerView.leftAnchor.constraintEqualToAnchor(view.leftAnchor).active = true
-        containerView.widthAnchor.constraintEqualToAnchor(view.widthAnchor).active = true
-        containerView.heightAnchor.constraintEqualToConstant(40).active = true
+        containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        containerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        let sendButton = UIButton(type: .System)
-        sendButton.setTitle("Send", forState: .Normal)
+        let sendButton = UIButton(type: .system)
+        sendButton.setTitle("Send", for: UIControlState())
         sendButton.translatesAutoresizingMaskIntoConstraints = false
-        sendButton.addTarget(self, action: #selector(handleSend), forControlEvents: .TouchUpInside)
+        sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         
         containerView.addSubview(sendButton)
-        sendButton.centerYAnchor.constraintEqualToAnchor(containerView.centerYAnchor).active = true
-        sendButton.rightAnchor.constraintEqualToAnchor(containerView.rightAnchor).active = true
-        sendButton.widthAnchor.constraintEqualToConstant(80).active = true
-        sendButton.heightAnchor.constraintEqualToAnchor(containerView.heightAnchor).active = true
+        sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
         
         containerView.addSubview(messageField)
-        messageField.centerYAnchor.constraintEqualToAnchor(containerView.centerYAnchor).active = true
-        messageField.leftAnchor.constraintEqualToAnchor(containerView.leftAnchor, constant: 8).active = true
-        messageField.rightAnchor.constraintEqualToAnchor(sendButton.leftAnchor).active = true
-        messageField.heightAnchor.constraintEqualToAnchor(containerView.heightAnchor, constant: -10).active = true
+        messageField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        messageField.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
+        messageField.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
+        messageField.heightAnchor.constraint(equalTo: containerView.heightAnchor, constant: -10).isActive = true
         
         let separator = UIView()
         separator.backgroundColor = UIColor(r: 240, g: 240, b: 240)
@@ -620,14 +631,14 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         view.addSubview(separator)
         
-        separator.bottomAnchor.constraintEqualToAnchor(containerView.topAnchor).active = true
-        separator.leftAnchor.constraintEqualToAnchor(containerView.leftAnchor).active = true
-        separator.rightAnchor.constraintEqualToAnchor(containerView.rightAnchor).active = true
-        separator.heightAnchor.constraintEqualToConstant(0.5).active = true
+        separator.bottomAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        separator.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        separator.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        separator.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
     }
     
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         handleSend()
         return true
     }
@@ -637,29 +648,29 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     var startingImageView: UIImageView?
    
     
-    func performZoomInForImageView(startingImageView: UIImageView) {
+    func performZoomInForImageView(_ startingImageView: UIImageView) {
     
         self.startingImageView = startingImageView
-        self.startingImageView?.hidden = true
+        self.startingImageView?.isHidden = true
         
-        startingFrame = startingImageView.superview?.convertRect(startingImageView.frame, toView: nil)
+        startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
         let zoomingImageView = ZoomingImageView(frame: startingFrame!)
     
         zoomingImageView.imageView.image = startingImageView.image
        
-        zoomingImageView.scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        zoomingImageView.userInteractionEnabled = true
+        zoomingImageView.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        zoomingImageView.isUserInteractionEnabled = true
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
         
-        if let keyWindow = UIApplication.sharedApplication().keyWindow {
+        if let keyWindow = UIApplication.shared.keyWindow {
             blackBackgroundView = UIView(frame: keyWindow.frame)
-            blackBackgroundView?.backgroundColor = UIColor.blackColor()
+            blackBackgroundView?.backgroundColor = UIColor.black
             blackBackgroundView?.alpha = 0
             inputContainerView.alpha = 1
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
             
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: { 
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
                 self.blackBackgroundView?.alpha = 1
                 self.inputContainerView.alpha = 0
                 
@@ -678,18 +689,18 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
     
-    func handleZoomOut(tapGesture: UITapGestureRecognizer ) {
+    func handleZoomOut(_ tapGesture: UITapGestureRecognizer ) {
         
         if let zoomOutImageView = tapGesture.view {
             zoomOutImageView.layer.cornerRadius = 16
             zoomOutImageView.clipsToBounds = true
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseOut, animations: {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 zoomOutImageView.frame  = self.startingFrame!
                 self.blackBackgroundView?.alpha = 0
                 self.inputContainerView.alpha = 1
                 }, completion: { (completed: Bool) in
                     zoomOutImageView.removeFromSuperview()
-                    self.startingImageView?.hidden = false
+                    self.startingImageView?.isHidden = false
             })
         }
     }
@@ -700,6 +711,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
 
 
 class MyTapGesture: UITapGestureRecognizer {
-    var message = Message?()
-    var status = String?()
+    var message: Message?
+    var status: String?
 }

@@ -17,7 +17,7 @@ class StepsView: UIView {
     }
     
     static let activeColor = UIColor(r: 0, g: 127, b: 255)
-    static let activeTextColor = UIColor.whiteColor()
+    static let activeTextColor = UIColor.white
     static let doneColor = UIColor(r: 192, g: 203, b: 214)
     static let doneTextColor = UIColor(r: 130, g: 147, b: 164)
     
@@ -33,7 +33,7 @@ class StepsView: UIView {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Понимание"
-        tv.font = UIFont.systemFontOfSize(12.0)
+        tv.font = UIFont.systemFont(ofSize: 12.0)
         tv.textColor = UIColor(r: 170, g: 170, b: 170)
         return tv
     }()
@@ -48,7 +48,7 @@ class StepsView: UIView {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Черновик"
-        tv.font = UIFont.systemFontOfSize(12.0)
+        tv.font = UIFont.systemFont(ofSize: 12.0)
         tv.textColor = UIColor(r: 170, g: 170, b: 170)
         return tv
     }()
@@ -63,7 +63,7 @@ class StepsView: UIView {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Чистовик"
-        tv.font = UIFont.systemFontOfSize(12.0)
+        tv.font = UIFont.systemFont(ofSize: 12.0)
         tv.textColor = UIColor(r: 170, g: 170, b: 170)
         return tv
     }()
@@ -78,7 +78,7 @@ class StepsView: UIView {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Исходник"
-        tv.font = UIFont.systemFontOfSize(12.0)
+        tv.font = UIFont.systemFont(ofSize: 12.0)
         tv.textColor = UIColor(r: 170, g: 170, b: 170)
         return tv
     }()

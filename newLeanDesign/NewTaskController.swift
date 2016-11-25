@@ -21,10 +21,10 @@ class NewTaskController: UIViewController {
         td.text = "Расскажите коротко о задаче. Дизайнер свяжется с вами и уточнит детали."
 
         td.translatesAutoresizingMaskIntoConstraints = false
-        td.backgroundColor = UIColor.clearColor()
-        td.font = UIFont.systemFontOfSize(16)
-        td.userInteractionEnabled = false
-        td.editable = false
+        td.backgroundColor = UIColor.clear
+        td.font = UIFont.systemFont(ofSize: 16)
+        td.isUserInteractionEnabled = false
+        td.isEditable = false
         return td
     }()
     
@@ -38,8 +38,8 @@ class NewTaskController: UIViewController {
     //поле имя
     let taskTextField: UITextView = {
         let tf = UITextView()
-        tf.selectable = true
-        tf.font = UIFont.systemFontOfSize(18, weight: UIFontWeightThin)
+        tf.isSelectable = true
+        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.becomeFirstResponder()
         return tf
@@ -50,10 +50,10 @@ class NewTaskController: UIViewController {
         imageView.image = UIImage(named: "attach")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectAttachImageView)))
-        imageView.userInteractionEnabled = true
+        imageView.isUserInteractionEnabled = true
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
@@ -63,19 +63,18 @@ class NewTaskController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .Plain, target: self, action: #selector(cancelNewTask))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить", style: .Plain, target: self, action: #selector(addNewTask));
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelNewTask))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить", style: .plain, target: self, action: #selector(addNewTask));
         
         setupInputForOrder()
-        
     }
 
     
     func cancelNewTask() {
         view.endEditing(true)
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     

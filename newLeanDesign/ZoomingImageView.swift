@@ -23,7 +23,7 @@ class ZoomingImageView: UIView, UIScrollViewDelegate {
         imageView = UIImageView(frame: self.frame)
         
         scrollView = UIScrollView(frame: self.bounds)
-        scrollView.backgroundColor = UIColor.clearColor()
+        scrollView.backgroundColor = UIColor.clear
         scrollView.contentSize = self.bounds.size
         scrollView.addSubview(imageView)
         addSubview(scrollView)
@@ -33,7 +33,7 @@ class ZoomingImageView: UIView, UIScrollViewDelegate {
         scrollView.zoomScale = 1.0
     }
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
 

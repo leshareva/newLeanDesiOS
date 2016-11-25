@@ -11,6 +11,30 @@ import Firebase
 import AVFoundation
 import DigitsKit
 import Swiftstraints
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -27,15 +51,15 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        tableView.frame         =   CGRectMake(0, 0, 320, screenSize.height);
+        let screenSize: CGRect = UIScreen.main.bounds
+        tableView.frame         =   CGRect(x: 0, y: 0, width: 320, height: screenSize.height);
         tableView.delegate      =   self
         tableView.dataSource    =   self
         
-        tableView.registerClass(TaskCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(TaskCell.self, forCellReuseIdentifier: cellId)
         tableView.allowsMultipleSelectionDuringEditing = true
         
-        navigationController?.navigationBar.translucent = false
+        navigationController?.navigationBar.isTranslucent = false
         
         fetchUser()
         
@@ -46,32 +70,32 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "Мои задачи"
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! TaskCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! TaskCell
         
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.text
         cell.detailTextLabel?.text = task.status
-        cell.timeLabel.text = String(task.price!)
-        cell.notificationsLabel.hidden = true
+        cell.timeLabel.text = String(describing: task.price!)
+        cell.notificationsLabel.isHidden = true
         
         if let taskImageUrl = task.imageUrl {
             cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
@@ -82,12 +106,12 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let task = tasks[indexPath.row]
         showChatControllerForUser(task)
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64
     }
     
@@ -95,7 +119,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func fetchUser() {
         tasks.removeAll()
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
         })
         observeUserTasks()
@@ -108,25 +132,25 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         let ref = FIRDatabase.database().reference().child("user-tasks").child(uid)
-        ref.observeEventType(.ChildAdded, withBlock: { (snapshot) in
+        ref.observe(.childAdded, with: { (snapshot) in
             
             let taskId = snapshot.key
             let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-            taskRef.observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+            taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                  
                         let task = Task()
-                        task.setValuesForKeysWithDictionary(dictionary)
+                        task.setValuesForKeys(dictionary)
                         self.tasks.append(task)
-                        self.tasks = self.tasks.reverse()
-                        dispatch_async(dispatch_get_main_queue(), {
+                        self.tasks = self.tasks.reversed()
+                        DispatchQueue.main.async(execute: {
                             self.tableView.reloadData()
                         })
                 }
                 
-                }, withCancelBlock: nil)
-            }, withCancelBlock: nil)
+                }, withCancel: nil)
+            }, withCancel: nil)
         
     }
     
@@ -134,53 +158,53 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     
-    func showChatControllerForUser(task: Task) {
+    func showChatControllerForUser(_ task: Task) {
         let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
         chatController.task = task
         navigationController?.pushViewController(chatController, animated: true)
     }
     
-    func showControllerForSetting(setting: Setting) {
+    func showControllerForSetting(_ setting: Setting) {
         
         if setting.name == .Exit {
             //            handleLogout()
             let archiveViewController = ArchiveViewController()
             archiveViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             archiveViewController.navigationItem.title = setting.name.rawValue
-            presentViewController(archiveViewController, animated: true, completion: nil)
+            present(archiveViewController, animated: true, completion: nil)
             
         } else if setting.name == .Settings {
             let profileViewController = ProfileViewController()
             profileViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             profileViewController.navigationItem.title = setting.name.rawValue
-            presentViewController(profileViewController, animated: true, completion: nil)
+            present(profileViewController, animated: true, completion: nil)
         } else {
             let dummySettingsViewController = UIViewController()
-            dummySettingsViewController.view.backgroundColor = UIColor.whiteColor()
+            dummySettingsViewController.view.backgroundColor = UIColor.white
             dummySettingsViewController.navigationItem.title = setting.name.rawValue
-            navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-            navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+            navigationController?.navigationBar.tintColor = UIColor.white
+            navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
             navigationController?.pushViewController(dummySettingsViewController, animated: true)
         }
         
     }
     
     
-    private func attemptReloadTable() {
+    fileprivate func attemptReloadTable() {
         self.timer?.invalidate()
         
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+        self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
     }
     
-    var timer: NSTimer?
+    var timer: Timer?
     
     func handleReloadTable() {
         self.tasks = Array(self.taskDictionary.values)
-        self.tasks.sortInPlace({ (task1, task2) -> Bool in
-            return task1.start?.intValue > task2.start?.intValue
+        self.tasks.sort(by: { (task1, task2) -> Bool in
+            return task1.start?.int32Value > task2.start?.int32Value
         })
         //this will crash because of background thread, so lets call this on dispatch_async main thread
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
         })
         

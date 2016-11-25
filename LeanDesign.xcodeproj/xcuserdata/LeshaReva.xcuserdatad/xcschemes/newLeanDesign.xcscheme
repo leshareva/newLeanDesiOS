@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CBE682B71D93EBD300CB3679"
-               BuildableName = "Lean Design.app"
-               BlueprintName = "Lean Design"
-               ReferencedContainer = "container:Lean Design.xcodeproj">
+               BuildableName = "LeanDesign.app"
+               BlueprintName = "LeanDesign"
+               ReferencedContainer = "container:LeanDesign.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CBE682B71D93EBD300CB3679"
-            BuildableName = "Lean Design.app"
-            BlueprintName = "Lean Design"
-            ReferencedContainer = "container:Lean Design.xcodeproj">
+            BuildableName = "LeanDesign.app"
+            BlueprintName = "LeanDesign"
+            ReferencedContainer = "container:LeanDesign.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,11 +56,18 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CBE682B71D93EBD300CB3679"
-            BuildableName = "Lean Design.app"
-            BlueprintName = "Lean Design"
-            ReferencedContainer = "container:Lean Design.xcodeproj">
+            BuildableName = "LeanDesign.app"
+            BlueprintName = "LeanDesign"
+            ReferencedContainer = "container:LeanDesign.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "OS_ACTIVITY_MODE"
+            value = "disable"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -75,9 +82,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CBE682B71D93EBD300CB3679"
-            BuildableName = "Lean Design.app"
-            BlueprintName = "Lean Design"
-            ReferencedContainer = "container:Lean Design.xcodeproj">
+            BuildableName = "LeanDesign.app"
+            BlueprintName = "LeanDesign"
+            ReferencedContainer = "container:LeanDesign.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

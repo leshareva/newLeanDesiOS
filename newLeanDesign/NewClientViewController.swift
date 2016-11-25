@@ -11,8 +11,17 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     let discriptionLabel: UILabel = {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.textColor = UIColor.whiteColor()
-        tv.textAlignment = .Left
+        tv.textColor = UIColor.white
+        tv.textAlignment = .left
+        tv.numberOfLines = 3
+        return tv
+    }()
+    
+    let waitingLabel: UILabel = {
+        let tv = UILabel()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textColor = UIColor.white
+        tv.textAlignment = .center
         tv.numberOfLines = 3
         return tv
     }()
@@ -27,8 +36,8 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.text = "Имя"
-        tf.font = UIFont.systemFontOfSize(16)
-        tf.textColor = .whiteColor()
+        tf.font = UIFont.systemFont(ofSize: 16)
+        tf.textColor = .white
         view.addSubview(tf)
         view.addConstraints("H:|-16-[\(tf)]")
         view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
@@ -37,11 +46,11 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
 
     let nameField: UITextView = {
         let tf = UITextView()
-        tf.backgroundColor = .clearColor()
-        tf.textColor = .whiteColor()
+        tf.backgroundColor = .clear
+        tf.textColor = .white
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFontOfSize(18, weight: UIFontWeightThin)
-        tf.selectable = true
+        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
+        tf.isSelectable = true
         tf.becomeFirstResponder()
         return tf
     }()
@@ -56,8 +65,8 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.text = "Фамилия"
-        tf.font = UIFont.systemFontOfSize(16)
-        tf.textColor = .whiteColor()
+        tf.font = UIFont.systemFont(ofSize: 16)
+        tf.textColor = .white
         view.addSubview(tf)
         view.addConstraints("H:|-16-[\(tf)]")
         view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
@@ -66,11 +75,11 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     let secondNameField: UITextView = {
         let tf = UITextView()
-        tf.backgroundColor = .clearColor()
-        tf.textColor = .whiteColor()
+        tf.backgroundColor = .clear
+        tf.textColor = .white
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFontOfSize(18, weight: UIFontWeightThin)
-        tf.selectable = true
+        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
+        tf.isSelectable = true
         return tf
     }()
     
@@ -85,8 +94,8 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.text = "Эл. почта"
-        tf.font = UIFont.systemFontOfSize(16)
-        tf.textColor = .whiteColor()
+        tf.font = UIFont.systemFont(ofSize: 16)
+        tf.textColor = .white
         view.addSubview(tf)
         view.addConstraints("H:|-16-[\(tf)]")
         view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
@@ -95,11 +104,11 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     let emailField: UITextView = {
         let tf = UITextView()
-        tf.backgroundColor = .clearColor()
-        tf.textColor = .whiteColor()
+        tf.backgroundColor = .clear
+        tf.textColor = .white
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFontOfSize(18, weight: UIFontWeightThin)
-        tf.selectable = true
+        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
+        tf.isSelectable = true
         return tf
     }()
     
@@ -113,8 +122,8 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let tf = UILabel()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.text = "Компания"
-        tf.font = UIFont.systemFontOfSize(16)
-        tf.textColor = .whiteColor()
+        tf.font = UIFont.systemFont(ofSize: 16)
+        tf.textColor = .white
         view.addSubview(tf)
         view.addConstraints("H:|-16-[\(tf)]")
         view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
@@ -123,11 +132,11 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     let companyField: UITextView = {
         let tf = UITextView()
-        tf.backgroundColor = .clearColor()
-        tf.textColor = .whiteColor()
+        tf.backgroundColor = .clear
+        tf.textColor = .white
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFontOfSize(18, weight: UIFontWeightThin)
-        tf.selectable = true
+        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
+        tf.isSelectable = true
         return tf
     }()
     
@@ -135,7 +144,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     let alertView: UIView = {
         let view = UIView()
-        view.backgroundColor = .redColor()
+        view.backgroundColor = .red
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 2
         view.layer.masksToBounds = true
@@ -144,10 +153,19 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     let alertLabel: UILabel = {
         let tf = UILabel()
-        tf.backgroundColor = .clearColor()
-        tf.textColor = .whiteColor()
+        tf.backgroundColor = .clear
+        tf.textColor = .white
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFontOfSize(18, weight: UIFontWeightThin)
+        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
+        return tf
+    }()
+    
+    let licenseText: UITextField = {
+        let tf = UITextField()
+        tf.backgroundColor = .clear
+        tf.textColor = .white
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightThin)
         return tf
     }()
     
@@ -158,12 +176,25 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(r: 0, g: 127, b: 255)
-
+        UINavigationBar.appearance().barTintColor = UIColor(r: 0, g: 127, b: 255)
+        navigationController?.navigationBar.isTranslucent = false
+        
+       
+        
+        licenseText.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLicense)))
+        licenseText.textColor = .white
+        
+        
+        
         checkUser()
         handleRefresh()
     }
     
+    func handleLicense() {
+
+    }
     
+  
     func handleRefresh() {
         guard let userId = Digits.sharedInstance().session()?.userID else {
             return
@@ -172,12 +203,12 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let ref = FIRDatabase.database().reference()
         let clientsReference = ref.child("clients")
         
-        clientsReference.observeEventType(.Value, withBlock: { (snapshot) in
+        clientsReference.observe(.value, with: { (snapshot) in
             if snapshot.hasChild(userId) {
                 let taskViewController = TaskViewController()
                 self.navigationController?.pushViewController(taskViewController, animated: true)
             }
-        }, withCancelBlock: nil)
+        }, withCancel: nil)
     }
     
     
@@ -193,7 +224,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let ref = FIRDatabase.database().reference()
         let clientsReference = ref.child("requests").child("clients")
         
-        clientsReference.observeEventType(.Value, withBlock: { (snapshot) in
+        clientsReference.observe(.value, with: { (snapshot) in
             
             if snapshot.hasChild(userId) {
                 print("We have this request")
@@ -203,14 +234,14 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
                 self.setupInputsForLogin()
             }
             
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
         
     }
     
     
     
     func dissmissController() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func handleSend() {
@@ -223,33 +254,33 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
             return
         }
         
-        guard let name = nameField.text where !name.isEmpty else {
-            alertView.hidden = false
+        guard let name = nameField.text, !name.isEmpty else {
+            alertView.isHidden = false
             alertLabel.text = "Укажите имя"
             return
         }
         
-        guard let sename = secondNameField.text where !sename.isEmpty else {
-            alertView.hidden = false
+        guard let sename = secondNameField.text, !sename.isEmpty else {
+            alertView.isHidden = false
             alertLabel.text = "Укажите Фамилию"
             return
         }
         
-        guard let email = emailField.text where !email.isEmpty else {
-            alertView.hidden = false
+        guard let email = emailField.text, !email.isEmpty else {
+            alertView.isHidden = false
             alertLabel.text = "Укажите почту"
             return
         }
         
-        guard let company = companyField.text where !company.isEmpty else {
-            alertView.hidden = false
+        guard let company = companyField.text, !company.isEmpty else {
+            alertView.isHidden = false
             alertLabel.text = "Укажите компанию"
             return
         }
         
         let ref = FIRDatabase.database().reference()
         let requestReference = ref.child("requests").child("clients")
-        let values: [String: AnyObject] = ["phone": phone, "lastName": sename, "id": userId, "email": email, "company": company, "firstName": name, "state": "none", "rate": 0.6, "sum": 0]
+        let values: [String: AnyObject] = ["phone": phone as AnyObject, "lastName": sename as AnyObject, "id": userId as AnyObject, "email": email as AnyObject, "company": company as AnyObject, "firstName": name as AnyObject, "state": "none" as AnyObject, "rate": 0.6 as AnyObject, "sum": 0 as AnyObject]
         
         requestReference.child(userId).updateChildValues(values) { (error, ref) in
             if error != nil {
@@ -258,13 +289,16 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
             }
         }
         
-        inputForCompany.hidden = true
-        inputForName.hidden = true
-        inputForEmail.hidden = true
-        inputForSecondName.hidden = true
+        inputForCompany.isHidden = true
+        inputForName.isHidden = true
+        inputForEmail.isHidden = true
+        inputForSecondName.isHidden = true
+        alertView.isHidden = true
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .Plain, target: self, action: #selector(self.handleRefresh));
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .plain, target: self, action: #selector(self.handleRefresh));
+        
+        view.endEditing(true)
         let startViewController = StartViewController()
         startViewController.checkUserInBase()
         
@@ -273,15 +307,19 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     
     func setupWaitingView() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .Plain, target: self, action: #selector(self.handleRefresh))
-        view.addSubview(discriptionLabel)
-        discriptionLabel.text = "Мы рассматриваем вашу заявку"
-        view.addConstraints("V:|-80-[\(discriptionLabel)]")
-        view.addConstraints("H:|-10-[\(discriptionLabel)]-10-|")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .plain, target: self, action: #selector(self.handleRefresh))
+        discriptionLabel.isHidden = true
+        view.addSubview(waitingLabel)
+        
+        waitingLabel.text = "Мы рассматриваем вашу заявку"
+        view.addConstraints("V:|-80-[\(waitingLabel)]")
+        view.addConstraints("H:|-10-[\(waitingLabel)]-10-|")
     }
     
+   
+    
     func setupInputsForLogin() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Отправить", style: .Plain, target: self, action: #selector(self.handleSend));
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Отправить", style: .plain, target: self, action: #selector(self.handleSend));
         view.addSubview(discriptionLabel)
         discriptionLabel.text = "Еще пару моментов, и сможем начать работать"
         view.addSubview(inputForName)
@@ -289,11 +327,12 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         view.addSubview(inputForCompany)
         view.addSubview(inputForSecondName)
         view.addSubview(alertView)
+        view.addSubview(licenseText)
         
-        view.addConstraints("V:|-80-[\(discriptionLabel)]-10-[\(inputForName)]-1-[\(inputForSecondName)]-1-[\(inputForEmail)]-1-[\(inputForCompany)]-1-[\(alertView)]")
-        view.addConstraints("H:|-10-[\(discriptionLabel)]-10-|","H:|[\(inputForName)]|","H:|[\(inputForEmail)]|","H:|[\(inputForCompany)]|",
-                            "H:|[\(alertView)]|", "H:|[\(inputForSecondName)]|")
-        view.addConstraints(inputForName.heightAnchor == 40, inputForEmail.heightAnchor == 40, inputForCompany.heightAnchor == 40, alertView.heightAnchor == 40, inputForSecondName.heightAnchor == 40)
+        view.addConstraints("V:|-20-[\(discriptionLabel)]-10-[\(inputForName)]-1-[\(inputForSecondName)]-1-[\(inputForEmail)]-1-[\(inputForCompany)]-1-[\(licenseText)]")
+        view.addConstraints("H:|-10-[\(discriptionLabel)]-10-|","H:|[\(inputForName)]|","H:|[\(licenseText)]|","H:|[\(inputForCompany)]|","H:|[\(inputForEmail)]|",
+                            "H:|[\(alertView)]|", "H:|[\(inputForSecondName)]|", "H:|[\(licenseText)]|")
+        view.addConstraints(inputForName.heightAnchor == 40, inputForEmail.heightAnchor == 40, inputForCompany.heightAnchor == 40, alertView.heightAnchor == 40, inputForSecondName.heightAnchor == 40, licenseText.heightAnchor == 40)
        
         inputForName.addSubview(nameField)
         inputForEmail.addSubview(emailField)
@@ -325,7 +364,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         alertView.addConstraints(alertLabel.centerYAnchor == alertView.centerYAnchor,
                                  alertLabel.heightAnchor == alertView.heightAnchor,
                                  alertLabel.centerXAnchor == alertView.centerXAnchor)
-        alertView.hidden = true
+        alertView.isHidden = true
     }
     
     

@@ -29,7 +29,7 @@ class StartViewController: UIViewController {
         view.addConstraints("V:|[\(imageView)]|")
         
         view.backgroundColor = UIColor(r: 0, g: 127, b: 255)
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         checkIfUserIsLoggedIn()
     }
@@ -39,7 +39,7 @@ class StartViewController: UIViewController {
         let digitsUid = digits.session()?.userID
         
         if digitsUid == nil {
-            performSelector(#selector(handleLogout), withObject: nil, afterDelay: 0)
+            perform(#selector(handleLogout), with: nil, afterDelay: 0)
         } else {
             checkUserInBase()
         }
@@ -54,7 +54,7 @@ class StartViewController: UIViewController {
         let ref = FIRDatabase.database().reference()
         let clientsReference = ref.child("clients")
         
-        clientsReference.observeEventType(.Value, withBlock: { (snapshot) in
+        clientsReference.observe(.value, with: { (snapshot) in
             if snapshot.hasChild(userId) {
                 print("it's our client!")
                 let taskViewController = TaskViewController()
@@ -64,11 +64,11 @@ class StartViewController: UIViewController {
                 print("itsn't our client!")
                 let newClientViewController = NewClientViewController()
                 let navController = UINavigationController(rootViewController: newClientViewController)
-                self.presentViewController(navController, animated: true, completion: nil) 
+                self.present(navController, animated: true, completion: nil) 
             }
             
         
-            }, withCancelBlock: nil)
+            }, withCancel: nil)
     }
     
     
@@ -85,7 +85,7 @@ class StartViewController: UIViewController {
         
         let loginController = LoginController()
         loginController.startViewController = self
-        presentViewController(loginController, animated: true, completion: nil)
+        present(loginController, animated: true, completion: nil)
     }
     
 }

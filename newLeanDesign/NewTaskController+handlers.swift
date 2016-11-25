@@ -26,7 +26,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
             
             for each in assets {
                 each.fetchOriginalImage(false) {
-                    (image: UIImage?, info: [NSObject : AnyObject]?) in
+                    (image: UIImage?, info: [AnyHashable: Any]?) in
                     
                     if let selectedImage = image {
                         self.attachImageView.image = selectedImage
@@ -36,7 +36,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
             
         }
         
-        self.presentViewController(pickerController, animated: true, completion: nil)
+        self.present(pickerController, animated: true, completion: nil)
         
     }
     
@@ -46,27 +46,32 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
             return
         }
         
-        guard let taskText = taskTextField.text where !taskText.isEmpty else {
+        guard let taskText = taskTextField.text, !taskText.isEmpty else {
             return
         }
 
         let ref = FIRDatabase.database().reference().child("tasks")
         let postRef = ref.childByAutoId()
-        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+        let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
         let taskId = postRef.key
         let toId = "designStudio"
         let phone = Digits.sharedInstance().session()?.phoneNumber
         
-        let values : [String : AnyObject] = ["fromId": fromId, "text": taskText, "taskId": taskId, "status": "none", "toId": toId, "price": 0, "phone": phone!, "rate": 0.5, "timestamp": timestamp]
+        let values : [String : AnyObject] = ["fromId": fromId as AnyObject, "text": taskText as AnyObject, "taskId": taskId as AnyObject, "status": "none" as AnyObject, "toId": toId as AnyObject, "price": 0 as AnyObject, "phone": phone! as AnyObject, "rate": 0.5 as AnyObject, "timestamp": timestamp]
         
         postRef.setValue(values)
         postRef.updateChildValues(values) { (error, ref) in
             if error != nil {
-                print(error)
+                print(error!)
                 return
             }
             
             let taskId = postRef.key
+            
+            
+            
+            
+            
             
             let activeTaskRef = FIRDatabase.database().reference().child("active-tasks").child(fromId)
             activeTaskRef.updateChildValues([taskId: 1])
@@ -79,7 +84,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         let messageValues = ["text": taskText, "taskId": taskId, "fromId": fromId, "toId": toId]
         messageРostRef.updateChildValues(messageValues) { (error, ref) in
             if error != nil {
-                print(error)
+                print(error!)
                 return
             }
             
@@ -89,22 +94,24 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         let messageID = messageРostRef.key
         userMessagesRef.updateChildValues([messageID: 1])
         
+        
+        
         view.endEditing(true)
         self.sendTaskImageToChat(fromId, taskId: taskId)
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    func sendTaskImageToChat(fromId: String, taskId: String) {
+    func sendTaskImageToChat(_ fromId: String, taskId: String) {
 //        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
         let image = attachImageView.image
-        let imageName = NSUUID().UUIDString
+        let imageName = UUID().uuidString
         let imageref = FIRStorage.storage().reference().child("task_image").child(imageName)
         
         if image != UIImage(named: "attach") {
             if let uploadData = UIImageJPEGRepresentation(image!, 0.8) {
-                imageref.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                imageref.put(uploadData, metadata: nil, completion: { (metadata, error) in
                     if error != nil {
-                        print("Faild upload image:", error)
+                        print("Faild upload image:", error!)
                         return
                     }
                     if let imageUrl = metadata?.downloadURL()?.absoluteString {
@@ -118,27 +125,27 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         
     }
     
-    private func sendMessageWithImageUrl(imageUrl: String, image: UIImage, taskId: String) {
-        let properties: [String: AnyObject] = ["imageUrl": imageUrl, "imageWidth": image.size.width, "imageHeight": image.size.height]
+    fileprivate func sendMessageWithImageUrl(_ imageUrl: String, image: UIImage, taskId: String) {
+        let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": image.size.width as AnyObject, "imageHeight": image.size.height as AnyObject]
         
         sendMessageWithProperties(properties, taskId: taskId)
     }
     
-    private func sendMessageWithProperties(properties: [String: AnyObject], taskId: String) {
+    fileprivate func sendMessageWithProperties(_ properties: [String: AnyObject], taskId: String) {
 //        let taskId = task?.taskId as String!
         let ref = FIRDatabase.database().reference().child("messages")
         let fromId = Digits.sharedInstance().session()?.userID as String!
         let childRef = ref.childByAutoId()
-        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
+        let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
         
         
-        var values: [String: AnyObject] = ["taskId": taskId, "timestamp": timestamp, "fromId": fromId, "status": "toDesigner"]
+        var values: [String: AnyObject] = ["taskId": taskId as AnyObject, "timestamp": timestamp, "fromId": fromId as AnyObject, "status": "toDesigner" as AnyObject]
         
         properties.forEach({values[$0] = $1})
         
         childRef.updateChildValues(values) { (error, ref) in
             if error != nil {
-                print(error)
+                print(error!)
                 return
             }
             

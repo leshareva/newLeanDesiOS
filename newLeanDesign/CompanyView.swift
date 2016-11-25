@@ -27,20 +27,35 @@ class CompanyView: UIView {
     let companyNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFontOfSize(18.0)
+        label.font = UIFont.boldSystemFont(ofSize: 18.0)
         return label
     }()
     
     let aboutPriceLabel: UILabel = {
         let label = UILabel()
-        label.text = "ВЫПОЛНЕНО РАБОТ НА"
+        label.text = "СУММА НА СЧЕТУ"
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFontOfSize(10.0)
+        label.font = UIFont.boldSystemFont(ofSize: 10.0)
         label.textColor = UIColor(r: 180, g: 180, b: 180)
         let attributedString = label.attributedText as! NSMutableAttributedString
         attributedString.addAttribute(NSKernAttributeName, value: 1.0, range: NSMakeRange(0, attributedString.length))
         label.attributedText = attributedString
         return label
+    }()
+    
+    let payButton: UIView = {
+       let btn = UIView()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.backgroundColor = UIColor(r: 240, g: 240, b: 240)
+        btn.layer.cornerRadius = 5
+        btn.layer.masksToBounds = true
+        let tv = UILabel()
+        tv.text = "Пополнить"
+        tv.font = UIFont.systemFont(ofSize: 14.0)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        btn.addSubview(tv)
+        btn.addConstraints(tv.centerYAnchor == btn.centerYAnchor, tv.centerXAnchor == btn.centerXAnchor)
+        return btn
     }()
     
     let priceLabel: UILabel = {
@@ -76,7 +91,7 @@ class CompanyView: UIView {
         let label = UILabel()
         label.text = "Папка с макетами"
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.userInteractionEnabled = true
+        label.isUserInteractionEnabled = true
         return label
     }()
     
@@ -92,7 +107,7 @@ class CompanyView: UIView {
         let label = UILabel()
         label.text = "ЗАДАЧИ В РАБОТЕ"
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFontOfSize(12.0)
+        label.font = UIFont.boldSystemFont(ofSize: 12.0)
         label.textColor = UIColor(r: 180, g: 180, b: 180)
         let attributedString = label.attributedText as! NSMutableAttributedString
         attributedString.addAttribute(NSKernAttributeName, value: 1.0, range: NSMakeRange(0, attributedString.length))
@@ -112,13 +127,13 @@ class CompanyView: UIView {
         self.addSubview(conceptButton)
         self.addSubview(separatorTwo)
         self.addSubview(titleTableLabel)
-        
+        self.addSubview(payButton)
         
 //        self.addConstraints("H:|-16-[\(logoView)]-16-[\(companyNameLabel)]|")
 //        self.addConstraints("V:|-16-[\(logoView)]", "V:|-16-[\(companyNameLabel)]-12-[\(aboutPriceLabel)]-4-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
         
         self.addConstraints("H:|-16-[\(companyNameLabel)]|")
-        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-6-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
+        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-12-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
         self.addConstraints(
                             aboutPriceLabel.leftAnchor == companyNameLabel.leftAnchor,
                             priceLabel.leftAnchor == companyNameLabel.leftAnchor,
@@ -137,13 +152,17 @@ class CompanyView: UIView {
                             separatorTwo.leftAnchor == companyNameLabel.leftAnchor,
                             separatorTwo.rightAnchor == separatorOne.rightAnchor,
                             
-                            titleTableLabel.leftAnchor == self.leftAnchor + 16
+                            titleTableLabel.leftAnchor == self.leftAnchor + 16,
+                            payButton.leftAnchor == priceLabel.rightAnchor + 16,
+                            payButton.centerYAnchor == priceLabel.centerYAnchor,
+                            payButton.widthAnchor == 100,
+                            payButton.heightAnchor == 25
             
         )
         
     }
     
-   
+    
     
     
     

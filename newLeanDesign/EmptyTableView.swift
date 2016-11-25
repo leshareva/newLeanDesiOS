@@ -31,14 +31,14 @@ class EmptyTableView: UIView {
         let tl = UITextView()
         tl.translatesAutoresizingMaskIntoConstraints = false
         tl.text = "Создайте задачу, а то дизайнеры скучают"
-        tl.font = UIFont.systemFontOfSize(14)
+        tl.font = UIFont.systemFont(ofSize: 14)
         tl.textColor = UIColor(r: 180, g: 180, b: 180)
-        tl.textAlignment = .Center
+        tl.textAlignment = .center
         return tl
     }()
     
     func setupView() {
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         
         self.addSubview(emptyImageView)
         self.addSubview(emptyTextView)

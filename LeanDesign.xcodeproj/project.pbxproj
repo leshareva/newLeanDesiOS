@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C081CF39264657DA812DBEBD /* Pods_LeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D6C0A1B5C38A5FC06B07BDA /* Pods_LeanDesign.framework */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* NotificationView.swift */; };
 		CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD31D942944007E9365 /* TaskViewController.swift */; };
@@ -37,19 +38,21 @@
 		CB39FB101D954FB4007E9365 /* loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB0F1D954FB4007E9365 /* loader.gif */; };
 		CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */; };
 		CB5F4D0E1DBCC12600530341 /* ZoomingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */; };
+		CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */; };
 		CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */; };
 		CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682BF1D93EBD400CB3679 /* Main.storyboard */; };
 		CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C21D93EBD400CB3679 /* Assets.xcassets */; };
 		CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */; };
-		CBFDCB061DD6F41C0038BE90 /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */; };
-		CBFDCB081DD6F5A30038BE90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */; };
-		CF962A58B47B68443E58D8ED /* Pods_newLeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E799A76A4D5AA8B5DF3D87 /* Pods_newLeanDesign.framework */; };
+		CBF891811DDAD2A800437DEA /* NoMoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */; };
+		CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891821DDAE1A800437DEA /* PayViewController.swift */; };
+		CBFDCB061DD6F41C0038BE90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB051DD6F41C0038BE90 /* GoogleService-Info.plist */; };
+		CBFDCB081DD6F5A30038BE90 /* GoogleService-Info-test.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB071DD6F5A30038BE90 /* GoogleService-Info-test.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0AFFFEE0C8819E37C5607F30 /* Pods-newLeanDesign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newLeanDesign.debug.xcconfig"; path = "Pods/Target Support Files/Pods-newLeanDesign/Pods-newLeanDesign.debug.xcconfig"; sourceTree = "<group>"; };
-		C16FCC02EBD3B69D56B8BEB1 /* Pods-newLeanDesign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-newLeanDesign.release.xcconfig"; path = "Pods/Target Support Files/Pods-newLeanDesign/Pods-newLeanDesign.release.xcconfig"; sourceTree = "<group>"; };
-		C8E799A76A4D5AA8B5DF3D87 /* Pods_newLeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_newLeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		56E5CC4B187F18A5A09B1A54 /* Pods-LeanDesign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeanDesign.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign.debug.xcconfig"; sourceTree = "<group>"; };
+		59699B5422D4A2BF5104CCF8 /* Pods-LeanDesign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeanDesign.release.xcconfig"; path = "Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign.release.xcconfig"; sourceTree = "<group>"; };
+		9D6C0A1B5C38A5FC06B07BDA /* Pods_LeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* NotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		CB39FAD31D942944007E9365 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -82,14 +85,18 @@
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CB6C74201D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		CBE682B81D93EBD300CB3679 /* Lean Design.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lean Design.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBannerView.swift; sourceTree = "<group>"; };
+		CBB78A9C1DE7D41500360D51 /* LeanDesign.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LeanDesign.entitlements; sourceTree = "<group>"; };
+		CBE682B81D93EBD300CB3679 /* LeanDesign.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeanDesign.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBE682C01D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CBE682C21D93EBD400CB3679 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBE682C51D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBE682C71D93EBD400CB3679 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
-		CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoMoneyViewController.swift; sourceTree = "<group>"; };
+		CBF891821DDAE1A800437DEA /* PayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayViewController.swift; sourceTree = "<group>"; };
+		CBFDCB051DD6F41C0038BE90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CBFDCB071DD6F5A30038BE90 /* GoogleService-Info-test.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-test.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF962A58B47B68443E58D8ED /* Pods_newLeanDesign.framework in Frameworks */,
+				C081CF39264657DA812DBEBD /* Pods_LeanDesign.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +114,7 @@
 		4C6FF513CCE9EBB253D6BD35 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C8E799A76A4D5AA8B5DF3D87 /* Pods_newLeanDesign.framework */,
+				9D6C0A1B5C38A5FC06B07BDA /* Pods_LeanDesign.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -127,6 +134,8 @@
 				CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */,
 				CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */,
 				CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */,
+				CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */,
+				CBF891821DDAE1A800437DEA /* PayViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -166,6 +175,7 @@
 				CB39FAFE1D942C24007E9365 /* SettingCell.swift */,
 				CB39FB001D942C32007E9365 /* CompanyView.swift */,
 				CB39FB0B1D94E92F007E9365 /* StepsView.swift */,
+				CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */,
 				CB39FB021D942C3F007E9365 /* ButtonView.swift */,
 				CB39FB0D1D952156007E9365 /* EmptyTableView.swift */,
 				CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */,
@@ -177,6 +187,7 @@
 		CBE682AF1D93EBD300CB3679 = {
 			isa = PBXGroup;
 			children = (
+				CBB78A9C1DE7D41500360D51 /* LeanDesign.entitlements */,
 				CBE682BA1D93EBD300CB3679 /* newLeanDesign */,
 				CBE682B91D93EBD300CB3679 /* Products */,
 				FAE6F8CEE853257B5119A9F0 /* Pods */,
@@ -187,7 +198,7 @@
 		CBE682B91D93EBD300CB3679 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CBE682B81D93EBD300CB3679 /* Lean Design.app */,
+				CBE682B81D93EBD300CB3679 /* LeanDesign.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,8 +219,8 @@
 				CB39FB051D942C6E007E9365 /* spinner.gif */,
 				CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */,
 				CBE682C71D93EBD400CB3679 /* Info.plist */,
-				CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */,
-				CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */,
+				CBFDCB051DD6F41C0038BE90 /* GoogleService-Info.plist */,
+				CBFDCB071DD6F5A30038BE90 /* GoogleService-Info-test.plist */,
 			);
 			path = newLeanDesign;
 			sourceTree = "<group>";
@@ -217,8 +228,8 @@
 		FAE6F8CEE853257B5119A9F0 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0AFFFEE0C8819E37C5607F30 /* Pods-newLeanDesign.debug.xcconfig */,
-				C16FCC02EBD3B69D56B8BEB1 /* Pods-newLeanDesign.release.xcconfig */,
+				56E5CC4B187F18A5A09B1A54 /* Pods-LeanDesign.debug.xcconfig */,
+				59699B5422D4A2BF5104CCF8 /* Pods-LeanDesign.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -226,9 +237,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CBE682B71D93EBD300CB3679 /* Lean Design */ = {
+		CBE682B71D93EBD300CB3679 /* LeanDesign */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CBE682CA1D93EBD400CB3679 /* Build configuration list for PBXNativeTarget "Lean Design" */;
+			buildConfigurationList = CBE682CA1D93EBD400CB3679 /* Build configuration list for PBXNativeTarget "LeanDesign" */;
 			buildPhases = (
 				82D13ED936FAF17E7CFE8E36 /* 📦 Check Pods Manifest.lock */,
 				CBE682B41D93EBD300CB3679 /* Sources */,
@@ -242,9 +253,9 @@
 			);
 			dependencies = (
 			);
-			name = "Lean Design";
+			name = LeanDesign;
 			productName = newLeanDesign;
-			productReference = CBE682B81D93EBD300CB3679 /* Lean Design.app */;
+			productReference = CBE682B81D93EBD300CB3679 /* LeanDesign.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -260,8 +271,12 @@
 					CBE682B71D93EBD300CB3679 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 74DED593Z8;
+						LastSwiftMigration = 0810;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
 								enabled = 1;
 							};
 							com.apple.Push = {
@@ -271,7 +286,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CBE682B31D93EBD300CB3679 /* Build configuration list for PBXProject "Lean Design" */;
+			buildConfigurationList = CBE682B31D93EBD300CB3679 /* Build configuration list for PBXProject "LeanDesign" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -284,7 +299,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CBE682B71D93EBD300CB3679 /* Lean Design */,
+				CBE682B71D93EBD300CB3679 /* LeanDesign */,
 			);
 		};
 /* End PBXProject section */
@@ -294,10 +309,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBFDCB061DD6F41C0038BE90 /* GoogleService-Info-prod.plist in Resources */,
+				CBFDCB061DD6F41C0038BE90 /* GoogleService-Info.plist in Resources */,
 				CB39FB061D942C6E007E9365 /* spinner-duo.gif in Resources */,
 				CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */,
-				CBFDCB081DD6F5A30038BE90 /* GoogleService-Info.plist in Resources */,
+				CBFDCB081DD6F5A30038BE90 /* GoogleService-Info-test.plist in Resources */,
 				CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */,
 				CB39FB101D954FB4007E9365 /* loader.gif in Resources */,
 				CB39FB071D942C6E007E9365 /* spinner.gif in Resources */,
@@ -320,7 +335,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-newLeanDesign/Pods-newLeanDesign-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		82D13ED936FAF17E7CFE8E36 /* 📦 Check Pods Manifest.lock */ = {
@@ -363,7 +378,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-newLeanDesign/Pods-newLeanDesign-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -373,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */,
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
 				CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */,
 				CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */,
@@ -380,8 +396,10 @@
 				CB39FAFD1D942C18007E9365 /* ChatMessageCell.swift in Sources */,
 				CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */,
 				CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */,
+				CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */,
 				CB39FAF61D942BCF007E9365 /* Message.swift in Sources */,
 				CB39FB031D942C3F007E9365 /* ButtonView.swift in Sources */,
+				CBF891811DDAD2A800437DEA /* NoMoneyViewController.swift in Sources */,
 				CB34A1851DC714260020F53E /* NotificationView.swift in Sources */,
 				CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */,
 				CB39FAF41D942BC4007E9365 /* User.swift in Sources */,
@@ -449,6 +467,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -495,6 +514,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -507,6 +527,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -515,28 +536,34 @@
 		};
 		CBE682CB1D93EBD400CB3679 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0AFFFEE0C8819E37C5607F30 /* Pods-newLeanDesign.debug.xcconfig */;
+			baseConfigurationReference = 56E5CC4B187F18A5A09B1A54 /* Pods-LeanDesign.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LeanDesign.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = newLeanDesign/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
-				PRODUCT_NAME = "Lean Design";
+				PRODUCT_NAME = LeanDesign;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		CBE682CC1D93EBD400CB3679 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C16FCC02EBD3B69D56B8BEB1 /* Pods-newLeanDesign.release.xcconfig */;
+			baseConfigurationReference = 59699B5422D4A2BF5104CCF8 /* Pods-LeanDesign.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LeanDesign.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = newLeanDesign/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
-				PRODUCT_NAME = "Lean Design";
+				PRODUCT_NAME = LeanDesign;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -544,7 +571,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CBE682B31D93EBD300CB3679 /* Build configuration list for PBXProject "Lean Design" */ = {
+		CBE682B31D93EBD300CB3679 /* Build configuration list for PBXProject "LeanDesign" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CBE682C81D93EBD400CB3679 /* Debug */,
@@ -553,7 +580,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CBE682CA1D93EBD400CB3679 /* Build configuration list for PBXNativeTarget "Lean Design" */ = {
+		CBE682CA1D93EBD400CB3679 /* Build configuration list for PBXNativeTarget "LeanDesign" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CBE682CB1D93EBD400CB3679 /* Debug */,

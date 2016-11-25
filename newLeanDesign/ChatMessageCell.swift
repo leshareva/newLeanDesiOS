@@ -17,10 +17,10 @@ class ChatMessageCell: UICollectionViewCell {
         let tv = UITextView()
         tv.text = "Some Sample Text"
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.font = UIFont.systemFontOfSize(16)
-        tv.backgroundColor = UIColor.clearColor()
-        tv.textColor = UIColor.blackColor()
-        tv.editable = false
+        tv.font = UIFont.systemFont(ofSize: 16)
+        tv.backgroundColor = UIColor.clear
+        tv.textColor = UIColor.black
+        tv.isEditable = false
         return tv
     }()
     
@@ -40,7 +40,7 @@ class ChatMessageCell: UICollectionViewCell {
         image.translatesAutoresizingMaskIntoConstraints = false
         image.layer.cornerRadius = 16
         image.layer.masksToBounds = true
-        image.contentMode = .ScaleAspectFill
+        image.contentMode = .scaleAspectFill
         return image
     }()
     
@@ -49,13 +49,13 @@ class ChatMessageCell: UICollectionViewCell {
         image.translatesAutoresizingMaskIntoConstraints = false
         image.layer.cornerRadius = 16
         image.layer.masksToBounds = true
-        image.contentMode = .ScaleAspectFill
-        image.userInteractionEnabled = true
+        image.contentMode = .scaleAspectFill
+        image.isUserInteractionEnabled = true
         image.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
         return image
     }()
     
-    func handleZoomTap(tapGesture: UITapGestureRecognizer) {
+    func handleZoomTap(_ tapGesture: UITapGestureRecognizer) {
         //Pro Tip: don't perform a lot of custom logic inside of a view class
         if let imageView = tapGesture.view as? UIImageView {
             self.chatLogController?.performZoomInForImageView(imageView)
@@ -75,34 +75,34 @@ class ChatMessageCell: UICollectionViewCell {
         bubbleView.addSubview(messageImageView)
        
         
-        messageImageView.leftAnchor.constraintEqualToAnchor(bubbleView.leftAnchor).active = true
-        messageImageView.rightAnchor.constraintEqualToAnchor(bubbleView.rightAnchor).active = true
-        messageImageView.widthAnchor.constraintEqualToAnchor(bubbleView.widthAnchor).active = true
-        messageImageView.heightAnchor.constraintEqualToAnchor(bubbleView.heightAnchor).active = true
+        messageImageView.leftAnchor.constraint(equalTo: bubbleView.leftAnchor).isActive = true
+        messageImageView.rightAnchor.constraint(equalTo: bubbleView.rightAnchor).isActive = true
+        messageImageView.widthAnchor.constraint(equalTo: bubbleView.widthAnchor).isActive = true
+        messageImageView.heightAnchor.constraint(equalTo: bubbleView.heightAnchor).isActive = true
         
         addSubview(profileImageView)
-        profileImageView.widthAnchor.constraintEqualToConstant(32).active = true
-        profileImageView.heightAnchor.constraintEqualToConstant(32).active = true
-        profileImageView.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 8).active = true
-        profileImageView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        profileImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
+        profileImageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         
         
-        bubleViewRightAnchor = bubbleView.rightAnchor.constraintEqualToAnchor(self.rightAnchor, constant: -8)
+        bubleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8)
 //        bubleViewRightAnchor?.active = false
         
-        bubbleViewLeftAnchor = bubbleView.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 48)
+        bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 48)
 //        bubbleViewLeftAnchor?.active = false
         
-        bubbleView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
-        bubbleWidthAnchor = bubbleView.widthAnchor.constraintEqualToConstant(200)
-        bubbleWidthAnchor?.active = true
+        bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        bubbleWidthAnchor = bubbleView.widthAnchor.constraint(equalToConstant: 200)
+        bubbleWidthAnchor?.isActive = true
         
-        bubbleView.heightAnchor.constraintEqualToAnchor(self.heightAnchor).active = true
+        bubbleView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         
-        textView.leftAnchor.constraintEqualToAnchor(bubbleView.leftAnchor, constant: 8).active = true
-        textView.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
-        textView.rightAnchor.constraintEqualToAnchor(bubbleView.rightAnchor).active = true
-        textView.heightAnchor.constraintEqualToAnchor(self.heightAnchor).active = true
+        textView.leftAnchor.constraint(equalTo: bubbleView.leftAnchor, constant: 8).isActive = true
+        textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        textView.rightAnchor.constraint(equalTo: bubbleView.rightAnchor).isActive = true
+        textView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
          
     }
     
