@@ -284,7 +284,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         
         requestReference.child(userId).updateChildValues(values) { (error, ref) in
             if error != nil {
-                print(error)
+                print(error as! NSError)
                 return
             }
         }

@@ -19,7 +19,7 @@ pod 'Swiftstraints'
 pod 'Flurry-iOS-SDK/FlurrySDK'
 pod 'Flurry-iOS-SDK/FlurryAds'
 pod 'Crashlytics'
-pod 'Alamofire', '~> 4.0'
+pod 'Caishen'
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|

@@ -10,7 +10,6 @@ import UIKit
 import Firebase
 import DigitsKit
 import Swiftstraints
-import Alamofire
 
 class NoMoneyViewController: UIViewController {
     
@@ -18,7 +17,7 @@ class NoMoneyViewController: UIViewController {
     
     let discriptionLabel: UILabel = {
         let tv = UILabel()
-        tv.text = "На вашем счету"
+        tv.text = "На вашем счете"
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = UIColor.white
         tv.textAlignment = .center

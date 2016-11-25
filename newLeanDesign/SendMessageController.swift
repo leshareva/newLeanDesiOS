@@ -53,7 +53,7 @@ class SendMessageController: UIViewController {
                 
                 childRef.updateChildValues(values) { (error, ref) in
                     if error != nil {
-                        print(error)
+                        print(error as! NSError)
                         return
                     }
                     
@@ -75,7 +75,7 @@ class SendMessageController: UIViewController {
                         let pushValues: [String: AnyObject] = ["token": token as AnyObject, "designerId": toId as AnyObject, "taskId": taskId as AnyObject]
                         pushRef.updateChildValues(pushValues) { (error, ref) in
                             if error != nil {
-                                print(error)
+                                print(error as! NSError)
                                 return
                             }
                         }

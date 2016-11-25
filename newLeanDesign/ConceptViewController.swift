@@ -167,7 +167,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             let value: [String: AnyObject] = ["approveTime": timestamp]
             taskRef.child("awareness").updateChildValues(value, withCompletionBlock: { (err, ref) in
                 if err != nil {
-                    print(err)
+                   print(err as! NSError)
                     return
                 }
             })
@@ -297,7 +297,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             let awStatus : [String: AnyObject] = ["status": "accept" as AnyObject]
             taskRef.child(step).updateChildValues(awStatus, withCompletionBlock: { (err, ref) in
                 if err != nil {
-                    print(err)
+                    print(err as! NSError)
                     return
                 }
             })
@@ -305,7 +305,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             let stepStatus : [String: AnyObject] = ["status": "none" as AnyObject]
             self.ref.child("tasks").child(taskId).child(newstatus).updateChildValues(stepStatus, withCompletionBlock: { (error, ref) in
                 if error != nil {
-                    print(error)
+                    print(error as! NSError)
                     return
                 }
             })

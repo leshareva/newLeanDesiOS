@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.2.0)
+  - Caishen (1.4.0)
   - Crashlytics (3.8.3):
     - Fabric (~> 1.6.3)
   - Digits (2.3.0):
@@ -76,7 +76,7 @@ PODS:
     - Fabric
 
 DEPENDENCIES:
-  - Alamofire (~> 4.0)
+  - Caishen
   - Crashlytics
   - Digits
   - DKImagePickerController
@@ -92,7 +92,7 @@ DEPENDENCIES:
   - TwitterCore
 
 SPEC CHECKSUMS:
-  Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
+  Caishen: 1d194378fcb51800e4d3d78cf83ce1c7d72d1e79
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
   Digits: af82d24ec38035cc555b60f55cca5abc68a76bed
   DKImagePickerController: 8fc8a42120cb0c9b7982af04d47e0e5b25b5186f
@@ -113,6 +113,6 @@ SPEC CHECKSUMS:
   Swiftstraints: d06a91d1cb80046814a90e934df1c19058ea02a8
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: cd3da90ed23a5f388c941ebeb7e49ac8bab7918c
+PODFILE CHECKSUM: 77f348f00656c7017c8d262f9a2372561bfc5730
 
 COCOAPODS: 1.0.0

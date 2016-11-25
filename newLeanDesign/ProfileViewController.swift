@@ -252,7 +252,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
             ref.put(uploadData, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
-                    print("Faild upload image:", error)
+                    print("Faild upload image:", error as! NSError)
                     return
                 }
                 
@@ -272,7 +272,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         ref.updateChildValues(values) { (error, ref) in
             if error != nil {
-                print(error)
+                print(error as! NSError)
                 return
             }
             
