@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F45E0FECFCBAF78CDE0230C /* Pods_LeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* NotificationView.swift */; };
 		CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD31D942944007E9365 /* TaskViewController.swift */; };
@@ -46,13 +47,12 @@
 		CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891821DDAE1A800437DEA /* PayViewController.swift */; };
 		CBFDCB061DD6F41C0038BE90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB051DD6F41C0038BE90 /* GoogleService-Info.plist */; };
 		CBFDCB081DD6F5A30038BE90 /* GoogleService-Info-test.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB071DD6F5A30038BE90 /* GoogleService-Info-test.plist */; };
-		F6A5031F176D2E61DAF9FB33 /* Pods_LeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6E620C7524C3FC9EF9A9D9 /* Pods_LeanDesign.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3F6E620C7524C3FC9EF9A9D9 /* Pods_LeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		56E5CC4B187F18A5A09B1A54 /* Pods-LeanDesign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeanDesign.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign.debug.xcconfig"; sourceTree = "<group>"; };
 		59699B5422D4A2BF5104CCF8 /* Pods-LeanDesign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeanDesign.release.xcconfig"; path = "Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign.release.xcconfig"; sourceTree = "<group>"; };
+		87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* NotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		CB39FAD31D942944007E9365 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +83,7 @@
 		CB39FB0F1D954FB4007E9365 /* loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loader.gif; sourceTree = "<group>"; };
 		CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
+		CB646B531DE8220100B09C9B /* LeanDesign-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LeanDesign-Bridging-Header.h"; sourceTree = "<group>"; };
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CB6C74201D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBannerView.swift; sourceTree = "<group>"; };
@@ -104,7 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F6A5031F176D2E61DAF9FB33 /* Pods_LeanDesign.framework in Frameworks */,
+				0F45E0FECFCBAF78CDE0230C /* Pods_LeanDesign.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +115,7 @@
 		4C6FF513CCE9EBB253D6BD35 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3F6E620C7524C3FC9EF9A9D9 /* Pods_LeanDesign.framework */,
+				87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -187,6 +188,7 @@
 		CBE682AF1D93EBD300CB3679 = {
 			isa = PBXGroup;
 			children = (
+				CB646B531DE8220100B09C9B /* LeanDesign-Bridging-Header.h */,
 				CBB78A9C1DE7D41500360D51 /* LeanDesign.entitlements */,
 				CBE682BA1D93EBD300CB3679 /* newLeanDesign */,
 				CBE682B91D93EBD300CB3679 /* Products */,
@@ -544,8 +546,99 @@
 				INFOPLIST_FILE = newLeanDesign/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"CardIO\"",
+					"-l\"c++\"",
+					"-l\"icucore\"",
+					"-l\"opencv_core\"",
+					"-l\"opencv_imgproc\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"AudioToolbox\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"Caishen\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreMedia\"",
+					"-framework",
+					"\"CoreVideo\"",
+					"-framework",
+					"\"Crashlytics\"",
+					"-framework",
+					"\"DKImagePickerController\"",
+					"-framework",
+					"\"DigitsKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseAuth\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseDatabase\"",
+					"-framework",
+					"\"FirebaseInstanceID\"",
+					"-framework",
+					"\"FirebaseMessaging\"",
+					"-framework",
+					"\"FirebaseStorage\"",
+					"-framework",
+					"\"Flurry_iOS_SDK\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"GTMSessionFetcher\"",
+					"-framework",
+					"\"GoogleInterchangeUtilities\"",
+					"-framework",
+					"\"GoogleSymbolUtilities\"",
+					"-framework",
+					"\"GoogleToolboxForMac\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"OpenGLES\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SafariServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"Swiftstraints\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"UIKit\"",
+					"\"-lc++\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = LeanDesign;
+				SWIFT_OBJC_BRIDGING_HEADER = "LeanDesign-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -561,8 +654,99 @@
 				INFOPLIST_FILE = newLeanDesign/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"CardIO\"",
+					"-l\"c++\"",
+					"-l\"icucore\"",
+					"-l\"opencv_core\"",
+					"-l\"opencv_imgproc\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"AudioToolbox\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"Caishen\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreMedia\"",
+					"-framework",
+					"\"CoreVideo\"",
+					"-framework",
+					"\"Crashlytics\"",
+					"-framework",
+					"\"DKImagePickerController\"",
+					"-framework",
+					"\"DigitsKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseAuth\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseDatabase\"",
+					"-framework",
+					"\"FirebaseInstanceID\"",
+					"-framework",
+					"\"FirebaseMessaging\"",
+					"-framework",
+					"\"FirebaseStorage\"",
+					"-framework",
+					"\"Flurry_iOS_SDK\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"GTMSessionFetcher\"",
+					"-framework",
+					"\"GoogleInterchangeUtilities\"",
+					"-framework",
+					"\"GoogleSymbolUtilities\"",
+					"-framework",
+					"\"GoogleToolboxForMac\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"OpenGLES\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SafariServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"Swiftstraints\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"UIKit\"",
+					"\"-lc++\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = LeanDesign;
+				SWIFT_OBJC_BRIDGING_HEADER = "LeanDesign-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
