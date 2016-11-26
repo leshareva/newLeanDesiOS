@@ -281,7 +281,16 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let ref = FIRDatabase.database().reference()
         let requestReference = ref.child("clients")
         
-       
+        let parameters: Parameters = [
+            "clientId": userId,
+            "company": company
+        ]
+        
+        Alamofire.request("http://leandesign.pro:8000/createFolder",
+                          method: .post,
+                          parameters: parameters)
+        
+
         
         let values: [String: AnyObject] = ["phone": phone as AnyObject, "lastName": sename as AnyObject, "id": userId as AnyObject, "email": email as AnyObject, "company": company as AnyObject, "firstName": name as AnyObject, "state": "none" as AnyObject, "rate": 0.6 as AnyObject, "sum": 0 as AnyObject]
         

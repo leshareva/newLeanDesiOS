@@ -16,27 +16,65 @@ import Alamofire
 import SWXMLHash
 
 class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentViewControllerDelegate, XMLParserDelegate {
-
-    let cardNumberTextField = CardTextField(frame:CGRect(x: 20, y: 0, width: 300, height: 400 ))
+    
+    var amount: Int!
+    
+    let cardNumberTextField = CardTextField(frame:CGRect(x: 10, y: 60, width: 300, height: 40 ))
+    
+    let discriptionLabel: UITextView = {
+        let tv = UITextView()
+        tv.text = "Данные вашей карты будут в безопасности: мы используем технологии шифрования, соответствующие требованиям Visa и MasterCard."
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textColor = .lightGray
+         tv.font = UIFont.systemFont(ofSize: 12)
+        tv.textAlignment = .center
+        return tv
+    }()
+    
+    let titleLabel: UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textColor = .black
+        tv.font = UIFont.systemFont(ofSize: 20)
+        tv.textAlignment = .center
+        tv.backgroundColor = .clear
+        return tv
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+        print(amount)
         setUpCardTextField()
         cardNumberTextField.cardTextFieldDelegate = self
     }
 
+    
+    
     func setUpCardTextField() {
         
         cardNumberTextField.cardTextFieldDelegate = self
         cardNumberTextField.placeholder = "0000000000000000"
+        cardNumberTextField.becomeFirstResponder()
+        
         self.view.addSubview(cardNumberTextField)
-        self.view.addConstraints(cardNumberTextField.widthAnchor == self.view.widthAnchor,
+        self.view.addSubview(discriptionLabel)
+        self.view.addSubview(titleLabel)
+        self.view.addConstraints(titleLabel.topAnchor == self.view.topAnchor,
+                                 titleLabel.leftAnchor == self.view.leftAnchor,
+                                 titleLabel.rightAnchor == self.view.rightAnchor,
+                                 titleLabel.heightAnchor == 40,
+                                 cardNumberTextField.widthAnchor == self.view.widthAnchor,
                                 cardNumberTextField.heightAnchor == self.view.heightAnchor,
                                 cardNumberTextField.centerXAnchor == self.view.centerXAnchor,
-                                cardNumberTextField.topAnchor == self.view.topAnchor
+                                cardNumberTextField.topAnchor == titleLabel.topAnchor + 20,
+                                discriptionLabel.topAnchor == cardNumberTextField.bottomAnchor,
+                                discriptionLabel.centerXAnchor == self.view.centerXAnchor,
+                                discriptionLabel.heightAnchor == 80,
+                                discriptionLabel.widthAnchor == self.view.widthAnchor - 40
                                )
+        titleLabel.text = "К оплате \(amount!) рублей"
+        
     }
     
    
@@ -73,7 +111,7 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
         let cvc = cardNumberTextField.card.cardVerificationCode
         let cardHolder = "Ivan Ivanov"
         let Merchant = "VWMerchantleanmysmaxomPay"
-        let amount = "100"
+        
         
         let database = FIRDatabase.database().reference()
         
@@ -84,7 +122,7 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
         
         let parameters: Parameters = [
             "Key": Merchant,
-            "Amount": amount,
+            "Amount": self.amount,
             "OrderId": orderId,
             "PayInfo": payInfo
         ]
@@ -130,7 +168,7 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
                         let userRef = database.child("clients").child(uid)
                             userRef.observeSingleEvent(of: .value, with: { (snapshot) in
                                 let oldAmount = (snapshot.value as? NSDictionary)!["sum"] as? Int
-                                let newAmount = Int(oldAmount!) + Int(amount)!
+                                let newAmount = Int(oldAmount!) + Int(self.amount!)
                                 print(newAmount)
                                 let values: [String : AnyObject] = ["sum": newAmount as AnyObject]
                                 userRef.updateChildValues(values, withCompletionBlock: { (error, ref) in

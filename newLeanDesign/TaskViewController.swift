@@ -49,13 +49,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         setupLogoView()
         setupTableView()
         
-        let parameters: Parameters = [
-            "company": "Мысмаксом"
-        ]
-        
-        Alamofire.request("https://leandesign.pro:8000/createFolder",
-                          method: .post,
-                          parameters: parameters)
     }
     
     func setupLogoView() {
@@ -99,8 +92,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     return
                 }
                 
-                let folder = "https://drive.google.com/drive/folders/\(conceptUrl)"
-                 UserDefaults.standard.set(folder, forKey: "folder")
+                 UserDefaults.standard.set(conceptUrl, forKey: "folder")
                 
                 companyView.conceptButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
                 
@@ -240,6 +232,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func openNewTaskView() {
         
+        
+                
         if let uid = Digits.sharedInstance().session()?.userID {
             let clientsRef = FIRDatabase.database().reference().child("clients").child(uid)
             clientsRef.observe(.value, with: { (snapshot) in

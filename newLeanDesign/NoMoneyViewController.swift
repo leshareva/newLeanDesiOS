@@ -41,8 +41,13 @@ class NoMoneyViewController: UIViewController {
         tv.textColor = UIColor.white
         tv.backgroundColor = .clear
         tv.font = UIFont.systemFont(ofSize: 18.0)
+        tv.isEditable = false
         return tv
     }()
+    
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +61,7 @@ class NoMoneyViewController: UIViewController {
         
         priceLabel.text = String(self.sum) + " ₽"
         setupView()
+
         
     }
     
@@ -70,29 +76,30 @@ class NoMoneyViewController: UIViewController {
         view.addSubview(priceLabel)
         view.addSubview(discriptionLabel)
         view.addSubview(aboutTextView)
+       
         view.addConstraints("H:|-18-[\(discriptionLabel)]-18-|", "H:|-18-[\(priceLabel)]-18-|", "H:|-18-[\(aboutTextView)]-18-|")
         view.addConstraints("V:|-40-[\(discriptionLabel)]-10-[\(priceLabel)]-10-[\(aboutTextView)]")
         
-        view.addConstraints(aboutTextView.heightAnchor == 300)
+        view.addConstraints(aboutTextView.heightAnchor == 300, priceLabel.heightAnchor == 80, discriptionLabel.heightAnchor == 20)
         
-        self.view.addSubview(self.buttonView)
-        buttonView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addConstraints(buttonView.widthAnchor == self.view.widthAnchor,
-                                 buttonView.bottomAnchor == self.view.bottomAnchor,
-                                 buttonView.heightAnchor == 50)
+        view.addSubview(self.buttonView)
+   
+        
+        view.addConstraints("V:[\(buttonView)]|")
+        view.addConstraints("H:|[\(buttonView)]|")
+        view.addConstraints(buttonView.heightAnchor == 50)
+        
         buttonView.buttonLabel.text = "Пополнить счет"
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
         buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handlePay)))
         buttonView.acceptTaskButtonView.backgroundColor = UIColor(r: 109, g: 199, b: 82)
     }
     
     func handlePay() {
-        
-        
-        
-        
-        let payViewController = PayViewController()
-        navigationController?.pushViewController(payViewController, animated: true)
+        let amountViewController = AmountViewController()
+        navigationController?.pushViewController(amountViewController, animated: true)
     }
-
+    
+    
     
 }
