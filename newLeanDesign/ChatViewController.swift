@@ -122,7 +122,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     func setupStepsView() {
         
-        
         let chatBannerView = ChatBannerView()
         view.addSubview(chatBannerView)
         chatBannerView.translatesAutoresizingMaskIntoConstraints = false

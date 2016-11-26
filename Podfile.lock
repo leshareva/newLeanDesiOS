@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (4.2.0)
   - Caishen (1.4.0)
   - CardIO (5.4.1)
   - Crashlytics (3.8.3):
@@ -72,12 +73,13 @@ PODS:
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.0)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.0)
   - GTMSessionFetcher/Core (1.1.7)
-  - SnapKit (3.0.2)
   - Swiftstraints (3.0.0)
+  - SWXMLHash (3.0.3)
   - TwitterCore (2.3.0):
     - Fabric
 
 DEPENDENCIES:
+  - Alamofire (~> 4.0)
   - Caishen (from `https://github.com/prolificinteractive/Caishen.git`, branch `swift-3.0`)
   - CardIO
   - Crashlytics
@@ -91,8 +93,8 @@ DEPENDENCIES:
   - Firebase/Storage
   - Flurry-iOS-SDK/FlurryAds
   - Flurry-iOS-SDK/FlurrySDK
-  - SnapKit (~> 3.0.2)
   - Swiftstraints
+  - SWXMLHash (~> 3.0.0)
   - TwitterCore
 
 EXTERNAL SOURCES:
@@ -106,6 +108,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/prolificinteractive/Caishen.git
 
 SPEC CHECKSUMS:
+  Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
   Caishen: 1d194378fcb51800e4d3d78cf83ce1c7d72d1e79
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
@@ -125,10 +128,10 @@ SPEC CHECKSUMS:
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
-  SnapKit: 2e456761aa92d4d4067a7a5594c18769d451a8ad
   Swiftstraints: d06a91d1cb80046814a90e934df1c19058ea02a8
+  SWXMLHash: 80d2529d74891bb2f15305a0b9e08f2a4f229ee7
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: b996055ff99129237066befc812f784bdd8d5f49
+PODFILE CHECKSUM: e9d5fa025164ae09809ac5e3fd422189ac97374f
 
 COCOAPODS: 1.1.1

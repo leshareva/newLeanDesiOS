@@ -21,7 +21,8 @@ pod 'Flurry-iOS-SDK/FlurryAds'
 pod 'Crashlytics'
 pod 'Caishen', :git => 'https://github.com/prolificinteractive/Caishen.git', :branch => 'swift-3.0'
 pod 'CardIO'
-pod 'SnapKit', '~> 3.0.2'
+pod 'Alamofire', '~> 4.0'
+pod 'SWXMLHash', '~> 3.0.0'
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|

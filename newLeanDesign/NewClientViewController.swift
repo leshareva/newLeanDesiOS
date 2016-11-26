@@ -3,6 +3,7 @@ import Firebase
 import DigitsKit
 import Swiftstraints
 import DKImagePickerController
+import Alamofire
 
 class NewClientViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -186,7 +187,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         
         
         
-        checkUser()
+        setupInputsForLogin()
         handleRefresh()
     }
     
@@ -212,31 +213,30 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     
-    func checkUser() {
-        
-        let digits = Digits.sharedInstance()
-
-        
-        guard let userId = digits.session()?.userID else {
-            return
-        }
-        
-        let ref = FIRDatabase.database().reference()
-        let clientsReference = ref.child("requests").child("clients")
-        
-        clientsReference.observe(.value, with: { (snapshot) in
-            
-            if snapshot.hasChild(userId) {
-                print("We have this request")
-                self.setupWaitingView()
-            } else {
-                print("It's new user")
-                self.setupInputsForLogin()
-            }
-            
-            }, withCancel: nil)
-        
-    }
+//    func checkUser() {
+//        
+//        let digits = Digits.sharedInstance()
+//
+//        guard let userId = digits.session()?.userID else {
+//            return
+//        }
+//        
+//        let ref = FIRDatabase.database().reference()
+//        let clientsReference = ref.child("requests").child("clients")
+//        
+//        clientsReference.observe(.value, with: { (snapshot) in
+//            
+//            if snapshot.hasChild(userId) {
+//                print("We have this request")
+//                self.setupWaitingView()
+//            } else {
+//                print("It's new user")
+//                self.setupInputsForLogin()
+//            }
+//            
+//            }, withCancel: nil)
+//        
+//    }
     
     
     
@@ -279,7 +279,10 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         }
         
         let ref = FIRDatabase.database().reference()
-        let requestReference = ref.child("requests").child("clients")
+        let requestReference = ref.child("clients")
+        
+       
+        
         let values: [String: AnyObject] = ["phone": phone as AnyObject, "lastName": sename as AnyObject, "id": userId as AnyObject, "email": email as AnyObject, "company": company as AnyObject, "firstName": name as AnyObject, "state": "none" as AnyObject, "rate": 0.6 as AnyObject, "sum": 0 as AnyObject]
         
         requestReference.child(userId).updateChildValues(values) { (error, ref) in
@@ -301,20 +304,9 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         view.endEditing(true)
         let startViewController = StartViewController()
         startViewController.checkUserInBase()
-        
-//        dismissViewControllerAnimated(true, completion: nil)
+
     }
     
-    
-    func setupWaitingView() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Обновить", style: .plain, target: self, action: #selector(self.handleRefresh))
-        discriptionLabel.isHidden = true
-        view.addSubview(waitingLabel)
-        
-        waitingLabel.text = "Мы рассматриваем вашу заявку"
-        view.addConstraints("V:|-80-[\(waitingLabel)]")
-        view.addConstraints("H:|-10-[\(waitingLabel)]-10-|")
-    }
     
    
     

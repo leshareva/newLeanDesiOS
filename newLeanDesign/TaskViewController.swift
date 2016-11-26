@@ -12,7 +12,7 @@ import Firebase
 import AVFoundation
 import DigitsKit
 import Swiftstraints
-//import AVFoundation
+import Alamofire
 
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -48,6 +48,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         setupbuttonView()
         setupLogoView()
         setupTableView()
+        
+        let parameters: Parameters = [
+            "company": "Мысмаксом"
+        ]
+        
+        Alamofire.request("https://leandesign.pro:8000/createFolder",
+                          method: .post,
+                          parameters: parameters)
     }
     
     func setupLogoView() {

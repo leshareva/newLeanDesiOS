@@ -55,8 +55,8 @@ class ChatBannerView: UIView {
         addSubview(line)
         addSubview(titleLabel)
         addSubview(textView)
-//        addConstraints("H:|[\(line)]|", "H:|-20-[\(titleLabel)]-20-|", "H:|-16-[\(textView)]-16-|")
-//        addConstraints("V:|[\(line)]-14-[\(titleLabel)][\(textView)]|")
-//        addConstraints(line.heightAnchor == 1, titleLabel.heightAnchor == 14)   
+        addConstraints("H:|[\(line)]|", "H:|-20-[\(titleLabel)]-20-|", "H:|-16-[\(textView)]-16-|")
+        addConstraints("V:|[\(line)]-14-[\(titleLabel)][\(textView)]|")
+        addConstraints(line.heightAnchor == 1, titleLabel.heightAnchor == 14)
     }
 }
