@@ -44,7 +44,6 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        print(amount)
         setUpCardTextField()
         cardNumberTextField.cardTextFieldDelegate = self
     }

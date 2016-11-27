@@ -108,8 +108,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func handlePay() {
-        let payViewController = PayViewController()
-        navigationController?.pushViewController(payViewController, animated: true)
+        let amountViewController = AmountViewController()
+        navigationController?.pushViewController(amountViewController, animated: true)
     }
     
     
@@ -170,12 +170,16 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.detailTextLabel?.text = "Согласуйте чистовик"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
                 cell.notificationsLabel.isHidden = false
+            } else if status == "source" {
+                cell.detailTextLabel?.text = "Дизайнер готовит исходники"
+                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.notificationsLabel.isHidden = false
             } else if status == "done" {
                 cell.detailTextLabel?.text = "Закройте задачу"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
                 cell.notificationsLabel.isHidden = false
             }
-
+            
             if let taskImageUrl = (snapshot.value as? NSDictionary)!["imageUrl"] as? String {
                 cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
             } else {

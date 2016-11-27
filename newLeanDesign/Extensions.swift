@@ -26,8 +26,10 @@ let imageCashe = NSCache<NSString, UIImage>()
 
 extension UIImageView {
     
+    
+    
     func loadImageUsingCashWithUrlString(_ urlString: String) {
-        
+
         self.image = nil
         
         //check cashe for image first
@@ -59,6 +61,8 @@ extension UIImageView {
             
         }).resume()
     }
+    
+   
     
 }
 

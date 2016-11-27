@@ -9,6 +9,8 @@
 import UIKit
 import Swiftstraints
 import Firebase
+import Alamofire
+import DigitsKit
 
 class ConceptViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     
@@ -33,7 +35,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.register(CustomCell.self, forCellWithReuseIdentifier: customCellIdentifier)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Обсудить", style: .plain, target: self, action: #selector(closeView))
-     
+        
         self.buttonView.acceptTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleApproveView)))
         
     }
@@ -55,29 +57,24 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     }
     
 
-    
-    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         collectionView?.collectionViewLayout.invalidateLayout()
     }
     
-    
-    
+
     var day = 0;
     var dayname = ["день", "дня", "дней"]
-    
-    
-    
-    
+
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: customCellIdentifier, for: indexPath) as! CustomCell
         
-       
-        
+      
         let concept = concepts[indexPath.item]
         
         if let imageUrl = concept.imgUrl {
+            
             cell.imageView.loadImageUsingCashWithUrlString(imageUrl)
+            
             cell.textView.isHidden = true
             cell.priceLabel.isHidden = true
             cell.timeLabel.isHidden = true
@@ -85,20 +82,15 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
 //            cell.imageWidthAnchor?.constant = s
             
         } else if let text = concept.text {
-           
-            
+ 
             cell.imageView.isHidden = true
             cell.textView.isHidden = false
             cell.priceLabel.isHidden = false
             cell.descriptView.isHidden = false
             cell.textView.text = text
-//            let price = concept.price
-//            let time = concept.time
-            
+
             buttonView.buttonLabel.text = "Все верно!"
-//            cell.priceLabel.text = String(price!) + " ₽"
-//            checkNumberOfDays(Int(time!))
-//            cell.timeLabel.text = String(time!) + " " + String(dayname[day])
+
         }
         return cell
     }
@@ -142,9 +134,6 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             height = view.frame.height
         }
         
-        
-
-        
         return CGSize(width: width, height: height)
     }
     
@@ -176,82 +165,150 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                 var time : Int?
                 let status = (snapshot.value as? NSDictionary)!["status"] as? String
                 time =  (snapshot.value as? NSDictionary)!["time"] as? Int
-                if let price = (snapshot.value as? NSDictionary)!["price"] {
-                    self.checkNumberOfDays(Int(time!))
+                if let price = (snapshot.value as? NSDictionary)!["price"] as? Int {
                     
-                    
-                var newstatus = ""
-                if status == "awarenessApprove" {
-                    newstatus = "concept"
-                        let alert = UIAlertController(title: "Стоимость работ — \(price) руб.", message: "", preferredStyle: UIAlertControllerStyle.alert)
-                        
-                        alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
-                            self.navigationController?.popToRootViewController(animated: true)
+                    if let uid = Digits.sharedInstance().session()?.userID {
+                        let clientRef = self.ref.child("clients").child(uid)
+                        clientRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                                guard let sum = (snapshot.value as! NSDictionary)["sum"] as? Int else {
+                                    return
+                                }
+
+                            if status == "awarenessApprove" {
+                                if sum < price {
+                                    self.showFailAlertView(price: price as Int)
+                                } else {
+                                    self.showSuccessAlertView(status: status! as String, time: time! as Int, price: price as Int)
+                                }
+                            } else {
+                                self.showSuccessAlertView(status: status! as String, time: time! as Int, price: price as Int)
+                            }
+                                
                             
-                            self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
-                        }))
-                        
-                        alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
-                            
-                            alert.dismiss(animated: true, completion: nil)
-    
-                        }))
-                        
-                        self.present(alert, animated: true, completion: nil)
-                   
-                    
-                    
-                } else if status == "conceptApprove" {
-                    newstatus = "design"
-                    
-                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия черновика, вы не сможете вносить глобальные изменения в черновик", preferredStyle: UIAlertControllerStyle.alert)
-                    
-                    alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
-                        self.navigationController?.popToRootViewController(animated: true)
-                        
-                        self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
-                    }))
-                    
-                    alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
-                        
-                        alert.dismiss(animated: true, completion: nil)
-                        
-                    }))
-                    
-                    self.present(alert, animated: true, completion: nil)
-                    
-                    
-                } else if status == "designApprove" {
-                    newstatus = "sources"
-                    
-                    let alert = UIAlertController(title: "Подтвердите", message: "После принятия чистовика вы не сможете вносить в него корректировки. Дизайнер будет готовить исходники.", preferredStyle: UIAlertControllerStyle.alert)
-                    
-                    alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
-                        self.navigationController?.popToRootViewController(animated: true)
-                        
-                        self.sendApproveToDB(taskId, status: status!, newstatus: newstatus, time: time!)
-                    }))
-                    
-                    alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
-                        
-                        alert.dismiss(animated: true, completion: nil)
-                        
-                    }))
-                    
-                    self.present(alert, animated: true, completion: nil)
-                    
-                }
-                    
+                        }, withCancel: nil)
+                    }
                 }
                 
                 }, withCancel: nil)
-            
         }
-        
-        
-        
     }
     
+    
+    
+    func showFailAlertView(price: Int) {
+        let alert = UIAlertController(title: "Не достаточно средств", message: "Чтобы эта задача пошла в работу на счету должно быть — \(price) руб.", preferredStyle: UIAlertControllerStyle.alert)
+        
+        alert.addAction(UIAlertAction(title: "Пополнить", style: .default, handler: { (action: UIAlertAction!) in
+            let amountViewController = AmountViewController()
+            let navController = UINavigationController(rootViewController: amountViewController)
+            self.present(navController, animated: true, completion: nil)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func showSuccessAlertView(status: String, time: Int, price: Int) {
+        guard let taskId = task!.taskId else {
+            return
+        }
+        
+        var newstatus = ""
+        if status == "awarenessApprove" {
+            newstatus = "concept"
+            let alert = UIAlertController(title: "Стоимость работ — \(price) руб.", message: "После нажатия кнопки «Подтверждаю» мы снимим сумму за первый этап", preferredStyle: UIAlertControllerStyle.alert)
+            
+            alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
+                self.navigationController?.popToRootViewController(animated: true)
+                
+                let bill = Double(price) * Double(0.1)
+                
+                self.sendBill(bill: Int(bill) as! Int)
+                self.sendApproveToDB(taskId, status: status, newstatus: newstatus, time: time)
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
+                
+                alert.dismiss(animated: true, completion: nil)
+                
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+            
+            
+            
+        } else if status == "conceptApprove" {
+            newstatus = "design"
+            
+            let alert = UIAlertController(title: "Подтвердите", message: "После принятия черновика, вы не сможете вносить глобальные изменения в черновик", preferredStyle: UIAlertControllerStyle.alert)
+            
+            alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
+                self.navigationController?.popToRootViewController(animated: true)
+                let bill = Double(price) * Double(0.4)
+                self.sendBill(bill: Int(bill) as! Int)
+                self.sendApproveToDB(taskId, status: status, newstatus: newstatus, time: time)
+            }))
+            
+            
+            
+            alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
+                
+                alert.dismiss(animated: true, completion: nil)
+                
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+            
+            
+        } else if status == "designApprove" {
+            newstatus = "sources"
+            
+            let alert = UIAlertController(title: "Подтвердите", message: "После принятия чистовика вы не сможете вносить в него корректировки. Дизайнер будет готовить исходники.", preferredStyle: UIAlertControllerStyle.alert)
+            
+            alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
+                self.navigationController?.popToRootViewController(animated: true)
+                let bill = Double(price) * Double(0.5)
+                self.sendBill(bill: Int(bill) as! Int)
+                self.sendApproveToDB(taskId, status: status, newstatus: newstatus, time: time)
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
+                
+                alert.dismiss(animated: true, completion: nil)
+                
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    
+    
+    func sendBill(bill: Int) {
+        
+        if let uid = Digits.sharedInstance().session()?.userID {
+            
+            let clientRef = self.ref.child("clients").child(uid)
+            clientRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let oldSum = (snapshot.value as! NSDictionary)["sum"] as? Int {
+                    let newSum = Int(oldSum) - Int(bill)
+                    print(newSum, oldSum, bill)
+                    let values: [String: AnyObject] = ["sum": newSum as AnyObject]
+                    clientRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            print(error!)
+                            return
+                        }
+                    })
+                }
+            }, withCancel: nil)
+            
+        }
+    }
     
     func sendApproveToDB(_ taskId: String, status: String, newstatus: String, time: Int) {
         let taskRef = self.ref.child("tasks").child(taskId)
@@ -271,7 +328,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             let calculatedDate = (Calendar.current as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: days!, to: Date(), options: NSCalendar.Options.init(rawValue: 0))
             
             let endDate = NSNumber(value: Int(calculatedDate!.timeIntervalSince1970))
-            print(endDate)
+         
             
             let values : [String: AnyObject] = ["status": newstatus as AnyObject, "start": startDate as AnyObject, "end": endDate as AnyObject]
             taskRef.updateChildValues(values) { (error, ref) in
@@ -319,10 +376,6 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     }
   
 }
-
-
-
-
 
 
 
@@ -417,7 +470,7 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
         descriptView.addSubview(descriptLabel)
         descriptView.addConstraints("H:|-16-[\(descriptLabel)]-16-|")
         descriptView.addConstraints("V:|-8-[\(descriptLabel)]-8-|")
-    
+     
         
     }
     
@@ -431,6 +484,8 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
             
         }
     }
+    
+    
     
     
     
@@ -451,6 +506,7 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
         
         zoomingImageView.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         zoomingImageView.isUserInteractionEnabled = true
+        zoomingImageView.backgroundColor = .white
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
         
         if let keyWindow = UIApplication.shared.keyWindow {

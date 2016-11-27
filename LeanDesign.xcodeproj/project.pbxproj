@@ -40,6 +40,7 @@
 		CB5F4D0E1DBCC12600530341 /* ZoomingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */; };
 		CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */; };
 		CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */; };
+		CBC9D49C1DEA118A00102C36 /* LicenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */; };
 		CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */; };
 		CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682BF1D93EBD400CB3679 /* Main.storyboard */; };
 		CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C21D93EBD400CB3679 /* Assets.xcassets */; };
@@ -90,6 +91,7 @@
 		CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBannerView.swift; sourceTree = "<group>"; };
 		CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountViewController.swift; sourceTree = "<group>"; };
 		CBB78A9C1DE7D41500360D51 /* LeanDesign.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LeanDesign.entitlements; sourceTree = "<group>"; };
+		CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseViewController.swift; sourceTree = "<group>"; };
 		CBE682B81D93EBD300CB3679 /* LeanDesign.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeanDesign.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBE682C01D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */,
 				CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */,
 				CBF891821DDAE1A800437DEA /* PayViewController.swift */,
+				CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 				CB39FAF21D942BBC007E9365 /* Task.swift in Sources */,
 				CB39FB011D942C32007E9365 /* CompanyView.swift in Sources */,
 				CB39FADF1D942A92007E9365 /* SettingsLauncher.swift in Sources */,
+				CBC9D49C1DEA118A00102C36 /* LicenseViewController.swift in Sources */,
 				CB39FAD91D942A48007E9365 /* NewTaskController.swift in Sources */,
 				CB39FAE31D942AD9007E9365 /* ProfileViewController.swift in Sources */,
 				CB39FADD1D942A78007E9365 /* ChatViewController.swift in Sources */,
