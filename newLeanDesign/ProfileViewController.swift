@@ -9,6 +9,9 @@ import DKImagePickerController
 
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    let userView = UserView()
+    
+    
     let discriptionLabel: UILabel = {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -27,38 +30,25 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         return imageView
     }()
     
-    lazy var profilePic: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage.gifWithName("spinner-duo")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
-        imageView.isUserInteractionEnabled = true
-        imageView.layer.cornerRadius = 38
-        imageView.layer.masksToBounds = true
-        return imageView
-    }()
-    
-    
-    let inputForName: UIView = {
+
+    lazy var logoutButton: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 2
-        view.layer.masksToBounds = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLogout)))
+        view.isUserInteractionEnabled = true
         
-        let tf = UILabel()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.text = "Компания"
-        tf.font = UIFont.systemFont(ofSize: 16)
-        tf.textColor = UIColor(r: 180, g: 180, b: 180)
-        view.addSubview(tf)
-        view.addConstraints("H:|-16-[\(tf)]")
-        view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
+        let tv = UILabel()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.text = "Выйти"
+        view.addSubview(tv)
+        
+        view.addConstraints(tv.centerXAnchor == view.centerXAnchor,
+                            tv.centerYAnchor == view.centerYAnchor)
         
         return view
     }()
- 
+    
     
     let firstField: UILabel = {
         let tf = UILabel()
@@ -94,26 +84,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         tf.font = UIFont.systemFont(ofSize: 16)
         return tf
     }()
-
-    
-    lazy var logoutButton: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLogout)))
-        view.isUserInteractionEnabled = true
-        
-        let tv = UILabel()
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.text = "Выйти"
-        view.addSubview(tv)
-        
-        view.addConstraints(tv.centerXAnchor == view.centerXAnchor,
-                            tv.centerYAnchor == view.centerYAnchor)
-        
-        return view
-    }()
-    
     
     
     override func viewDidLoad() {
@@ -142,15 +112,15 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let ref = FIRDatabase.database().reference().child("clients").child(userId)
         ref.observe(.value, with: { (snapshot) in
             
-            if let name = (snapshot.value as? NSDictionary)!["name"] as? String {
-               self.discriptionLabel.text = name
+            if let name = (snapshot.value as? NSDictionary)!["firstName"] as? String {
+               self.userView.nameLabel.text = name
             }
             if let company = (snapshot.value as? NSDictionary)!["company"] as? String {
                 self.firstField.text = company
             }
             
             if let profileImageUrl = (snapshot.value as? NSDictionary)!["photoUrl"] as? String  {
-                self.profilePic.loadImageUsingCashWithUrlString(profileImageUrl)
+                self.userView.profilePic.loadImageUsingCashWithUrlString(profileImageUrl)
             }
             
             if let phone = (snapshot.value as? NSDictionary)!["phone"] as? String  {
@@ -182,37 +152,24 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     
     func setupView() {
-        
-        view.addSubview(discriptionLabel)
-        view.addSubview(profilePic)
-        view.addSubview(inputForName)
+        userView.frame = CGRect(x: 0, y: 80, width: view.frame.size.width, height: 100)
         view.addSubview(inputForPhone)
         view.addSubview(closeButton)
         view.addSubview(logoutButton)
-       
+        view.addSubview(userView)
         
         view.addConstraints("V:|-20-[\(closeButton)]")
         view.addConstraints("H:|-8-[\(closeButton)]")
         
-        view.addConstraints("V:|-60-[\(profilePic)][\(discriptionLabel)]-20-[\(inputForName)]-1-[\(inputForPhone)]")
-        view.addConstraints("V:[\(logoutButton)]|")
-        view.addConstraints("H:|[\(inputForName)]|", "H:|[\(logoutButton)]|", "H:|[\(inputForPhone)]|")
-        view.addConstraints(discriptionLabel.widthAnchor == view.widthAnchor,
-                            discriptionLabel.heightAnchor == 40,
-                            inputForName.heightAnchor == 40,
-                            inputForPhone.heightAnchor == 40,
-                            profilePic.centerXAnchor == view.centerXAnchor,
-                            profilePic.heightAnchor == 76,
-                            profilePic.widthAnchor == 76,
+
+        view.addConstraints("V:[\(logoutButton)]|", "V:|-240-[\(inputForPhone)]")
+        view.addConstraints("H:|[\(logoutButton)]|", "H:|[\(inputForPhone)]|")
+        view.addConstraints(inputForPhone.heightAnchor == 40,
                             closeButton.widthAnchor == 30,
                             closeButton.heightAnchor == 30,
-                            logoutButton.heightAnchor == 40
+                            logoutButton.heightAnchor == 60
                             )
         
-    
-        inputForName.addSubview(firstField)
-        inputForName.addConstraints("H:|-100-[\(firstField)]|")
-        inputForName.addConstraints( firstField.centerYAnchor == inputForName.centerYAnchor)
         inputForPhone.addSubview(phoneField)
         inputForPhone.addConstraints("H:|-100-[\(phoneField)]|")
         inputForPhone.addConstraints( phoneField.centerYAnchor == inputForPhone.centerYAnchor)
@@ -233,7 +190,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             for each in assets {
                 each.fetchOriginalImage(false) {
                     (image: UIImage?, info: [AnyHashable: Any]?) in
-                    self.profilePic.image = image
+                    self.userView.profilePic.image = image
 //                    let imageData: NSData = UIImagePNGRepresentation(image!)!
                     self.uploadToFirebaseStorageUsingImage(image!)
                 }

@@ -107,6 +107,8 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
         return CGSize(width: collectionView.frame.width, height: cellHeight)
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }

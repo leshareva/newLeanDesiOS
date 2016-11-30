@@ -11,6 +11,7 @@ import Firebase
 import AVFoundation
 import DigitsKit
 import Swiftstraints
+
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
@@ -42,17 +43,13 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     var tableView: UITableView  =  UITableView()
     var tasks = [Task]()
     var taskDictionary = [String: Task]()
-    
-    var beepSoundEffect: AVAudioPlayer!
-    
-    
-    
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let screenSize: CGRect = UIScreen.main.bounds
-        tableView.frame         =   CGRect(x: 0, y: 0, width: 320, height: screenSize.height);
+        tableView.frame         =   CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height);
         tableView.delegate      =   self
         tableView.dataSource    =   self
         
@@ -64,9 +61,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         fetchUser()
         
         self.view.addSubview(tableView)
-        
-        
-        
+ 
     }
     
     
@@ -93,10 +88,20 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.text
-        cell.detailTextLabel?.text = task.status
-        cell.timeLabel.text = String(describing: task.price!)
-        cell.notificationsLabel.isHidden = true
         
+        let status = task.status
+        if status == "done" {
+           cell.detailTextLabel?.text = "Задача сдана и оплачена"
+            
+        } else if status == "archiveRejected" {
+            cell.detailTextLabel?.text = "Задача отменена"
+            cell.detailTextLabel?.tintColor = .red
+        }
+        
+        let taskPrice = Int(task.price!)
+        cell.timeLabel.text = "\(String(describing: taskPrice)) ₽"
+        cell.notificationsLabel.isHidden = true
+
         if let taskImageUrl = task.imageUrl {
             cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
         } else {

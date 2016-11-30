@@ -10,6 +10,7 @@
 		0F45E0FECFCBAF78CDE0230C /* Pods_LeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */; };
 		CB06803F1DEEC36100D78572 /* AcceptPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */; };
 		CB0680411DEF16A300D78572 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680401DEF16A300D78572 /* Constant.swift */; };
+		CB0680431DEF54D100D78572 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680421DEF54D100D78572 /* UserView.swift */; };
 		CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* ChatInputView.swift */; };
@@ -60,6 +61,7 @@
 		87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptPriceViewController.swift; sourceTree = "<group>"; };
 		CB0680401DEF16A300D78572 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		CB0680421DEF54D100D78572 /* UserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				CB39FB0D1D952156007E9365 /* EmptyTableView.swift */,
 				CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */,
 				CB34A1841DC714260020F53E /* ChatInputView.swift */,
+				CB0680421DEF54D100D78572 /* UserView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */,
 				CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */,
 				CB39FAF41D942BC4007E9365 /* User.swift in Sources */,
+				CB0680431DEF54D100D78572 /* UserView.swift in Sources */,
 				CB39FAFB1D942C04007E9365 /* TaskCell.swift in Sources */,
 				CB39FAEC1D942B6D007E9365 /* ConceptViewController.swift in Sources */,
 				CB39FAD61D942A17007E9365 /* ArchiveViewController.swift in Sources */,

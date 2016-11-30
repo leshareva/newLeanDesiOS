@@ -19,7 +19,7 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
     
     var amount: Int!
     
-    let cardNumberTextField = CardTextField(frame:CGRect(x: 10, y: 60, width: 300, height: 40 ))
+    let cardNumberTextField = CardTextField()
     
     let discriptionLabel: UITextView = {
         let tv = UITextView()
@@ -69,8 +69,10 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
     }()
     
     
+    
     func setUpCardTextField() {
-        
+        let screenSize: CGRect = UIScreen.main.bounds
+        cardNumberTextField.frame = CGRect(x: 16, y: 60, width: screenSize.width - 32, height: 40 )
         cardNumberTextField.cardTextFieldDelegate = self
         cardNumberTextField.placeholder = "0000000000000000"
         cardNumberTextField.becomeFirstResponder()
@@ -80,7 +82,7 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
         self.view.addSubview(titleLabel)
         self.view.addSubview(errorView)
         
-        self.view.addConstraints(titleLabel.topAnchor == self.view.topAnchor,
+        self.view.addConstraints(titleLabel.topAnchor == self.view.topAnchor + 10,
                                  titleLabel.leftAnchor == self.view.leftAnchor,
                                  titleLabel.rightAnchor == self.view.rightAnchor,
                                  titleLabel.heightAnchor == 40,
@@ -97,6 +99,8 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
                                 errorView.topAnchor == self.view.topAnchor,
                                 errorView.leftAnchor == self.view.leftAnchor
                                )
+        
+        
         errorView.isHidden = true
         errorView.addSubview(errorLabel)
         errorView.addConstraints("H:|-10-[\(errorLabel)]-10-|")

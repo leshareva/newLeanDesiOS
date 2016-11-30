@@ -21,6 +21,7 @@ class ChatInputView: UIView, UITextFieldDelegate {
     
     let sendButton: UIButton = {
         let btn = UIButton()
+        btn.setTitleColor(.black, for: .normal)
         btn.setTitle("Отпр.", for: UIControlState())
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn

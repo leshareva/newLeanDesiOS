@@ -23,17 +23,17 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
     }
     
-    var user: User? {
-        didSet {
-            
-        }
-    }
+    var user: User?
     
     var messages = [Message]()
     var sentMessages = [String]()
     var defaults = UserDefaults.standard
     
-    
+    lazy var inputContainerView: ChatInputView = {
+        let chatInputView = ChatInputView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50))
+        chatInputView.chatViewController = self
+        return chatInputView
+    }()
     
     
     let cellId = "cellId"
@@ -61,17 +61,11 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
         taskRef.observe(.value, with: { (snapshot) in
             let status = (snapshot.value! as! NSDictionary)["status"]  as! String
-            if status == "awareness" {
-                if !UserDefaults.standard.bool(forKey: taskId) {
-                    UserDefaults.standard.set(false, forKey: taskId)
-                }
-                if UserDefaults.standard.bool(forKey: taskId) {
-                    print("Terms have been accepted, proceed as normal")
-                    self.observeMessages()
-                } else {
-                    print("Terms have not been accepted. Show terms (perhaps using")
-                }
+            if status == "none" {
                 
+            } else if status == "awareness" {
+//                UserDefaults.standard.removeObject(forKey: taskId)
+                self.setupBannerView(taskId: taskId)
             } else if status == "reject" {
                 self.handleDone()
             } else {
@@ -81,6 +75,33 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
     }
     
+    let chatBannerView = ChatBannerView()
+    
+    func setupBannerView(taskId: String) {
+        if !UserDefaults.standard.bool(forKey: taskId) {
+            UserDefaults.standard.set(false, forKey: taskId)
+        }
+        if UserDefaults.standard.bool(forKey: taskId) {
+            self.observeMessages()
+            self.inputContainerView.isHidden = false
+        } else {
+            let theHeight = self.view.frame.size.height
+            chatBannerView.frame = CGRect(x: 0, y: theHeight - 150, width: self.view.frame.size.width, height: 150)
+            self.view.addSubview(chatBannerView)
+            chatBannerView.startChatButton.addTarget(self, action: #selector(self.skipBanner), for: .touchUpInside)
+            self.inputContainerView.isHidden = true
+        }
+    }
+    
+    
+    func skipBanner() {
+        guard let taskId = task?.taskId else {
+            return
+        }
+        UserDefaults.standard.set(true, forKey: taskId)
+        self.chatBannerView.isHidden = true
+        self.inputContainerView.isHidden = false
+    }
     
     
     func observeMessages() {
@@ -112,7 +133,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 
                 if let text = dictionary["text"] as? String {
                     if self.sentMessages.contains(text){
-                        print("we alrady have this message")
                     } else {
                         self.messages.append(Message(dictionary: dictionary))
                     }
@@ -120,7 +140,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 
                 if let imageUrl = dictionary["imageUrl"] as? String {
                     if self.sentMessages.contains(imageUrl){
-                        print("we alrady have this message")
                     } else {
                         self.messages.append(Message(dictionary: dictionary))
                     }
@@ -132,13 +151,9 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                     //scroll to the last index
                     let indexPath = IndexPath(item: self.messages.count-1, section: 0)
                     self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
-                    
                 })
-                
             }, withCancel: nil)
-            
         }, withCancel: nil)
-        
     }
     
 
@@ -146,15 +161,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     
     func setupStepsView() {
-        
-        let chatBannerView = ChatBannerView()
-        view.addSubview(chatBannerView)
-        chatBannerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints("H:|[\(chatBannerView)]|")
-        view.addConstraints("V:[\(chatBannerView)]|")
-        view.addConstraints(chatBannerView.heightAnchor == 110)
-        chatBannerView.isHidden = true
-        
+
         let containerView = StepsView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 30))
         view.addSubview(containerView)
         
@@ -176,7 +183,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 containerView.stepOne.backgroundColor = StepsView.activeColor
                 containerView.textOne.textColor = StepsView.activeTextColor
                 buttonView.isHidden = true
-                chatBannerView.isHidden = false
             } else if status == "awarenessApprove" {
                 buttonView.alertTextView.text = "Согласуйте понимание задачи"
                 buttonView.alertButton.isHidden = false
@@ -230,6 +236,8 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         
     }
+    
+    
     
     func handleDone() {
         guard let taskId = task?.taskId, let fromId = task?.fromId else {
@@ -304,8 +312,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 }
                 }, withCancel: nil)
         }
-        
-        
+
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: titleView)
     }
     
@@ -317,18 +324,13 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
    
-    lazy var inputContainerView: ChatInputView = {
-        let chatInputView = ChatInputView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50))
-        chatInputView.chatViewController = self
-        return chatInputView
-    }()
+  
     
     var assets: [DKAsset]?
     
+    
     func handleUploadTap() {
         let pickerController = DKImagePickerController()
-        
-        
         pickerController.didSelectAssets = { (assets: [DKAsset]) in
 
             for each in assets {
@@ -338,7 +340,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                     self.uploadToFirebaseStorageUsingImage(image!)
                 }
             }
-            
         }
         
         self.present(pickerController, animated: true, completion: nil)
@@ -366,6 +367,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
     }
     
+    
     let sendMessageController = SendMessageController()
     
     fileprivate func sendMessageWithImageUrl(_ imageUrl: String, image: UIImage) {
@@ -383,6 +385,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
        
         self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId!)
     }
+    
     
     func handleSend() {
         guard let messageText = inputContainerView.messageField.text else {
@@ -406,28 +409,21 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 self.collectionView?.reloadData()
             })
             
-            
             let properties: [String: AnyObject] = ["text": messageText as AnyObject]
             self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId!)
             
             inputContainerView.messageField.text = nil
-//            let properties: [String: AnyObject] = ["text": messageText]
-//            sendMessageWithProperties(properties)
         }
         
         
     }
     
     
-    
-    
-    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
     
-    
-    
+
     var containerViewBottomAnchor: NSLayoutConstraint?
     
     override var inputAccessoryView: UIView? {
