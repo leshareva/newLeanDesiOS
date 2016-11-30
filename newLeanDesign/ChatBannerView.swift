@@ -40,7 +40,7 @@ class ChatBannerView: UIView {
     
     let textView: UITextView = {
         let td = UITextView()
-        td.text = "В ближайшее время он свяжется с вами, что задать вопросы"
+        td.text = "В ближайшее время он свяжется с вами, чтобы задать вопросы"
         td.translatesAutoresizingMaskIntoConstraints = false
         td.backgroundColor = UIColor.clear
         td.font = UIFont.systemFont(ofSize: 14)

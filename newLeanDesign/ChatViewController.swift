@@ -19,7 +19,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     var task: Task? {
         didSet {
-            observeMessages()
+            checkTaskStatus()
         }
     }
     
@@ -31,79 +31,13 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     var messages = [Message]()
     var sentMessages = [String]()
-
-    func observeMessages() {
-        guard let taskId = self.task?.taskId else {
-            return
-        }
-       
-        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
-        userMessagesRef.queryLimited(toLast: 20).observe(.childAdded, with: { (snapshot) in
-            
-            let taskMessagesRef = FIRDatabase.database().reference().child("messages").child(snapshot.key)
-            taskMessagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            let status = (snapshot.value as? NSDictionary)!["status"] as? String
-                if status == self.task!.fromId {
-                    
-                    let values : [String: AnyObject] = ["status": "read" as AnyObject]
-                    taskMessagesRef.updateChildValues(values) { (error, ref) in
-                        if error != nil {
-                            print(error!)
-                            return
-                        }
-                    }
-                }
-                
-                guard var dictionary = snapshot.value as? [String: AnyObject] else {
-                    return
-                }
-
-                
-                
-                if let text = dictionary["text"] as? String {
-                    if self.sentMessages.contains(text){
-                        print("we alrady have this message")
-                    } else {
-                        self.messages.append(Message(dictionary: dictionary))
-                    }
-                }
-
-                if let imageUrl = dictionary["imageUrl"] as? String {
-                    if self.sentMessages.contains(imageUrl){
-                        print("we alrady have this message")
-                    } else {
-                        self.messages.append(Message(dictionary: dictionary))
-                    }
-                }
-                
-                
-                DispatchQueue.main.async(execute: {
-                    self.collectionView?.reloadData()
-                    //scroll to the last index
-                    let indexPath = IndexPath(item: self.messages.count-1, section: 0)
-                    self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
-                    
-                })
-
-                }, withCancel: nil)
-            
-            }, withCancel: nil)
-        
-    }
+    var defaults = UserDefaults.standard
     
     
-    lazy var messageField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Type message..."
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.delegate = self
-        return textField
-    }()
     
     
     let cellId = "cellId"
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -120,13 +54,104 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
     
+    func checkTaskStatus() {
+        guard let taskId = self.task?.taskId else {
+            return
+        }
+        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
+        taskRef.observe(.value, with: { (snapshot) in
+            let status = (snapshot.value! as! NSDictionary)["status"]  as! String
+            if status == "awareness" {
+                if !UserDefaults.standard.bool(forKey: taskId) {
+                    UserDefaults.standard.set(false, forKey: taskId)
+                }
+                if UserDefaults.standard.bool(forKey: taskId) {
+                    print("Terms have been accepted, proceed as normal")
+                    self.observeMessages()
+                } else {
+                    print("Terms have not been accepted. Show terms (perhaps using")
+                }
+                
+            } else if status == "reject" {
+                self.handleDone()
+            } else {
+                self.observeMessages()
+            }
+        }, withCancel: nil)
+        
+    }
+    
+    
+    
+    func observeMessages() {
+        guard let taskId = self.task?.taskId else {
+            return
+        }
+        
+        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
+        userMessagesRef.queryLimited(toLast: 20).observe(.childAdded, with: { (snapshot) in
+            
+            let taskMessagesRef = FIRDatabase.database().reference().child("messages").child(snapshot.key)
+            taskMessagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                
+                let status = (snapshot.value as? NSDictionary)!["status"] as? String
+                if status == self.task!.fromId {
+                    
+                    let values : [String: AnyObject] = ["status": "read" as AnyObject]
+                    taskMessagesRef.updateChildValues(values) { (error, ref) in
+                        if error != nil {
+                            print(error!)
+                            return
+                        }
+                    }
+                }
+                
+                guard var dictionary = snapshot.value as? [String: AnyObject] else {
+                    return
+                }
+                
+                if let text = dictionary["text"] as? String {
+                    if self.sentMessages.contains(text){
+                        print("we alrady have this message")
+                    } else {
+                        self.messages.append(Message(dictionary: dictionary))
+                    }
+                }
+                
+                if let imageUrl = dictionary["imageUrl"] as? String {
+                    if self.sentMessages.contains(imageUrl){
+                        print("we alrady have this message")
+                    } else {
+                        self.messages.append(Message(dictionary: dictionary))
+                    }
+                }
+                
+                
+                DispatchQueue.main.async(execute: {
+                    self.collectionView?.reloadData()
+                    //scroll to the last index
+                    let indexPath = IndexPath(item: self.messages.count-1, section: 0)
+                    self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
+                    
+                })
+                
+            }, withCancel: nil)
+            
+        }, withCancel: nil)
+        
+    }
+    
+
+    
+    
+    
     func setupStepsView() {
         
         let chatBannerView = ChatBannerView()
         view.addSubview(chatBannerView)
         chatBannerView.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints("H:|[\(chatBannerView)]|")
-        view.addConstraints("V:[\(chatBannerView)]-40-|")
+        view.addConstraints("V:[\(chatBannerView)]|")
         view.addConstraints(chatBannerView.heightAnchor == 110)
         chatBannerView.isHidden = true
         
@@ -210,6 +235,11 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         guard let taskId = task?.taskId, let fromId = task?.fromId else {
             return
         }
+        
+        let status = "archiveRejected"
+        
+        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
+        taskRef.updateChildValues(["status": status])
        
         let activeTasksRef = FIRDatabase.database().reference().child("active-tasks").child(fromId).child(taskId)
         
@@ -223,10 +253,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
        
     }
     
-    func backToHome() {
-        let taskViewController = TaskViewController()
-        navigationController?.pushViewController(taskViewController, animated: true)
-    }
+
     
     func openStepInfo(_ sender : MyTapGesture) {
         let status = sender.status
@@ -290,54 +317,10 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
    
-    lazy var inputContainerView: UIView = {
-        let containerView = UIView()
-        containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
-        containerView.backgroundColor = UIColor.white
-        
-        let uploadImage = UIImageView()
-        uploadImage.isUserInteractionEnabled = true
-        uploadImage.image = UIImage(named: "addimage")
-        uploadImage.translatesAutoresizingMaskIntoConstraints = false
-        uploadImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadTap)))
-        
-        containerView.addSubview(uploadImage)
-        uploadImage.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
-        uploadImage.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        uploadImage.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        uploadImage.heightAnchor.constraint(equalToConstant: 32).isActive = true
-        
-        let sendButton = UIButton(type: .system)
-        sendButton.setTitle("Send", for: UIControlState())
-        sendButton.translatesAutoresizingMaskIntoConstraints = false
-        sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
-        
-        containerView.addSubview(sendButton)
-        sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
-        sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
-        
-        containerView.addSubview(self.messageField)
-        self.messageField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        self.messageField.leftAnchor.constraint(equalTo: uploadImage.rightAnchor, constant: 8).isActive = true
-        self.messageField.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
-        self.messageField.heightAnchor.constraint(equalTo: containerView.heightAnchor, constant: -10).isActive = true
-        
-        let separator = UIView()
-        separator.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-        separator.translatesAutoresizingMaskIntoConstraints = false
-        
-        containerView.addSubview(separator)
-        
-        separator.bottomAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        separator.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
-        separator.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
-        separator.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-        
-        
-        return containerView
-        
+    lazy var inputContainerView: ChatInputView = {
+        let chatInputView = ChatInputView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50))
+        chatInputView.chatViewController = self
+        return chatInputView
     }()
     
     var assets: [DKAsset]?
@@ -402,7 +385,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
     func handleSend() {
-        guard let messageText = messageField.text else {
+        guard let messageText = inputContainerView.messageField.text else {
             return
         }
         
@@ -427,7 +410,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             let properties: [String: AnyObject] = ["text": messageText as AnyObject]
             self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId!)
             
-            self.messageField.text = nil
+            inputContainerView.messageField.text = nil
 //            let properties: [String: AnyObject] = ["text": messageText]
 //            sendMessageWithProperties(properties)
         }
@@ -594,52 +577,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         return messages.count
     }
     
-    
-    
-    func setupInputComponents() {
-        let containerView = UIView()
-        
-        containerView.backgroundColor = UIColor.white
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(containerView)
-        
-        
-        containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        containerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        let sendButton = UIButton(type: .system)
-        sendButton.setTitle("Send", for: UIControlState())
-        sendButton.translatesAutoresizingMaskIntoConstraints = false
-        sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
-        
-        containerView.addSubview(sendButton)
-        sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
-        sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
-        
-        containerView.addSubview(messageField)
-        messageField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        messageField.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
-        messageField.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
-        messageField.heightAnchor.constraint(equalTo: containerView.heightAnchor, constant: -10).isActive = true
-        
-        let separator = UIView()
-        separator.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-        separator.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(separator)
-        
-        separator.bottomAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        separator.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
-        separator.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
-        separator.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-    }
-    
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         handleSend()
         return true

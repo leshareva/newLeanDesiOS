@@ -106,13 +106,8 @@ class AcceptPriceViewController: UIViewController {
             }
         })
 
-        self.view.window!.rootViewController?.dismiss(animated: true, completion: {
-            let chatViewController = ChatViewController()
-            chatViewController.backToHome()
-        })
-        
-        
-        
+        self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
+ 
     }
     
     
