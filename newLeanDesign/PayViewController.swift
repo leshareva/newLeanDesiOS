@@ -26,8 +26,9 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
         tv.text = "Данные вашей карты будут в безопасности: мы используем технологии шифрования, соответствующие требованиям Visa и MasterCard."
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .lightGray
-         tv.font = UIFont.systemFont(ofSize: 12)
+        tv.font = UIFont.systemFont(ofSize: 12)
         tv.textAlignment = .center
+        tv.isEditable = false
         return tv
     }()
     
@@ -47,7 +48,25 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
         setUpCardTextField()
         cardNumberTextField.cardTextFieldDelegate = self
     }
-
+    
+    let errorView: UIView = {
+       let uv = UIView()
+        uv.backgroundColor = .red
+        uv.translatesAutoresizingMaskIntoConstraints = false
+        return uv
+    }()
+    
+    let errorLabel: UITextView = {
+        let tv = UITextView()
+        tv.text = "Произошла ошибка"
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textColor = .white
+        tv.font = UIFont.systemFont(ofSize: 14)
+        tv.textAlignment = .center
+        tv.backgroundColor = .clear
+        tv.isEditable = false
+        return tv
+    }()
     
     
     func setUpCardTextField() {
@@ -59,6 +78,8 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
         self.view.addSubview(cardNumberTextField)
         self.view.addSubview(discriptionLabel)
         self.view.addSubview(titleLabel)
+        self.view.addSubview(errorView)
+        
         self.view.addConstraints(titleLabel.topAnchor == self.view.topAnchor,
                                  titleLabel.leftAnchor == self.view.leftAnchor,
                                  titleLabel.rightAnchor == self.view.rightAnchor,
@@ -70,8 +91,17 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
                                 discriptionLabel.topAnchor == cardNumberTextField.bottomAnchor,
                                 discriptionLabel.centerXAnchor == self.view.centerXAnchor,
                                 discriptionLabel.heightAnchor == 80,
-                                discriptionLabel.widthAnchor == self.view.widthAnchor - 40
+                                discriptionLabel.widthAnchor == self.view.widthAnchor - 40,
+                                errorView.widthAnchor == self.view.widthAnchor,
+                                errorView.heightAnchor == 40,
+                                errorView.topAnchor == self.view.topAnchor,
+                                errorView.leftAnchor == self.view.leftAnchor
                                )
+        errorView.isHidden = true
+        errorView.addSubview(errorLabel)
+        errorView.addConstraints("H:|-10-[\(errorLabel)]-10-|")
+        errorView.addConstraints(errorLabel.heightAnchor == 24, errorLabel.centerYAnchor == errorView.centerYAnchor)
+        
         titleLabel.text = "К оплате \(amount!) рублей"
         
     }
@@ -97,11 +127,11 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
     
     
     func handlePay() {
+        
         let pan = cardNumberTextField.card.bankCardNumber
         let expiryDate = String(describing: cardNumberTextField.card.expiryDate)
         let year = expiryDate.substring(from:expiryDate.index(expiryDate.startIndex, offsetBy: 3))
-        
-        
+
         let tldEndIndex = expiryDate.index(expiryDate.startIndex, offsetBy: 2)
         let tldStartIndex = expiryDate.index(expiryDate.startIndex, offsetBy: 0)
         let range = Range(uncheckedBounds: (lower: tldStartIndex, upper: tldEndIndex))
@@ -162,13 +192,14 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
                                 }
                         }
                     } else if success! == "True" {
-                        print(utf8Text)
+                        
                         if let uid = Digits.sharedInstance().session()?.userID {
                         let userRef = database.child("clients").child(uid)
                             userRef.observeSingleEvent(of: .value, with: { (snapshot) in
                                 let oldAmount = (snapshot.value as? NSDictionary)!["sum"] as? Int
                                 let newAmount = Int(oldAmount!) + Int(self.amount!)
-                                print(newAmount)
+                                let clientEmail = (snapshot.value as? NSDictionary)!["email"] as? String
+                                
                                 let values: [String : AnyObject] = ["sum": newAmount as AnyObject]
                                 userRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
                                     if error != nil {
@@ -176,15 +207,21 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
                                         return
                                     }
                                 })
+                                
+                                
+                                
                             }, withCancel: nil)
                         }
                        
-                        let payViewController = PayViewController()
-                        payViewController.dismiss(animated: true, completion: nil)
+                       
+                        self.dismiss(animated: true, completion: nil)
                         
                     } else {
                         let error = xml["Pay"].element?.attribute(by: "ErrCode")?.text
+                        self.errorView.isHidden = false
+                        self.errorLabel.text = "Платеж не прошел. Попробуйте еще раз"
                         print("False:", error!)
+                       
                     }
                 }
                 

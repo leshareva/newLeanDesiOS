@@ -9,6 +9,7 @@
 import UIKit
 import DigitsKit
 import Firebase
+import Swiftstraints
 
 class LoginController: UIViewController {
     
@@ -18,32 +19,22 @@ class LoginController: UIViewController {
     var newClientViewController: NewClientViewController?
     var profileViewController: ProfileViewController?
     
+    let logoView: UIImageView = {
+       let iv = UIImageView()
+        iv.image = UIImage(named: "logo")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
+    // Set up your own button to call Digits
+    let loginButton = UIButton()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set up your own button to call Digits
-        let loginButton = UIButton()
-        loginButton.setTitleColor(UIColor(r: 0, g: 127, b: 255), for: UIControlState())
-        loginButton.setTitle("Войти", for: UIControlState())
-        loginButton.addTarget(self, action: #selector(self.didTapLoginButton(_:)), for: .touchUpInside)
-        loginButton.sizeToFit()
-        loginButton.center = view.center
-        view.addSubview(loginButton)
-        
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        view.backgroundColor = UIColor(r: 0, g: 127, b: 255)
-        
-        loginButton.setTitleColor(UIColor.white, for: UIControlState())
-        loginButton.layer.cornerRadius = 5
-        loginButton.layer.borderWidth = 1
-        loginButton.layer.borderColor = UIColor.white.cgColor
-        loginButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        loginButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-        loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        loginButton.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 350).isActive = true
-        
+       
+       
+        setupView()
     }
     
     
@@ -82,7 +73,33 @@ class LoginController: UIViewController {
         }
     }
     
-    
+    func setupView() {
+        view.addSubview(loginButton)
+        view.addSubview(logoView)
+        
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.backgroundColor = UIColor(r: 0, g: 127, b: 255)
+        
+        loginButton.setTitleColor(UIColor.white, for: UIControlState())
+        loginButton.layer.cornerRadius = 5
+        loginButton.layer.borderWidth = 1
+        loginButton.layer.borderColor = UIColor.white.cgColor
+ 
+        loginButton.setTitleColor(UIColor(r: 255, g: 255, b: 255), for: UIControlState())
+        loginButton.setTitle("Войти", for: UIControlState())
+        loginButton.addTarget(self, action: #selector(self.didTapLoginButton(_:)), for: .touchUpInside)
+        loginButton.sizeToFit()
+        loginButton.center = view.center
+        
+        view.addConstraints("V:[\(loginButton)]-20-|")
+        view.addConstraints("H:|-20-[\(loginButton)]-20-|")
+        view.addConstraints(logoView.centerXAnchor == view.centerXAnchor,
+                            logoView.centerYAnchor == view.centerYAnchor - 60,
+                            loginButton.heightAnchor == 60)
+        
+        
+    }
     
     
 }

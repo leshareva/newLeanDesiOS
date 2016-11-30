@@ -12,66 +12,40 @@ import DigitsKit
 import DKImagePickerController
 import Swiftstraints
 
-class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
+class SupportViewController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     
     let cashe = NSCache<AnyObject, AnyObject>()
     var designerPic: String?
-    
-    var task: Task? {
-        didSet {
-            observeMessages()
-        }
-    }
-    
-    var user: User? {
-        didSet {
-            
-        }
-    }
+    let adminId = "uzpW1sRJa0MNcU0mwL2pvLmHCsQ2"
     
     var messages = [Message]()
     var sentMessages = [String]()
-
+    
     func observeMessages() {
-        guard let taskId = self.task?.taskId else {
+      
+        guard let uid = Digits.sharedInstance().session()!.userID else {
             return
         }
-       
-        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
+        
+        let userMessagesRef = FIRDatabase.database().reference().child("support-messages").child(uid).child(adminId)
         userMessagesRef.queryLimited(toLast: 20).observe(.childAdded, with: { (snapshot) in
+           
             
             let taskMessagesRef = FIRDatabase.database().reference().child("messages").child(snapshot.key)
             taskMessagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            let status = (snapshot.value as? NSDictionary)!["status"] as? String
-                if status == self.task!.fromId {
-                    
-                    let values : [String: AnyObject] = ["status": "read" as AnyObject]
-                    taskMessagesRef.updateChildValues(values) { (error, ref) in
-                        if error != nil {
-                            print(error!)
-                            return
-                        }
-                    }
-                }
-                
+               
                 guard var dictionary = snapshot.value as? [String: AnyObject] else {
                     return
                 }
-
-                
-                
                 if let text = dictionary["text"] as? String {
                     if self.sentMessages.contains(text){
-                        print("we alrady have this message")
                     } else {
                         self.messages.append(Message(dictionary: dictionary))
                     }
                 }
-
+                
                 if let imageUrl = dictionary["imageUrl"] as? String {
                     if self.sentMessages.contains(imageUrl){
-                        print("we alrady have this message")
                     } else {
                         self.messages.append(Message(dictionary: dictionary))
                     }
@@ -85,10 +59,10 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                     self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
                     
                 })
-
-                }, withCancel: nil)
-            
+                
             }, withCancel: nil)
+            
+        }, withCancel: nil)
         
     }
     
@@ -114,182 +88,16 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         collectionView?.register(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.keyboardDismissMode = .interactive
         
-        setupNavbarWithUser()
-        setupStepsView()
+   
+        
         setupKeyboardObservers()
     }
     
-    
-    func setupStepsView() {
-        
-        let chatBannerView = ChatBannerView()
-        view.addSubview(chatBannerView)
-        chatBannerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints("H:|[\(chatBannerView)]|")
-        view.addConstraints("V:[\(chatBannerView)]-40-|")
-        view.addConstraints(chatBannerView.heightAnchor == 110)
-        chatBannerView.isHidden = true
-        
-        let containerView = StepsView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 30))
-        view.addSubview(containerView)
-        
-        let buttonView = ButtonView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 50))
-        view.addSubview(buttonView)
-        
-        let taskId = task?.taskId
-        let ref = FIRDatabase.database().reference().child("tasks").child(taskId!)
-        ref.observe(.value, with: { (snapshot) in
-            let status = (snapshot.value as? NSDictionary)!["status"] as! String
-            
-            let tappy = MyTapGesture(target: self, action: #selector(self.openStepInfo(_:)))
-
-            if status == "none" {
-                buttonView.alertButton.isHidden = false
-                buttonView.alertButton.backgroundColor = StepsView.activeColor
-                buttonView.alertTextView.text = "Мы подбираем дизайнера"
-            } else  if status == "awareness" {
-                containerView.stepOne.backgroundColor = StepsView.activeColor
-                containerView.textOne.textColor = StepsView.activeTextColor
-                buttonView.isHidden = true
-                chatBannerView.isHidden = false
-            } else if status == "awarenessApprove" {
-                buttonView.alertTextView.text = "Согласуйте понимание задачи"
-                buttonView.alertButton.isHidden = false
-                buttonView.isHidden = false
-                buttonView.alertButton.addGestureRecognizer(tappy)
-                tappy.status = "awareness"
-            } else if status == "concept" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
-                containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.activeColor
-                containerView.textTwo.textColor = StepsView.activeTextColor
-                buttonView.isHidden = true
-            } else if status == "conceptApprove" {
-                buttonView.isHidden = false
-                buttonView.alertButton.isHidden = false
-                buttonView.alertTextView.text = "Согласуйте черновик"
-                buttonView.alertButton.addGestureRecognizer(tappy)
-                tappy.status = "concept"
-            }else if status == "design" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
-                containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.doneColor
-                containerView.textTwo.textColor = StepsView.doneTextColor
-                containerView.stepThree.backgroundColor = StepsView.activeColor
-                containerView.textThree.textColor = StepsView.activeTextColor
-                buttonView.isHidden = true
-            } else if status == "designApprove" {
-                buttonView.isHidden = false
-                buttonView.alertTextView.text = "Согласуйте чистовик"
-                buttonView.alertButton.isHidden = false
-                buttonView.alertButton.addGestureRecognizer(tappy)
-                tappy.status = "design"
-            } else if status == "sources" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
-                containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.doneColor
-                containerView.textTwo.textColor = StepsView.doneTextColor
-                containerView.stepThree.backgroundColor = StepsView.doneColor
-                containerView.textThree.textColor = StepsView.doneTextColor
-                containerView.stepFour.backgroundColor = StepsView.activeColor
-                containerView.textFour.textColor = StepsView.activeTextColor
-                buttonView.isHidden = true
-            } else if status == "done" {
-                buttonView.isHidden = false
-                buttonView.alertTextView.text = "Задача закрыта, исходники лежат в вашей папке"
-                buttonView.alertButton.isHidden = false
-                buttonView.alertButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleDone)))
-            }
-            }, withCancel: nil)
-        
-        
-        
+    override func viewWillAppear(_ animated: Bool) {
+        setupNavbarWithUser()
+        observeMessages()
     }
     
-    func handleDone() {
-        guard let taskId = task?.taskId, let fromId = task?.fromId else {
-            return
-        }
-       
-        let activeTasksRef = FIRDatabase.database().reference().child("active-tasks").child(fromId).child(taskId)
-        
-        activeTasksRef.removeValue()
-        
-        let archiveRef = FIRDatabase.database().reference().child("user-tasks").child(fromId)
-        archiveRef.updateChildValues([taskId: 1])
-        
-        let taskViewController = TaskViewController()
-        navigationController?.pushViewController(taskViewController, animated: true)
-       
-    }
-    
-    func backToHome() {
-        let taskViewController = TaskViewController()
-        navigationController?.pushViewController(taskViewController, animated: true)
-    }
-    
-    func openStepInfo(_ sender : MyTapGesture) {
-        let status = sender.status
-
-        let flowLayout = UICollectionViewFlowLayout()
-        let conceptViewController = ConceptViewController(collectionViewLayout: flowLayout)
-        conceptViewController.view.backgroundColor = UIColor.white
-        conceptViewController.task = task
-        
-        if let taskId = self.task?.taskId {
-            let ref = FIRDatabase.database().reference().child("tasks").child(taskId).child(status!)
-            ref.observe(.childAdded, with: { (snapshot) in
-                guard let dictionary = snapshot.value as? [String : AnyObject] else {
-                    return
-                }
-
-                conceptViewController.concepts.append(Concept(dictionary: dictionary))
-                DispatchQueue.main.async(execute: {
-                    conceptViewController.collectionView?.reloadData()
-                })
-                
-                }, withCancel: nil)
-            
-        }
-        
-        let navController = UINavigationController(rootViewController: conceptViewController)
-        present(navController, animated: true, completion: nil)
-        
-    }
-    
-    
-    func setupNavbarWithUser() {
-        let titleView = UIImageView()
-        titleView.frame = CGRect(x: 0, y: 0, width: 36, height: 36)
-
-        titleView.layer.cornerRadius = 18
-        titleView.layer.masksToBounds = true
-        titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openDesignerProfile)))
-        titleView.isUserInteractionEnabled = true
-        
-        if let taskId = task!.taskId {
-            
-            let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
-            ref.observe(.value, with: { (snapshot) in
-                if let imageUrl = (snapshot.value as? NSDictionary)!["imageUrl"] as? String {
-                    self.designerPic = imageUrl
-                     titleView.loadImageUsingCashWithUrlString(imageUrl)
-                }
-                }, withCancel: nil)
-        }
-        
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: titleView)
-    }
-    
-    func openDesignerProfile() {
-        let userProfileViewController = UserProfileViewController()
-        userProfileViewController.task = task
-        userProfileViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-        navigationController?.pushViewController(userProfileViewController, animated: true)
-    }
-    
-   
     lazy var inputContainerView: UIView = {
         let containerView = UIView()
         containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
@@ -340,6 +148,26 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
     }()
     
+    func setupNavbarWithUser() {
+        let titleView = UIImageView()
+        titleView.frame = CGRect(x: 0, y: 0, width: 36, height: 36)
+        
+        titleView.layer.cornerRadius = 18
+        titleView.layer.masksToBounds = true
+        titleView.isUserInteractionEnabled = true
+        
+            let ref = FIRDatabase.database().reference().child("clients").child(self.adminId)
+            ref.observe(.value, with: { (snapshot) in
+                if let imageUrl = (snapshot.value as? NSDictionary)!["photoUrl"] as? String {
+                    self.designerPic = imageUrl
+                    titleView.loadImageUsingCashWithUrlString(imageUrl)
+                }
+            }, withCancel: nil)
+        
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: titleView)
+    }
+    
     var assets: [DKAsset]?
     
     func handleUploadTap() {
@@ -347,11 +175,11 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         
         
         pickerController.didSelectAssets = { (assets: [DKAsset]) in
-
+            
             for each in assets {
                 each.fetchOriginalImage(false) {
                     (image: UIImage?, info: [AnyHashable: Any]?) in
-                   
+                    
                     self.uploadToFirebaseStorageUsingImage(image!)
                 }
             }
@@ -386,10 +214,10 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     let sendMessageController = SendMessageController()
     
     fileprivate func sendMessageWithImageUrl(_ imageUrl: String, image: UIImage) {
-         let taskId = task?.taskId as String!
-         let fromId = Digits.sharedInstance().session()?.userID as String!
+        
+        let fromId = Digits.sharedInstance().session()?.userID as String!
         let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
-        let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": image.size.width as AnyObject, "imageHeight": image.size.height as AnyObject, "taskId": taskId as AnyObject, "timestamp": timestamp as AnyObject, "fromId": fromId as AnyObject]
+        let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": image.size.width as AnyObject, "imageHeight": image.size.height as AnyObject, "timestamp": timestamp as AnyObject, "fromId": fromId as AnyObject]
         
         self.sentMessages.append(String(imageUrl))
         self.messages.append(Message(dictionary: properties))
@@ -397,8 +225,8 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         DispatchQueue.main.async(execute: {
             self.collectionView?.reloadData()
         })
-       
-        self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId!)
+        
+        self.sendMessageController.sendMessageToSupport(properties)
     }
     
     func handleSend() {
@@ -407,13 +235,12 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
         
         if messageText != "" {
-            let taskId = task?.taskId as String!
-           
+            
             let fromId = Digits.sharedInstance().session()?.userID as String!
             
             let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
-
-            let dictionary: [String: AnyObject] = ["text": messageText as AnyObject, "taskId": taskId as AnyObject, "timestamp": timestamp, "fromId": fromId as AnyObject]
+            
+            let dictionary: [String: AnyObject] = ["text": messageText as AnyObject, "timestamp": timestamp, "fromId": fromId as AnyObject]
             self.sentMessages.append(String(messageText))
             
             self.messages.append(Message(dictionary: dictionary))
@@ -425,11 +252,9 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             
             
             let properties: [String: AnyObject] = ["text": messageText as AnyObject]
-            self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId!)
+            self.sendMessageController.sendMessageToSupport(properties)
             
             self.messageField.text = nil
-//            let properties: [String: AnyObject] = ["text": messageText]
-//            sendMessageWithProperties(properties)
         }
         
         
@@ -452,7 +277,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             return inputContainerView
         }
     }
-
+    
     
     override var canBecomeFirstResponder : Bool {
         return true
@@ -460,20 +285,13 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     
     func setupKeyboardObservers() {
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardDidShow), name: UIKeyboardDidShowNotification, object: nil)
-                NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        //        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleKeyboardDidShow), name: UIKeyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
-                NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
     }
     
-//    func handleKeyboardDidShow() {
-//        if messages.count >= 3 {
-//            let indexPath = NSIndexPath(forItem: messages.count - 1, inSection: 0)
-//            collectionView?.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-//        }
-//        
-//    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -487,16 +305,16 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         containerViewBottomAnchor?.constant = -keyboardFrame!.height
         UIView.animate(withDuration: keyboardDuration!, animations: {
             self.view.layoutIfNeeded()
-        }) 
+        })
     }
     
     func handleKeyboardWillHide(_ notification: Notification) {
-//        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
+        //        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
         let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
         containerViewBottomAnchor?.constant = 0
         UIView.animate(withDuration: keyboardDuration!, animations: {
             self.view.layoutIfNeeded()
-        }) 
+        })
     }
     
     
@@ -504,13 +322,13 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatMessageCell
         
-        cell.chatLogController = self
+        cell.supportLogController = self
         
         let message = messages[indexPath.item]
         cell.textView.text = message.text
-    
+        
         setupCell(cell, message: message)
-
+        
         
         // lets modify the bubble width somehow??
         if let text = message.text {
@@ -524,16 +342,16 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         }
         
         if self.designerPic != nil {
-           cell.profileImageView.loadImageUsingCashWithUrlString(self.designerPic!)
+            cell.profileImageView.loadImageUsingCashWithUrlString(self.designerPic!)
         }
         
         
-//        if let photoUrl = message.photoUrl {
-//            cell.profileImageView.loadImageUsingCashWithUrlString(photoUrl)
-//        }
+        //        if let photoUrl = message.photoUrl {
+        //            cell.profileImageView.loadImageUsingCashWithUrlString(photoUrl)
+        //        }
         return cell
     }
-
+    
     
     fileprivate func setupCell(_ cell: ChatMessageCell, message: Message) {
         if let messageImageUrl = message.imageUrl {
@@ -545,7 +363,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             cell.messageImageView.isHidden = true
             cell.textView.dataDetectorTypes = UIDataDetectorTypes.all
         }
-
+        
         if message.fromId == Digits.sharedInstance().session()?.userID {
             //outgoing blue
             cell.bubbleView.backgroundColor = ChatMessageCell.blueColor
@@ -648,18 +466,18 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     var startingFrame: CGRect?
     var blackBackgroundView: UIView?
     var startingImageView: UIImageView?
-   
+    
     
     func performZoomInForImageView(_ startingImageView: UIImageView) {
-    
+        
         self.startingImageView = startingImageView
         self.startingImageView?.isHidden = true
         
         startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
         let zoomingImageView = ZoomingImageView(frame: startingFrame!)
-    
+        
         zoomingImageView.imageView.image = startingImageView.image
-       
+        
         zoomingImageView.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         zoomingImageView.isUserInteractionEnabled = true
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
@@ -672,7 +490,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
             
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.blackBackgroundView?.alpha = 1
                 self.inputContainerView.alpha = 0
                 
@@ -683,10 +501,10 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: keyWindow.frame.height)
                 
                 zoomingImageView.imageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-                 
+                
                 zoomingImageView.imageView.center = keyWindow.center
                 
-                }, completion: nil)
+            }, completion: nil)
         }
     }
     
@@ -700,19 +518,13 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 zoomOutImageView.frame  = self.startingFrame!
                 self.blackBackgroundView?.alpha = 0
                 self.inputContainerView.alpha = 1
-                }, completion: { (completed: Bool) in
-                    zoomOutImageView.removeFromSuperview()
-                    self.startingImageView?.isHidden = false
+            }, completion: { (completed: Bool) in
+                zoomOutImageView.removeFromSuperview()
+                self.startingImageView?.isHidden = false
             })
         }
     }
- 
+    
     
 }
 
-
-
-class MyTapGesture: UITapGestureRecognizer {
-    var message: Message?
-    var status: String?
-}

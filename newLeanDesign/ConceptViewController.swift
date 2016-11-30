@@ -212,6 +212,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     }
     
     
+    
     func showSuccessAlertView(status: String, time: Int, price: Int) {
         guard let taskId = task!.taskId else {
             return
@@ -219,26 +220,11 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         
         var newstatus = ""
         if status == "awarenessApprove" {
-            newstatus = "concept"
-            let alert = UIAlertController(title: "Стоимость работ — \(price) руб.", message: "После нажатия кнопки «Подтверждаю» мы снимим сумму за первый этап", preferredStyle: UIAlertControllerStyle.alert)
             
-            alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
-                self.navigationController?.popToRootViewController(animated: true)
-                
-                let bill = Double(price) * Double(0.1)
-                
-                self.sendBill(bill: Int(bill) as! Int)
-                self.sendApproveToDB(taskId, status: status, newstatus: newstatus, time: time)
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
-                
-                alert.dismiss(animated: true, completion: nil)
-                
-            }))
-            
-            self.present(alert, animated: true, completion: nil)
-            
+            let acceptPriceViewController = AcceptPriceViewController()
+            acceptPriceViewController.task = task
+            acceptPriceViewController.time = time
+            self.present(acceptPriceViewController, animated: true)
             
             
         } else if status == "conceptApprove" {
@@ -252,8 +238,6 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                 self.sendBill(bill: Int(bill) as! Int)
                 self.sendApproveToDB(taskId, status: status, newstatus: newstatus, time: time)
             }))
-            
-            
             
             alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
                 
@@ -446,18 +430,13 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
     
 
     func setupView() {
-        
-        
         backgroundColor = UIColor.white
         addSubview(imageView)
         addSubview(textView)
         addSubview(descriptView)
         
-        
         addConstraints("H:|[\(descriptView)]|", "H:|-16-[\(textView)]-16-|")
         addConstraints("V:|[\(descriptView)]-8-[\(textView)]")
-
-        
         
         addConstraints(imageView.leftAnchor == self.leftAnchor,
                        imageView.topAnchor == self.topAnchor,
@@ -470,8 +449,6 @@ class CustomCell: UICollectionViewCell, UIScrollViewDelegate {
         descriptView.addSubview(descriptLabel)
         descriptView.addConstraints("H:|-16-[\(descriptLabel)]-16-|")
         descriptView.addConstraints("V:|-8-[\(descriptLabel)]-8-|")
-     
-        
     }
     
     

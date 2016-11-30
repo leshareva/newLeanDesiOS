@@ -19,7 +19,6 @@ class NewTaskController: UIViewController {
     let textDescription: UITextView = {
         let td = UITextView()
         td.text = "Расскажите коротко о задаче. Дизайнер свяжется с вами и уточнит детали."
-
         td.translatesAutoresizingMaskIntoConstraints = false
         td.backgroundColor = UIColor.clear
         td.font = UIFont.systemFont(ofSize: 16)

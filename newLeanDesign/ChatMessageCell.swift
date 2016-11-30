@@ -12,6 +12,7 @@ import Swiftstraints
 class ChatMessageCell: UICollectionViewCell {
     
     var chatLogController: ChatViewController?
+    var supportLogController: SupportViewController?
     
     let textView: UITextView = {
         let tv = UITextView()

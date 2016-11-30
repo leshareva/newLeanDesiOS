@@ -52,8 +52,8 @@ class NoMoneyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(r: 0, g: 127, b: 255)
-        UINavigationBar.appearance().barTintColor = UIColor(r: 0, g: 127, b: 255)
+        view.backgroundColor = LeanColor.blueColor
+        UINavigationBar.appearance().barTintColor = LeanColor.blueColor
         navigationController?.navigationBar.isTranslucent = false
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(handleCancel))

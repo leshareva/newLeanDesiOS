@@ -13,6 +13,36 @@ import DigitsKit
 class SendMessageController: UIViewController {
     
     
+    func sendMessageToSupport(_ properties: [String: AnyObject]) {
+        let ref = FIRDatabase.database().reference().child("messages")
+        
+        guard let fromId = Digits.sharedInstance().session()?.userID as String! else {
+            return
+        }
+        
+        let childRef = ref.childByAutoId()
+        let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
+        let toId = "uzpW1sRJa0MNcU0mwL2pvLmHCsQ2"
+        
+        var values: [String: AnyObject] = ["timestamp": timestamp, "fromId": fromId as AnyObject]
+        
+        properties.forEach({values[$0] = $1})
+        
+        childRef.updateChildValues(values) { (error, ref) in
+            if error != nil {
+                print(error as! NSError)
+                return
+            }
+        }
+        
+        let userMessagesRef = FIRDatabase.database().reference().child("support-messages").child(fromId).child(toId)
+        let messageID = childRef.key
+        userMessagesRef.updateChildValues([messageID: 1])
+        
+        let recipientUserMessagesRef = FIRDatabase.database().reference().child("support-messages").child(toId).child(fromId)
+        recipientUserMessagesRef.updateChildValues([messageID: 1])
+        
+    }
     
     func sendMessageWithProperties(_ properties: [String: AnyObject], taskId: String) {
         let ref = FIRDatabase.database().reference().child("messages")
@@ -22,7 +52,8 @@ class SendMessageController: UIViewController {
         
         let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
         
-        
+      
+
         
         taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let toId = (snapshot.value as? NSDictionary)?["toId"] as? String else {
@@ -96,7 +127,7 @@ class SendMessageController: UIViewController {
         
         
     }
-    
-    
+ 
     
 }
+

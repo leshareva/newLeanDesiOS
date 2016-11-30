@@ -7,6 +7,7 @@ import Alamofire
 
 class NewClientViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    
     var taskViewController: TaskViewController?
     
     let discriptionLabel: UILabel = {
@@ -248,17 +249,21 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let requestReference = ref.child("clients")
         
         let parameters: Parameters = [
+            "toEmail": email,
+            "subject": "Добро пожаловать в Лин",
+            "mailKind": "welcome",
+            "name": name,
             "clientId": userId,
             "company": company
         ]
         
-        Alamofire.request("http://leandesign.pro:8000/createFolder",
+        Alamofire.request("\(Server.serverUrl)/createFolder",
                           method: .post,
                           parameters: parameters)
         
 
         
-        let values: [String: AnyObject] = ["phone": phone as AnyObject, "lastName": sename as AnyObject, "id": userId as AnyObject, "email": email as AnyObject, "company": company as AnyObject, "firstName": name as AnyObject, "state": "none" as AnyObject, "rate": 0.6 as AnyObject, "sum": 0 as AnyObject]
+        let values: [String: AnyObject] = ["phone": phone as AnyObject, "lastName": sename as AnyObject, "id": userId as AnyObject, "email": email as AnyObject, "company": company as AnyObject, "firstName": name as AnyObject, "rate": 0.6 as AnyObject, "sum": 0 as AnyObject]
         
         requestReference.child(userId).updateChildValues(values) { (error, ref) in
             if error != nil {

@@ -25,7 +25,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
 //    var beepSoundEffect: AVAudioPlayer!
     
     
-    static let blueColor = UIColor(r: 48, g: 140, b: 229)
+    
     
 
     let emptyTableView = EmptyTableView()
@@ -43,7 +43,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         fetchUser()
         view.addSubview(tableView)
         buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewTaskView)))
-
+        
+        
         setupLoadingView()
         setupbuttonView()
         setupLogoView()
@@ -53,8 +54,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func setupLogoView() {
         let logoView = UIImageView()
-        logoView.frame = CGRect(x: 0, y: 0, width: 89, height: 29)
-        logoView.image = UIImage(named: "logo")
+        logoView.frame = CGRect(x: 0, y: 10, width: 30, height: 36)
+        logoView.image = UIImage(named: "support")
+        logoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleOpenSupportChat)))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: logoView)
     }
 
@@ -235,9 +237,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func openNewTaskView() {
-        
-        
-                
+
         if let uid = Digits.sharedInstance().session()?.userID {
             let clientsRef = FIRDatabase.database().reference().child("clients").child(uid)
             clientsRef.observe(.value, with: { (snapshot) in
@@ -395,6 +395,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             navigationController?.pushViewController(dummySettingsViewController, animated: true)
         }
         
+    }
+    
+    
+    func handleOpenSupportChat() {
+        let supportViewController = SupportViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        navigationController?.pushViewController(supportViewController, animated: true)
     }
     
 

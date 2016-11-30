@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0F45E0FECFCBAF78CDE0230C /* Pods_LeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */; };
+		CB06803F1DEEC36100D78572 /* AcceptPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */; };
+		CB0680411DEF16A300D78572 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680401DEF16A300D78572 /* Constant.swift */; };
+		CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* NotificationView.swift */; };
 		CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD31D942944007E9365 /* TaskViewController.swift */; };
@@ -55,6 +58,9 @@
 		56E5CC4B187F18A5A09B1A54 /* Pods-LeanDesign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeanDesign.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign.debug.xcconfig"; sourceTree = "<group>"; };
 		59699B5422D4A2BF5104CCF8 /* Pods-LeanDesign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeanDesign.release.xcconfig"; path = "Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign.release.xcconfig"; sourceTree = "<group>"; };
 		87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptPriceViewController.swift; sourceTree = "<group>"; };
+		CB0680401DEF16A300D78572 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* NotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		CB39FAD31D942944007E9365 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +138,7 @@
 				CB39FAD81D942A48007E9365 /* NewTaskController.swift */,
 				CB39FADA1D942A60007E9365 /* LoginController.swift */,
 				CB39FADC1D942A78007E9365 /* ChatViewController.swift */,
+				CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */,
 				CB39FADE1D942A92007E9365 /* SettingsLauncher.swift */,
 				CB39FAE01D942AAA007E9365 /* NewClientViewController.swift */,
 				CB39FAE21D942AD9007E9365 /* ProfileViewController.swift */,
@@ -143,6 +150,7 @@
 				CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */,
 				CBF891821DDAE1A800437DEA /* PayViewController.swift */,
 				CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */,
+				CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -221,6 +229,7 @@
 				CB39FAEA1D942B3A007E9365 /* Helpers */,
 				CBE682C21D93EBD400CB3679 /* Assets.xcassets */,
 				CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */,
+				CB0680401DEF16A300D78572 /* Constant.swift */,
 				CB39FB0F1D954FB4007E9365 /* loader.gif */,
 				CBE682BF1D93EBD400CB3679 /* Main.storyboard */,
 				CB39FB041D942C6E007E9365 /* spinner-duo.gif */,
@@ -398,6 +407,7 @@
 			files = (
 				CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */,
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
+				CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */,
 				CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */,
 				CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */,
 				CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */,
@@ -406,6 +416,7 @@
 				CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */,
 				CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */,
 				CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */,
+				CB0680411DEF16A300D78572 /* Constant.swift in Sources */,
 				CB39FAF61D942BCF007E9365 /* Message.swift in Sources */,
 				CB39FB031D942C3F007E9365 /* ButtonView.swift in Sources */,
 				CBF891811DDAD2A800437DEA /* NoMoneyViewController.swift in Sources */,
@@ -419,6 +430,7 @@
 				CB39FAFF1D942C24007E9365 /* SettingCell.swift in Sources */,
 				CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */,
 				CB39FAF21D942BBC007E9365 /* Task.swift in Sources */,
+				CB06803F1DEEC36100D78572 /* AcceptPriceViewController.swift in Sources */,
 				CB39FB011D942C32007E9365 /* CompanyView.swift in Sources */,
 				CB39FADF1D942A92007E9365 /* SettingsLauncher.swift in Sources */,
 				CBC9D49C1DEA118A00102C36 /* LicenseViewController.swift in Sources */,
