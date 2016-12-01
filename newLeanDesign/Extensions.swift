@@ -29,11 +29,27 @@ extension UIImageView {
     
     
     func loadImageUsingCashWithUrlString(_ urlString: String) {
-
+        
+        
+        
         self.image = nil
+        
+        let ai = UIActivityIndicatorView(frame: self.frame)
+        // Add the UIActivityIndicatorView as a subview on the cell
+        
+        // Start the UIActivityIndicatorView animating
+        ai.color = .gray
+        ai.center = self.center
+        ai.startAnimating()
+        
+        self.addSubview(ai)
+        // Load the remote image with this different API, and send nil as the placeholder
+
         
         //check cashe for image first
         if let cashedImage = imageCashe.object(forKey: urlString as NSString) {
+            ai.stopAnimating()
+            ai.removeFromSuperview()
             self.image = cashedImage
             return
         }
@@ -47,12 +63,16 @@ extension UIImageView {
                 return
             }
             
+            ai.stopAnimating()
+            ai.removeFromSuperview()
+            
             DispatchQueue.main.async(execute: {
                 
                 if let downloadedImage = UIImage(data: data!) {
                     imageCashe.setObject(downloadedImage, forKey: urlString as NSString)
-                    
+                   
                     self.image = downloadedImage
+                    
                 }
                 
                 

@@ -71,10 +71,13 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
       
         let concept = concepts[indexPath.item]
         
+        
+        
+               
+        
         if let imageUrl = concept.imgUrl {
             
             cell.imageView.loadImageUsingCashWithUrlString(imageUrl)
-            
             cell.textView.isHidden = true
             cell.priceLabel.isHidden = true
             cell.timeLabel.isHidden = true

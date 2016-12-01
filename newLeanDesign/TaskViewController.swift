@@ -364,7 +364,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     }, withCancel: nil)
             
             }, withCancel: nil)
-        
     }
     
     func showChatControllerForUser(_ task: Task) {

@@ -62,12 +62,13 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         taskRef.observe(.value, with: { (snapshot) in
             let status = (snapshot.value! as! NSDictionary)["status"]  as! String
             if status == "none" {
-                
+                self.inputContainerView.isHidden = true
             } else if status == "awareness" {
 //                UserDefaults.standard.removeObject(forKey: taskId)
                 self.setupBannerView(taskId: taskId)
             } else if status == "reject" {
                 self.handleDone()
+                self.inputContainerView.isHidden = true
             } else {
                 self.observeMessages()
             }
@@ -90,6 +91,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             self.view.addSubview(chatBannerView)
             chatBannerView.startChatButton.addTarget(self, action: #selector(self.skipBanner), for: .touchUpInside)
             self.inputContainerView.isHidden = true
+           
         }
     }
     
@@ -101,6 +103,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         UserDefaults.standard.set(true, forKey: taskId)
         self.chatBannerView.isHidden = true
         self.inputContainerView.isHidden = false
+        self.observeMessages()
     }
     
     
@@ -230,6 +233,9 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                 buttonView.alertTextView.text = "Задача закрыта, исходники лежат в вашей папке"
                 buttonView.alertButton.isHidden = false
                 buttonView.alertButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleDone)))
+            } else if status == "archiveRejected" {
+                buttonView.isHidden = false
+                buttonView.alertTextView.text = "Вы отменили задачу"
             }
             }, withCancel: nil)
         

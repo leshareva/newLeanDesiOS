@@ -12,6 +12,7 @@
 		CB0680411DEF16A300D78572 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680401DEF16A300D78572 /* Constant.swift */; };
 		CB0680431DEF54D100D78572 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680421DEF54D100D78572 /* UserView.swift */; };
 		CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */; };
+		CB15C4FA1DEFEC490067A51E /* UIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB15C4F91DEFEC490067A51E /* UIControls.swift */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* ChatInputView.swift */; };
 		CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD31D942944007E9365 /* TaskViewController.swift */; };
@@ -63,6 +64,7 @@
 		CB0680401DEF16A300D78572 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		CB0680421DEF54D100D78572 /* UserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
+		CB15C4F91DEFEC490067A51E /* UIControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControls.swift; sourceTree = "<group>"; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
 		CB39FAD31D942944007E9365 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */,
 				CB34A1841DC714260020F53E /* ChatInputView.swift */,
 				CB0680421DEF54D100D78572 /* UserView.swift */,
+				CB15C4F91DEFEC490067A51E /* UIControls.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 				CB39FAFD1D942C18007E9365 /* ChatMessageCell.swift in Sources */,
 				CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */,
 				CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */,
+				CB15C4FA1DEFEC490067A51E /* UIControls.swift in Sources */,
 				CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */,
 				CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */,
 				CB0680411DEF16A300D78572 /* Constant.swift in Sources */,

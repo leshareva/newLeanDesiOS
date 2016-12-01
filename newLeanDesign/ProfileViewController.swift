@@ -12,14 +12,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     let userView = UserView()
     
     
-    let discriptionLabel: UILabel = {
-        let tv = UILabel()
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.textColor = UIColor.black
-        tv.textAlignment = .center
-        return tv
-    }()
-    
     lazy var closeButton: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "close")
@@ -49,41 +41,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         return view
     }()
     
-    
-    let firstField: UILabel = {
-        let tf = UILabel()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFont(ofSize: 16)
-        return tf
-    }()
-    
-    
-    let inputForPhone: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 2
-        view.layer.masksToBounds = true
-        
-        let tf = UILabel()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.text = "Телефон"
-        tf.font = UIFont.systemFont(ofSize: 16)
-        tf.textColor = UIColor(r: 180, g: 180, b: 180)
-        view.addSubview(tf)
-        
-        view.addConstraints("H:|-16-[\(tf)]")
-        view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
-        
-        return view
-    }()
-    
-    let phoneField: UILabel = {
-        let tf = UILabel()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFont(ofSize: 16)
-        return tf
-    }()
+ 
+    let inputForPhone = UIControl.TextField()
+    let inputForCompany = UIControl.TextField()
     
     
     override func viewDidLoad() {
@@ -97,11 +57,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-        
     }
-    
     
     
     func loadUserInfo() {
@@ -116,7 +73,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                self.userView.nameLabel.text = name
             }
             if let company = (snapshot.value as? NSDictionary)!["company"] as? String {
-                self.firstField.text = company
+                self.inputForCompany.label.text = "Компания"
+                self.inputForCompany.field.text = company
             }
             
             if let profileImageUrl = (snapshot.value as? NSDictionary)!["photoUrl"] as? String  {
@@ -124,7 +82,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
             
             if let phone = (snapshot.value as? NSDictionary)!["phone"] as? String  {
-                self.phoneField.text = phone
+                self.inputForPhone.label.text = "Телефон"
+                self.inputForPhone.field.text = phone
+//                self.phoneField.text = phone
             }
             
             }, withCancel: nil)
@@ -153,7 +113,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func setupView() {
         userView.frame = CGRect(x: 0, y: 80, width: view.frame.size.width, height: 100)
+        
+        
         view.addSubview(inputForPhone)
+        view.addSubview(inputForCompany)
         view.addSubview(closeButton)
         view.addSubview(logoutButton)
         view.addSubview(userView)
@@ -162,17 +125,15 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         view.addConstraints("H:|-8-[\(closeButton)]")
         
 
-        view.addConstraints("V:[\(logoutButton)]|", "V:|-240-[\(inputForPhone)]")
-        view.addConstraints("H:|[\(logoutButton)]|", "H:|[\(inputForPhone)]|")
-        view.addConstraints(inputForPhone.heightAnchor == 40,
+        view.addConstraints("V:[\(logoutButton)]|", "V:|-240-[\(inputForPhone)]-1-[\(inputForCompany)]")
+        view.addConstraints("H:|[\(logoutButton)]|", "H:|[\(inputForPhone)]|", "H:|[\(inputForCompany)]|")
+        view.addConstraints(inputForPhone.heightAnchor == 50,
+                            inputForCompany.heightAnchor == 50,
                             closeButton.widthAnchor == 30,
                             closeButton.heightAnchor == 30,
                             logoutButton.heightAnchor == 60
                             )
         
-        inputForPhone.addSubview(phoneField)
-        inputForPhone.addConstraints("H:|-100-[\(phoneField)]|")
-        inputForPhone.addConstraints( phoneField.centerYAnchor == inputForPhone.centerYAnchor)
         
         
         
