@@ -8,8 +8,9 @@
 
 import UIKit
 import Swiftstraints
+import SafariServices
 
-class AmountViewController: UIViewController, UITextViewDelegate {
+class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewControllerDelegate {
 
     
  
@@ -64,9 +65,10 @@ class AmountViewController: UIViewController, UITextViewDelegate {
     
     
     func handlePay() {
-        let payViewController = PayViewController()
-        payViewController.amount = Int(amountField.text)
-        navigationController?.pushViewController(payViewController, animated: true)
+        let tinkoffViewController = TinkoffViewController()
+        tinkoffViewController.amount = Int(amountField.text)
+        let navController = UINavigationController(rootViewController: tinkoffViewController)
+        self.present(navController, animated: true, completion: nil)
     }
 
     

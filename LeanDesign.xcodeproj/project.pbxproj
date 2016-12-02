@@ -43,6 +43,8 @@
 		CB39FB101D954FB4007E9365 /* loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB0F1D954FB4007E9365 /* loader.gif */; };
 		CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */; };
 		CB5F4D0E1DBCC12600530341 /* ZoomingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */; };
+		CB6C5E141DF02DA9007D74E3 /* WaitingAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */; };
+		CB6C5E161DF085A8007D74E3 /* TinkoffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */; };
 		CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */; };
 		CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */; };
 		CBC9D49C1DEA118A00102C36 /* LicenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */; };
@@ -96,6 +98,8 @@
 		CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
 		CB646B531DE8220100B09C9B /* LeanDesign-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LeanDesign-Bridging-Header.h"; sourceTree = "<group>"; };
+		CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingAlertView.swift; sourceTree = "<group>"; };
+		CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinkoffViewController.swift; sourceTree = "<group>"; };
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CB6C74201D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBannerView.swift; sourceTree = "<group>"; };
@@ -152,6 +156,7 @@
 				CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */,
 				CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */,
 				CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */,
+				CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */,
 				CBF891821DDAE1A800437DEA /* PayViewController.swift */,
 				CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */,
 				CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */,
@@ -201,6 +206,7 @@
 				CB34A1841DC714260020F53E /* ChatInputView.swift */,
 				CB0680421DEF54D100D78572 /* UserView.swift */,
 				CB15C4F91DEFEC490067A51E /* UIControls.swift */,
+				CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -435,6 +441,8 @@
 				CB39FAEC1D942B6D007E9365 /* ConceptViewController.swift in Sources */,
 				CB39FAD61D942A17007E9365 /* ArchiveViewController.swift in Sources */,
 				CB39FAF81D942BDA007E9365 /* Concept.swift in Sources */,
+				CB6C5E161DF085A8007D74E3 /* TinkoffViewController.swift in Sources */,
+				CB6C5E141DF02DA9007D74E3 /* WaitingAlertView.swift in Sources */,
 				CB39FAFF1D942C24007E9365 /* SettingCell.swift in Sources */,
 				CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */,
 				CB39FAF21D942BBC007E9365 /* Task.swift in Sources */,

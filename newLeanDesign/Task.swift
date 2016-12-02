@@ -35,6 +35,32 @@ class Task: NSObject {
     func chatPartnerId() -> String? {
         return fromId == Digits.sharedInstance().session()?.userID ? toId : fromId
     }
+    
+    init(dictionary: [String: AnyObject]) {
+        super.init()
+        
+        awareness = dictionary["awareness"] as? AnyObject
+        concept = dictionary["concept"] as? AnyObject
+        design = dictionary["design"] as? AnyObject
+        sources = dictionary["sources"] as? AnyObject
+        company = dictionary["company"] as? String
+        fromId = dictionary["fromId"] as? String
+        imageUrl = dictionary["imageUrl"] as? String
+        phone = dictionary["phone"] as? String
+        price = dictionary["price"] as? NSNumber
+        maxPrice = dictionary["maxPrice"] as? NSNumber
+        minPrice = dictionary["minPrice"] as? NSNumber
+        rate = dictionary["rate"] as? NSNumber
+        status = dictionary["status"] as? String
+        text = dictionary["text"] as? String
+        taskId = dictionary["taskId"] as? String
+        start = dictionary["start"] as? NSNumber
+        end = dictionary["end"] as? NSNumber
+        toId = dictionary["toId"] as? String
+        time = dictionary["time"] as? NSNumber
+        timestamp = dictionary["timestamp"] as? NSNumber
+    }
+    
 }
 
 

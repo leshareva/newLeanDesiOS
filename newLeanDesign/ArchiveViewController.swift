@@ -42,7 +42,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     let cellId = "cellId"
     var tableView: UITableView  =  UITableView()
     var tasks = [Task]()
-    var taskDictionary = [String: Task]()
+    var tasksDictionary = [String: Task]()
 
 
     override func viewDidLoad() {
@@ -144,14 +144,8 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
             taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 
                 if let dictionary = snapshot.value as? [String: AnyObject] {
-                 
-                        let task = Task()
-                        task.setValuesForKeys(dictionary)
-                        self.tasks.append(task)
-                        self.tasks = self.tasks.reversed()
-                        DispatchQueue.main.async(execute: {
-                            self.tableView.reloadData()
-                        })
+                        let task = Task(dictionary: dictionary)
+                        self.tasksDictionary[taskId] = task
                 }
                 
                 }, withCancel: nil)
@@ -204,7 +198,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     var timer: Timer?
     
     func handleReloadTable() {
-        self.tasks = Array(self.taskDictionary.values)
+        self.tasks = Array(self.tasksDictionary.values)
         self.tasks.sort(by: { (task1, task2) -> Bool in
             return task1.start?.int32Value > task2.start?.int32Value
         })

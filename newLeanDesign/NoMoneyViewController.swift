@@ -57,7 +57,6 @@ class NoMoneyViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = false
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(handleCancel))
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить", style: .Plain, target: self, action: #selector(addNewTask));
         
         priceLabel.text = String(self.sum) + " ₽"
         setupView()

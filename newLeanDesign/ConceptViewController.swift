@@ -20,11 +20,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
     let buttonView = ButtonView()
     
-    var task: Task? {
-        didSet {
-          
-        }
-    }
+    var task: Task? 
     
     var concepts = [Concept]()
     
@@ -52,8 +48,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         self.view.addConstraints(buttonView.widthAnchor == self.view.widthAnchor,
                                  buttonView.bottomAnchor == self.view.bottomAnchor,
                                  buttonView.heightAnchor == 50)
-        buttonView.acceptTaskButtonView.backgroundColor = UIColor(r: 109, g: 199, b: 82)
-        buttonView.buttonLabel.text = "Согласовать"
+       
     }
     
 
@@ -67,14 +62,9 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: customCellIdentifier, for: indexPath) as! CustomCell
-        
-      
+
         let concept = concepts[indexPath.item]
-        
-        
-        
-               
-        
+
         if let imageUrl = concept.imgUrl {
             
             cell.imageView.loadImageUsingCashWithUrlString(imageUrl)
@@ -146,13 +136,9 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         setupView()
     }
     
-    
-    
-    
-    
+
     func handleApproveView() {
-        
-        
+
         if let taskId = task!.taskId {
             let taskRef:FIRDatabaseReference    = ref.child("tasks").child(taskId)
             let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))

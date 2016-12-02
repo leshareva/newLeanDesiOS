@@ -9,7 +9,8 @@
 import Foundation
 
 struct Server {
-    static let serverUrl = "http://localhost:8000"
+    static let serverUrl = "http://leandesign.pro:8000"
+//     static let serverUrl = "http://localhost:8000"
 }
 
 

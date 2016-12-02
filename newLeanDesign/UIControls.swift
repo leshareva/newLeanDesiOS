@@ -9,11 +9,10 @@
 import UIKit
 import Swiftstraints
 
-class UIControl {
+class UIControls {
     
     class TextField: UIView {
-        
-        
+
         let input: UIView = {
             let view = UIView()
             view.backgroundColor = .white
@@ -29,12 +28,12 @@ class UIControl {
             return tf
         }()
         
-        let field: UITextView = {
-            let tf = UITextView()
+        lazy var field: UITextField = {
+            let tf = UITextField()
             tf.translatesAutoresizingMaskIntoConstraints = false
             tf.font = UIFont.systemFont(ofSize: 16)
             tf.textColor = .black
-            tf.isEditable = true
+            tf.textAlignment = .left
             return tf
         }()
         
@@ -49,12 +48,10 @@ class UIControl {
             
             input.addSubview(label)
             input.addSubview(field)
-            input.addConstraints("H:|-5-[\(label)]-5-[\(field)]|")
-            input.addConstraints(label.centerYAnchor == input.centerYAnchor,
-                                 label.heightAnchor == 20,
-                                 field.centerYAnchor == input.centerYAnchor,
-                                 field.heightAnchor == 20
-                                 )
+            input.addConstraints("H:|-16-[\(label)]-5-[\(field)]-5-|")
+            input.addConstraints("V:|[\(label)]|", "V:|[\(field)]|")
+            input.addConstraints(label.widthAnchor == 120)
+           
         }
         
         
@@ -63,6 +60,5 @@ class UIControl {
         }
         
     }
-    
-    
+ 
 }

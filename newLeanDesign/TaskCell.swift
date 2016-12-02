@@ -98,16 +98,13 @@ class TaskCell: UITableViewCell {
         textLabel?.frame = CGRect(x: 66, y: textLabel!.frame.origin.y - 2, width: self.frame.width - 84, height: textLabel!.frame.height)
         detailTextLabel?.frame = CGRect(x: 66, y: detailTextLabel!.frame.origin.y + 2, width: detailTextLabel!.frame.width, height: detailTextLabel!.frame.height)
         textLabel?.numberOfLines = 2
-        textLabel?.font = UIFont.systemFont(ofSize: 14)
-        detailTextLabel?.textColor = UIColor(r: 140, g: 140, b: 140)
+        textLabel?.font = UIFont.systemFont(ofSize: 16)
+        
         detailTextLabel?.font = UIFont.systemFont(ofSize: 12)
-        
-        
+
         addSubview(timeLabel)
         timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16).isActive = true
-        timeLabel.topAnchor.constraint(equalTo: (textLabel?.bottomAnchor)!, constant: 2).isActive = true
-        
-        
+        timeLabel.topAnchor.constraint(equalTo: (textLabel?.bottomAnchor)!, constant: 2).isActive = true 
     }
     
     required init?(coder aDecoder: NSCoder) {

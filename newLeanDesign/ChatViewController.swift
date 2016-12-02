@@ -655,4 +655,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
 class MyTapGesture: UITapGestureRecognizer {
     var message: Message?
     var status: String?
+    var task: Task?
+    var indexPath: IndexPath?
+    var taskIndex: Int?
 }

@@ -23,6 +23,7 @@ pod 'Caishen', :git => 'https://github.com/prolificinteractive/Caishen.git', :br
 pod 'CardIO'
 pod 'Alamofire', '~> 4.0'
 pod 'SWXMLHash', '~> 3.0.0'
+pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|

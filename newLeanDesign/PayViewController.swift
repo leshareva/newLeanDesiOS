@@ -14,6 +14,7 @@ import Caishen
 import Firebase
 import Alamofire
 import SWXMLHash
+import CryptoSwift
 
 class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentViewControllerDelegate, XMLParserDelegate {
     
@@ -47,6 +48,10 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
         view.backgroundColor = .white
         setUpCardTextField()
         cardNumberTextField.cardTextFieldDelegate = self
+        
+      
+        
+        
     }
     
     let errorView: UIView = {
@@ -151,88 +156,124 @@ class PayViewController: UIViewController, CardTextFieldDelegate, CardIOPaymentV
         let crateId = database.child("payture").childByAutoId()
         let orderId = crateId.key
         
-        let payInfo = "PAN%3D\(pan)%3BEMonth%3D\(month)%3BEYear%3D\(year)%3BCardHolder%3D\(cardHolder)%3BSecureCode%3D\(cvc)%3BOrderId%3D\(orderId)"
+//        let payInfo = "PAN%3D\(pan)%3BEMonth%3D\(month)%3BEYear%3D\(year)%3BCardHolder%3D\(cardHolder)%3BSecureCode%3D\(cvc)%3BOrderId%3D\(orderId)"
+        let email = "leshareva.box%40gmail.com"
+        
+        let terminalKey = "1480564341918DEMO"
+        let description = "Тестовый платеж"
+        
+        let data = "Email=\(email)"
+        let password = "1f272aw4aqe9lwm2"
+        
+       
+        
+//        let parameters: [String : Any] = [
+//            "TerminalKey": terminalKey,
+//            "Amount": self.amount,
+//            "OrderId": orderId,
+//            "Description": description,
+//            "DATA": data,
+//            "Password": password
+//        ]
+        
+//        let sortedKeysAndValues = parameters.sorted(by: { $0.0 < $1.0 })
+//        print(sortedKeysAndValues)
+//        
+//        let cookieHeader = (sortedKeysAndValues.flatMap({ (key, value) -> String in
+//            return "\(key)=\(value)"
+//        }) as Array).joined(separator: "")
+//        print(cookieHeader)
+//        
+//        let hash = cookieHeader.sha256()
+//        print("shaHex: \(hash)")
         
         let parameters: Parameters = [
-            "Key": Merchant,
+            "TerminalKey": terminalKey,
             "Amount": self.amount,
             "OrderId": orderId,
-            "PayInfo": payInfo
+            "Description": description,
+            "DATA": data,
+            "Password": password
         ]
         
         
-        Alamofire.request("https://sandbox2.payture.com/api/Pay",
-                          method: .post,
-                          parameters: parameters,
-                          encoding: URLEncoding(destination: .methodDependent))
-            .responseData { response in
-            switch response.result {
-                
-            case .success:
-                if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                     let xml = SWXMLHash.parse(utf8Text)
-                    let success = xml["Pay"].element?.attribute(by: "Success")?.text
-                    if success! == "3DS" {
-                        
-                        let PaReq = xml["Pay"].element?.attribute(by: "PaReq")?.text
-                        let newParametres: Parameters = [
-                            "Key": Merchant,
-                            "OrderId": orderId,
-                            "PaRes": PaReq!
-                        ]
+        Alamofire.request("\(Server.serverUrl)/Pay",
+                                                    method: .post,
+                                  parameters: parameters)
 
-                        Alamofire.request("https://sandbox2.payture.com/api/Pay3DS",
-                                          method: .post,
-                                          parameters: newParametres,
-                                          encoding: URLEncoding(destination: .methodDependent))
-                            .responseData { response in
-                                switch response.result {
-                                case .success:
-                                    if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                                        print(utf8Text)
-                                    }
-                                case .failure(let error):
-                                    print(error)
-                                }
-                        }
-                    } else if success! == "True" {
-                        
-                        if let uid = Digits.sharedInstance().session()?.userID {
-                        let userRef = database.child("clients").child(uid)
-                            userRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                                let oldAmount = (snapshot.value as? NSDictionary)!["sum"] as? Int
-                                let newAmount = Int(oldAmount!) + Int(self.amount!)
-                                let clientEmail = (snapshot.value as? NSDictionary)!["email"] as? String
-                                
-                                let values: [String : AnyObject] = ["sum": newAmount as AnyObject]
-                                userRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
-                                    if error != nil {
-                                        print(error!)
-                                        return
-                                    }
-                                })
-                                
-                                
-                                
-                            }, withCancel: nil)
-                        }
-                       
-                       
-                        self.dismiss(animated: true, completion: nil)
-                        
-                    } else {
-                        let error = xml["Pay"].element?.attribute(by: "ErrCode")?.text
-                        self.errorView.isHidden = false
-                        self.errorLabel.text = "Платеж не прошел. Попробуйте еще раз"
-                        print("False:", error!)
-                       
-                    }
-                }
-                
-            case .failure(let error):
-                print(error)
-                }
-        }
+        
+//        Alamofire.request("https://sandbox2.payture.com/api/Pay",
+//                          method: .post,
+//                          parameters: parameters,
+//                          encoding: URLEncoding(destination: .methodDependent))
+//            .responseData { response in
+//            switch response.result {
+//                
+//            case .success:
+//                if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+//                     let xml = SWXMLHash.parse(utf8Text)
+//                    let success = xml["Pay"].element?.attribute(by: "Success")?.text
+//                    if success! == "3DS" {
+//                        
+//                        let PaReq = xml["Pay"].element?.attribute(by: "PaReq")?.text
+//                        let newParametres: Parameters = [
+//                            "Key": Merchant,
+//                            "OrderId": orderId,
+//                            "PaRes": PaReq!
+//                        ]
+//
+//                        Alamofire.request("https://sandbox2.payture.com/api/Pay3DS",
+//                                          method: .post,
+//                                          parameters: newParametres,
+//                                          encoding: URLEncoding(destination: .methodDependent))
+//                            .responseData { response in
+//                                switch response.result {
+//                                case .success:
+//                                    if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+//                                        print(utf8Text)
+//                                    }
+//                                case .failure(let error):
+//                                    print(error)
+//                                }
+//                        }
+//                    } else if success! == "True" {
+//                        
+//                        if let uid = Digits.sharedInstance().session()?.userID {
+//                        let userRef = database.child("clients").child(uid)
+//                            userRef.observeSingleEvent(of: .value, with: { (snapshot) in
+//                                let oldAmount = (snapshot.value as? NSDictionary)!["sum"] as? Int
+//                                let newAmount = Int(oldAmount!) + Int(self.amount!)
+//                                let clientEmail = (snapshot.value as? NSDictionary)!["email"] as? String
+//                                
+//                                let values: [String : AnyObject] = ["sum": newAmount as AnyObject]
+//                                userRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
+//                                    if error != nil {
+//                                        print(error!)
+//                                        return
+//                                    }
+//                                })
+//                                
+//                                
+//                                
+//                            }, withCancel: nil)
+//                        }
+//                       
+//                       
+//                        self.dismiss(animated: true, completion: nil)
+//                        
+//                    } else {
+//                        let error = xml["Pay"].element?.attribute(by: "ErrCode")?.text
+//                        self.errorView.isHidden = false
+//                        self.errorLabel.text = "Платеж не прошел. Попробуйте еще раз"
+//                        print("False:", error!)
+//                       
+//                    }
+//                }
+//                
+//            case .failure(let error):
+//                print(error)
+//                }
+//        }
         
     }
     

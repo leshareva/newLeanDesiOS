@@ -42,7 +42,7 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     let cellHeight: CGFloat = 50
     let settings: [Setting] = {
         let settingsSetting = Setting(name: .Settings, imageName: "settings")
-        let exitSetting = Setting(name: .Archive, imageName: "exit")
+        let exitSetting = Setting(name: .Archive, imageName: "archive")
         let cancelSetting = Setting(name: .Cancel, imageName: "close")
         return [settingsSetting, exitSetting, cancelSetting]
     }()

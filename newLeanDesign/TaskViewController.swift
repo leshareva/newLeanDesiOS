@@ -14,24 +14,21 @@ import DigitsKit
 import Swiftstraints
 import Alamofire
 
+
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let cellId = "cellId"
     var tableView: UITableView  =  UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     var tasks = [Task]()
-    var taskDictionary = [String: Task]()
     var user: User?
-    
+    var tasksDictionary = [String: Task]()
 //    var beepSoundEffect: AVAudioPlayer!
-    
-    
-    
     
 
     let emptyTableView = EmptyTableView()
     let loaderView = UIView()
     let buttonView = ButtonView()
-    
+    var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +72,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             }, completion: nil)
     }
     
+
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let companyView = CompanyView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
@@ -145,36 +143,60 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.text
         cell.notificationsLabel.isHidden = true
-
-        let taskRef = FIRDatabase.database().reference().child("tasks").child(task.taskId!)
+        let taskId = task.taskId!
+        
+        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
         taskRef.observe(.value, with: { (snapshot) in
             guard let status = (snapshot.value as? NSDictionary)!["status"] as? String else {
                 return
             }
+            
             if status == "none" {
                 cell.detailTextLabel?.text = "Подбираем дизайнера"
+                cell.backgroundColor = .white
+                cell.textLabel?.textColor = .black
+                cell.detailTextLabel?.textColor = .black
             } else if status == "awareness" {
                 cell.detailTextLabel?.text = "Дизайнер принял задачу"
+                cell.backgroundColor = .white
+                cell.textLabel?.textColor = .black
+                cell.detailTextLabel?.textColor = .black
             } else if status == "awarenessApprove" {
                 cell.detailTextLabel?.text = "Согласуйте понимание задачи"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
-                cell.notificationsLabel.isHidden = false
+                cell.notificationsLabel.isHidden = true
+                cell.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.textLabel?.textColor = .white
+                cell.detailTextLabel?.textColor = .white
             } else if status == "concept" {
                 cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
+                cell.backgroundColor = .white
+                cell.textLabel?.textColor = .black
+                cell.detailTextLabel?.textColor = .black
             } else if status == "conceptApprove" {
                 cell.detailTextLabel?.text = "Согласуйте черновик"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
-                cell.notificationsLabel.isHidden = false
+                cell.notificationsLabel.isHidden = true
+                cell.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.textLabel?.textColor = .white
+                cell.detailTextLabel?.textColor = .white
             } else if status == "design" {
                 cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
-                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.backgroundColor = .white
+                cell.textLabel?.textColor = .black
+                cell.detailTextLabel?.textColor = .black
             } else if status == "designApprove" {
                 cell.detailTextLabel?.text = "Согласуйте чистовик"
                 cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
-                cell.notificationsLabel.isHidden = false
+                cell.notificationsLabel.isHidden = true
+                cell.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.textLabel?.textColor = .white
+                cell.detailTextLabel?.textColor = .white
             } else if status == "source" {
                 cell.detailTextLabel?.text = "Дизайнер готовит исходники"
-                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.backgroundColor = .white
+                cell.textLabel?.textColor = .black
+                cell.detailTextLabel?.textColor = .black
                 cell.notificationsLabel.isHidden = false
             } else if status == "done" {
                 cell.detailTextLabel?.text = "Закройте задачу"
@@ -194,25 +216,12 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let messageRef = FIRDatabase.database().reference().child("task-messages").child(task.taskId!)
         messageRef.observe(.childAdded, with: { (snapshot) in
-            
-            
-            
+
             let ref = FIRDatabase.database().reference().child("messages").child(snapshot.key)
             ref.observeSingleEvent(of: .value, with: { (snapshot) in
                 let status = (snapshot.value as? NSDictionary)!["status"] as? String
                 if status == task.fromId {
                     cell.notificationsLabel.isHidden = false
-//                    
-//                    let path = NSBundle.mainBundle().pathForResource("beep.mp3", ofType:nil)!
-//                    let url = NSURL(fileURLWithPath: path)
-//                    
-//                    do {
-//                        let sound = try AVAudioPlayer(contentsOfURL: url)
-//                        self.beepSoundEffect = sound
-//                        sound.play()
-//                    } catch {
-//                        // couldn't load file :(
-//                    }
                 }
                 }, withCancel: nil)
             
@@ -227,10 +236,46 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         return true
     }
 
+    
+    let waitingAlertView = WaitingAlertView()
+    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let task = tasks[indexPath.row]
-        showChatControllerForUser(task)
+        let status = task.status
+              
+        if status == "none" {
+            if let keyWindow = UIApplication.shared.keyWindow {
+                waitingAlertView.alpha = 1
+                waitingAlertView.frame = keyWindow.frame
+                keyWindow.addSubview(waitingAlertView)
+                
+                waitingAlertView.textView.text = "«\(task.text!)»"
+                let tappy = MyTapGesture(target: self, action: #selector(self.cancelTask(_:)))
+                    tappy.task = task
+                waitingAlertView.cancelButton.addGestureRecognizer(tappy)
+                
+            }
+        } else {
+           showChatControllerForUser(task)
+        }
     }
+    
+    func cancelTask(_ sender: MyTapGesture) {
+        guard let uid = Digits.sharedInstance().session()?.userID, let taskId = sender.task?.taskId else {
+            return
+        }
+        
+        let ref = FIRDatabase.database().reference()
+        ref.child("active-tasks").child(uid).child(taskId).removeValue { (error, ref) in
+            if error != nil {
+                print(error!)
+                return
+            }
+        }
+        waitingAlertView.alpha = 0
+    }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 74
@@ -351,20 +396,44 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 taskRef.queryOrdered(byChild: "time").observeSingleEvent(of: .value, with: { (snapshot) in
                     
                         if let dictionary = snapshot.value as? [String: AnyObject] {
-//                            let status = snapshot.value!["status"] as? String
-                                let task = Task()
-                                task.setValuesForKeys(dictionary)
-                                self.tasks.append(task)
-                                DispatchQueue.main.async(execute: {
-                                    self.tableView.reloadData()
-                                })
-                                self.loaderView.isHidden = true
+                            let task = Task(dictionary: dictionary)
+                            self.tasksDictionary[taskId] = task
                         }
-                  
+                    
+                    self.attemptReloadTable()
+                    self.loaderView.isHidden = true
                     }, withCancel: nil)
             
             }, withCancel: nil)
+        
+        ref.observe(.childRemoved, with: { (snap) in
+            self.tasksDictionary.removeValue(forKey: snap.key)
+            self.attemptReloadTable()
+            self.loaderView.isHidden = true
+        }, withCancel: nil)
+        
     }
+    
+    
+    
+    private func attemptReloadTable() {
+        self.timer?.invalidate()
+        
+        self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+    }
+    
+    
+    func handleReloadTable() {
+        self.tasks = Array(self.tasksDictionary.values)
+//        self.tasks.sort(by: { (task1, task2) -> Bool in
+//            return (task1.timestamp?.intValue)! > (task2.timestamp?.intValue)!
+//        })
+        //this will crash because of background thread, so lets call this on dispatch_async main thread
+        DispatchQueue.main.async(execute: {
+            self.tableView.reloadData()
+        })
+    }
+    
     
     func showChatControllerForUser(_ task: Task) {
         let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())

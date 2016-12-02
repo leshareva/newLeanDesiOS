@@ -7,7 +7,7 @@ import DKImagePickerController
 
 
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let userView = UserView()
     
@@ -19,6 +19,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         imageView.contentMode = .scaleAspectFill
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handelCancel)))
         imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
+    
+    lazy var saveButton: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "done")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(saveUserData)))
+        imageView.isUserInteractionEnabled = true
+        imageView.isHidden = true
         return imageView
     }()
     
@@ -42,9 +53,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }()
     
  
-    let inputForPhone = UIControl.TextField()
-    let inputForCompany = UIControl.TextField()
-    
+    let inputForPhone = UIControls.TextField()
+    let inputForCompany = UIControls.TextField()
+    let inputForEmail = UIControls.TextField()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +64,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         setupView()
         loadUserInfo()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -72,8 +84,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             if let name = (snapshot.value as? NSDictionary)!["firstName"] as? String {
                self.userView.nameLabel.text = name
             }
+            
             if let company = (snapshot.value as? NSDictionary)!["company"] as? String {
-                self.inputForCompany.label.text = "Компания"
                 self.inputForCompany.field.text = company
             }
             
@@ -82,28 +94,27 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }
             
             if let phone = (snapshot.value as? NSDictionary)!["phone"] as? String  {
-                self.inputForPhone.label.text = "Телефон"
                 self.inputForPhone.field.text = phone
-//                self.phoneField.text = phone
+            }
+            
+            if let email = (snapshot.value as? NSDictionary)!["email"] as? String {
+                self.inputForEmail.field.text = email
             }
             
             }, withCancel: nil)
     }
     
     func handleLogout() {
+        
         Digits.sharedInstance().logOut()
         
-       do {
+        do {
             try FIRAuth.auth()?.signOut()
         } catch let logoutError {
             print(logoutError)
         }
-
         let loginController = LoginController()
-        present(loginController, animated: true, completion: nil)
-        
-        
-        
+        self.present(loginController, animated: true, completion: nil)
     }
     
     func handelCancel() {
@@ -113,31 +124,62 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func setupView() {
         userView.frame = CGRect(x: 0, y: 80, width: view.frame.size.width, height: 100)
+        self.inputForPhone.label.text = "Телефон"
+        self.inputForPhone.field.isUserInteractionEnabled = false
+        self.inputForPhone.field.textColor = .lightGray
+        
+        self.inputForCompany.label.text = "Компания"
+        self.inputForEmail.label.text = "Эл. почта"
+        
+        
+        self.inputForCompany.field.addTarget(self, action: #selector(handleSave), for: UIControlEvents.touchDown)
         
         
         view.addSubview(inputForPhone)
         view.addSubview(inputForCompany)
+        view.addSubview(inputForEmail)
         view.addSubview(closeButton)
+        view.addSubview(saveButton)
         view.addSubview(logoutButton)
         view.addSubview(userView)
         
-        view.addConstraints("V:|-20-[\(closeButton)]")
-        view.addConstraints("H:|-8-[\(closeButton)]")
+        view.addConstraints("V:|-20-[\(closeButton)]", "V:|-20-[\(saveButton)]")
+        view.addConstraints("H:|-8-[\(closeButton)]", "H:[\(saveButton)]-8-|")
         
 
-        view.addConstraints("V:[\(logoutButton)]|", "V:|-240-[\(inputForPhone)]-1-[\(inputForCompany)]")
-        view.addConstraints("H:|[\(logoutButton)]|", "H:|[\(inputForPhone)]|", "H:|[\(inputForCompany)]|")
+        view.addConstraints("V:[\(logoutButton)]|", "V:|-240-[\(inputForPhone)]-1-[\(inputForCompany)]-1-[\(inputForEmail)]")
+        view.addConstraints("H:|[\(logoutButton)]|", "H:|[\(inputForPhone)]|", "H:|[\(inputForCompany)]|", "H:|[\(inputForEmail)]|")
         view.addConstraints(inputForPhone.heightAnchor == 50,
                             inputForCompany.heightAnchor == 50,
+                            inputForEmail.heightAnchor == 50,
                             closeButton.widthAnchor == 30,
                             closeButton.heightAnchor == 30,
-                            logoutButton.heightAnchor == 60
+                            logoutButton.heightAnchor == 60,
+                            saveButton.widthAnchor == 30,
+                            saveButton.heightAnchor == 30
                             )
         
-        
-        
-        
     }
+    
+    
+    func handleSave() {
+        saveButton.isHidden = false
+    }
+    
+    
+    func saveUserData() {
+        let ref = FIRDatabase.database().reference().child("clients")
+        guard let uid = Digits.sharedInstance().session()?.userID else {
+            return
+        }
+        let company = self.inputForCompany.field.text
+        let email = self.inputForEmail.field.text
+        let values : [String: AnyObject] = ["company": company as AnyObject, "email" : email as AnyObject]
+        ref.child(uid).updateChildValues(values)
+        saveButton.isHidden = true
+    }
+    
+  
     
     var assets: [DKAsset]?
     
@@ -181,6 +223,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 
             })
         }
+    }
+    
+    func textFieldShouldReturn(textField: UITextField!) -> Bool // called when 'return' key pressed. return NO to ignore.
+    {
+        textField.resignFirstResponder()
+        return true;
     }
     
     fileprivate func sendMessageWithImageUrl(_ imageUrl: String, image: UIImage) {

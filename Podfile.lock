@@ -4,6 +4,7 @@ PODS:
   - CardIO (5.4.1)
   - Crashlytics (3.8.3):
     - Fabric (~> 1.6.3)
+  - CryptoSwift (0.6.6)
   - Digits (2.3.0):
     - TwitterCore (= 2.3.0)
   - DKImagePickerController (3.4.2):
@@ -83,6 +84,7 @@ DEPENDENCIES:
   - Caishen (from `https://github.com/prolificinteractive/Caishen.git`, branch `swift-3.0`)
   - CardIO
   - Crashlytics
+  - CryptoSwift (from `https://github.com/krzyzanowskim/CryptoSwift`, branch `master`)
   - Digits
   - DKImagePickerController
   - Fabric
@@ -101,17 +103,24 @@ EXTERNAL SOURCES:
   Caishen:
     :branch: swift-3.0
     :git: https://github.com/prolificinteractive/Caishen.git
+  CryptoSwift:
+    :branch: master
+    :git: https://github.com/krzyzanowskim/CryptoSwift
 
 CHECKOUT OPTIONS:
   Caishen:
     :commit: 6f0de8319a9261f7a486cc3bef5dbff5801675a1
     :git: https://github.com/prolificinteractive/Caishen.git
+  CryptoSwift:
+    :commit: 8007a4fb4d8988bdb8839480ddc7801a089f4b72
+    :git: https://github.com/krzyzanowskim/CryptoSwift
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
   Caishen: 1d194378fcb51800e4d3d78cf83ce1c7d72d1e79
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
+  CryptoSwift: 5e857f6d8a91c41c92c7c6a6950a52434d8d35c2
   Digits: af82d24ec38035cc555b60f55cca5abc68a76bed
   DKImagePickerController: 8fc8a42120cb0c9b7982af04d47e0e5b25b5186f
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
@@ -132,6 +141,6 @@ SPEC CHECKSUMS:
   SWXMLHash: 80d2529d74891bb2f15305a0b9e08f2a4f229ee7
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: e9d5fa025164ae09809ac5e3fd422189ac97374f
+PODFILE CHECKSUM: 813a932973f0ac74a5a9266f1bbe8f5a46002133
 
 COCOAPODS: 1.2.0.beta.1
