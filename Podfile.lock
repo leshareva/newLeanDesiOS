@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (4.2.0)
-  - Caishen (1.4.0)
+  - Caishen (1.5.0)
   - CardIO (5.4.1)
   - Crashlytics (3.8.3):
     - Fabric (~> 1.6.3)
@@ -109,7 +109,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Caishen:
-    :commit: 6f0de8319a9261f7a486cc3bef5dbff5801675a1
+    :commit: 26e082e0f2073faaf6c2a106030216f6a392f863
     :git: https://github.com/prolificinteractive/Caishen.git
   CryptoSwift:
     :commit: 8007a4fb4d8988bdb8839480ddc7801a089f4b72
@@ -117,7 +117,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
-  Caishen: 1d194378fcb51800e4d3d78cf83ce1c7d72d1e79
+  Caishen: 19c73df58634c898c8cab66b870b9159d60ce9e2
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
   CryptoSwift: 5e857f6d8a91c41c92c7c6a6950a52434d8d35c2

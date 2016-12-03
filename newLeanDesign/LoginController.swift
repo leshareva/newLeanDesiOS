@@ -65,7 +65,6 @@ class LoginController: UIViewController {
                         self.startViewController?.checkUserInBase()
                         self.dismiss(animated: true, completion: nil)
                     }
-                    
                 }
             } else {
                 NSLog("Authentication error: %@", error!.localizedDescription)

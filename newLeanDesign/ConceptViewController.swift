@@ -260,7 +260,6 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     }
     
     
-    
     func sendBill(bill: Int) {
         
         if let uid = Digits.sharedInstance().session()?.userID {

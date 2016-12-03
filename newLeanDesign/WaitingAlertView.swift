@@ -13,6 +13,7 @@ class WaitingAlertView: UIView {
     
     lazy var closeButton: UIImageView = {
         let imageView = UIImageView()
+        imageView.tintColor = .white
         imageView.image = UIImage(named: "close")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
@@ -105,7 +106,7 @@ class WaitingAlertView: UIView {
         addSubview(cancelButton)
         addSubview(cancelLabel)
         addConstraints("H:|-20-[\(cancelButton)]-20-|", "H:|-20-[\(cancelLabel)]-20-|")
-        addConstraints("V:[\(cancelButton)]-10-[\(cancelLabel)]-20-|")
+        addConstraints("V:[\(cancelButton)]-10-[\(cancelLabel)]-10-|")
         addConstraints(cancelButton.heightAnchor == 50, cancelLabel.heightAnchor == 80)
         
          addSubview(closeButton)

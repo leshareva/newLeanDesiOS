@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F45E0FECFCBAF78CDE0230C /* Pods_LeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */; };
+		B74175F1B8ABA2888DBF9A58 /* Pods_LeanDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832861B91C18D2D173AC3C09 /* Pods_LeanDesign.framework */; };
 		CB06803F1DEEC36100D78572 /* AcceptPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */; };
 		CB0680411DEF16A300D78572 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680401DEF16A300D78572 /* Constant.swift */; };
 		CB0680431DEF54D100D78572 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680421DEF54D100D78572 /* UserView.swift */; };
@@ -61,7 +61,7 @@
 /* Begin PBXFileReference section */
 		56E5CC4B187F18A5A09B1A54 /* Pods-LeanDesign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeanDesign.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign.debug.xcconfig"; sourceTree = "<group>"; };
 		59699B5422D4A2BF5104CCF8 /* Pods-LeanDesign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LeanDesign.release.xcconfig"; path = "Pods/Target Support Files/Pods-LeanDesign/Pods-LeanDesign.release.xcconfig"; sourceTree = "<group>"; };
-		87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		832861B91C18D2D173AC3C09 /* Pods_LeanDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LeanDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptPriceViewController.swift; sourceTree = "<group>"; };
 		CB0680401DEF16A300D78572 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		CB0680421DEF54D100D78572 /* UserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
@@ -97,7 +97,6 @@
 		CB39FB0F1D954FB4007E9365 /* loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loader.gif; sourceTree = "<group>"; };
 		CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
-		CB646B531DE8220100B09C9B /* LeanDesign-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LeanDesign-Bridging-Header.h"; sourceTree = "<group>"; };
 		CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingAlertView.swift; sourceTree = "<group>"; };
 		CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinkoffViewController.swift; sourceTree = "<group>"; };
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
@@ -123,7 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F45E0FECFCBAF78CDE0230C /* Pods_LeanDesign.framework in Frameworks */,
+				B74175F1B8ABA2888DBF9A58 /* Pods_LeanDesign.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,7 +132,7 @@
 		4C6FF513CCE9EBB253D6BD35 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				87B08FCF9E8E5B6CF797DE35 /* Pods_LeanDesign.framework */,
+				832861B91C18D2D173AC3C09 /* Pods_LeanDesign.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -214,7 +213,6 @@
 		CBE682AF1D93EBD300CB3679 = {
 			isa = PBXGroup;
 			children = (
-				CB646B531DE8220100B09C9B /* LeanDesign-Bridging-Header.h */,
 				CBB78A9C1DE7D41500360D51 /* LeanDesign.entitlements */,
 				CBE682BA1D93EBD300CB3679 /* newLeanDesign */,
 				CBE682B91D93EBD300CB3679 /* Products */,
@@ -681,7 +679,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = LeanDesign;
-				SWIFT_OBJC_BRIDGING_HEADER = "LeanDesign-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -789,7 +787,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = LeanDesign;
-				SWIFT_OBJC_BRIDGING_HEADER = "LeanDesign-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

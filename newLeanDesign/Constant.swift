@@ -6,7 +6,7 @@
 //  Copyright © 2016 LeshaReva. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Server {
     static let serverUrl = "http://leandesign.pro:8000"

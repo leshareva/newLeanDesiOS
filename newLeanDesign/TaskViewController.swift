@@ -242,23 +242,41 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let task = tasks[indexPath.row]
-        let status = task.status
-              
-        if status == "none" {
-            if let keyWindow = UIApplication.shared.keyWindow {
-                waitingAlertView.alpha = 1
-                waitingAlertView.frame = keyWindow.frame
-                keyWindow.addSubview(waitingAlertView)
-                
-                waitingAlertView.textView.text = "«\(task.text!)»"
-                let tappy = MyTapGesture(target: self, action: #selector(self.cancelTask(_:)))
-                    tappy.task = task
-                waitingAlertView.cancelButton.addGestureRecognizer(tappy)
-                
-            }
-        } else {
-           showChatControllerForUser(task)
+        
+        
+        guard let taskId = task.taskId else {
+            return
         }
+        
+        let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let dictionary = snapshot.value as? [String: AnyObject] else {
+                return
+            }
+            
+            let status = dictionary["status"] as! String
+         
+            
+            if status == "none" {
+                if let keyWindow = UIApplication.shared.keyWindow {
+                    self.waitingAlertView.alpha = 1
+                    self.waitingAlertView.frame = keyWindow.frame
+                    keyWindow.addSubview(self.waitingAlertView)
+                    
+                    self.waitingAlertView.textView.text = "«\(task.text!)»"
+                    let tappy = MyTapGesture(target: self, action: #selector(self.cancelTask(_:)))
+                    tappy.task = task
+                    self.waitingAlertView.cancelButton.addGestureRecognizer(tappy)
+                    
+                }
+            } else {
+                self.showChatControllerForUser(task)
+            }
+            
+            
+        }, withCancel: nil)
+              
+        
     }
     
     func cancelTask(_ sender: MyTapGesture) {
