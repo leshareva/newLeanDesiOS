@@ -59,7 +59,7 @@ class LoginController: UIViewController {
                 DispatchQueue.main.async {
                     FIRAuth.auth()?.signInAnonymously() { (user, error) in
                         if error != nil {
-                            print(error)
+                            print(error!)
                             return
                         }
                         self.startViewController?.checkUserInBase()

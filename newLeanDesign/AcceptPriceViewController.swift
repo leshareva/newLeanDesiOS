@@ -97,7 +97,7 @@ class AcceptPriceViewController: UIViewController {
         guard let taskId = task?.taskId else {
             return
         }
-        var ref = FIRDatabase.database().reference()
+        let ref = FIRDatabase.database().reference()
         let value: [String: AnyObject] = ["status": "reject" as AnyObject]
         ref.child("tasks").child(taskId).updateChildValues(value, withCompletionBlock: { (error, ref) in
             if error != nil {
@@ -168,7 +168,7 @@ class AcceptPriceViewController: UIViewController {
         
         let bill = Double(price) * Double(0.1)
         let conceptViewController = ConceptViewController()
-        conceptViewController.sendBill(bill: Int(bill) as! Int)
+        conceptViewController.sendBill(bill: Int(bill))
         
         self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
        

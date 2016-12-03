@@ -198,7 +198,7 @@ class SupportViewController: UICollectionViewController, UITextFieldDelegate, UI
         if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
             ref.put(uploadData, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
-                    print("Faild upload image:", error)
+                    print("Faild upload image:", error as Any!)
                     return
                 }
                 

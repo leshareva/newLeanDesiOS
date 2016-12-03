@@ -39,10 +39,10 @@ class Task: NSObject {
     init(dictionary: [String: AnyObject]) {
         super.init()
         
-        awareness = dictionary["awareness"] as? AnyObject
-        concept = dictionary["concept"] as? AnyObject
-        design = dictionary["design"] as? AnyObject
-        sources = dictionary["sources"] as? AnyObject
+        awareness = dictionary["awareness"] as AnyObject
+        concept = dictionary["concept"] as AnyObject
+        design = dictionary["design"] as AnyObject
+        sources = dictionary["sources"] as AnyObject
         company = dictionary["company"] as? String
         fromId = dictionary["fromId"] as? String
         imageUrl = dictionary["imageUrl"] as? String

@@ -224,7 +224,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
                 self.navigationController?.popToRootViewController(animated: true)
                 let bill = Double(price) * Double(0.4)
-                self.sendBill(bill: Int(bill) as! Int)
+                self.sendBill(bill: Int(bill))
                 self.sendApproveToDB(taskId, status: status, newstatus: newstatus, time: time)
             }))
             
@@ -245,7 +245,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             alert.addAction(UIAlertAction(title: "Подтверждаю", style: .default, handler: { (action: UIAlertAction!) in
                 self.navigationController?.popToRootViewController(animated: true)
                 let bill = Double(price) * Double(0.5)
-                self.sendBill(bill: Int(bill) as! Int)
+                self.sendBill(bill: Int(bill))
                 self.sendApproveToDB(taskId, status: status, newstatus: newstatus, time: time)
             }))
             
