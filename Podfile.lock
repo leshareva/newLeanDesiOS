@@ -1,7 +1,5 @@
 PODS:
   - Alamofire (4.2.0)
-  - Caishen (1.5.0)
-  - CardIO (5.4.1)
   - Crashlytics (3.8.3):
     - Fabric (~> 1.6.3)
   - CryptoSwift (0.6.6)
@@ -81,8 +79,6 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
-  - Caishen (from `https://github.com/prolificinteractive/Caishen.git`, branch `swift-3.0`)
-  - CardIO
   - Crashlytics
   - CryptoSwift (from `https://github.com/krzyzanowskim/CryptoSwift`, branch `master`)
   - Digits
@@ -100,25 +96,17 @@ DEPENDENCIES:
   - TwitterCore
 
 EXTERNAL SOURCES:
-  Caishen:
-    :branch: swift-3.0
-    :git: https://github.com/prolificinteractive/Caishen.git
   CryptoSwift:
     :branch: master
     :git: https://github.com/krzyzanowskim/CryptoSwift
 
 CHECKOUT OPTIONS:
-  Caishen:
-    :commit: 26e082e0f2073faaf6c2a106030216f6a392f863
-    :git: https://github.com/prolificinteractive/Caishen.git
   CryptoSwift:
     :commit: 8007a4fb4d8988bdb8839480ddc7801a089f4b72
     :git: https://github.com/krzyzanowskim/CryptoSwift
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
-  Caishen: 19c73df58634c898c8cab66b870b9159d60ce9e2
-  CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
   CryptoSwift: 5e857f6d8a91c41c92c7c6a6950a52434d8d35c2
   Digits: af82d24ec38035cc555b60f55cca5abc68a76bed
@@ -141,6 +129,6 @@ SPEC CHECKSUMS:
   SWXMLHash: 80d2529d74891bb2f15305a0b9e08f2a4f229ee7
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: 813a932973f0ac74a5a9266f1bbe8f5a46002133
+PODFILE CHECKSUM: 208edc0127f9a64df57ff8e7b45e78dadc818705
 
 COCOAPODS: 1.2.0.beta.1

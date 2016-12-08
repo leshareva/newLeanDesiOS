@@ -246,7 +246,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         }
         
         let ref = FIRDatabase.database().reference()
-        let requestReference = ref.child("clients")
+        let clientReference = ref.child("clients")
         
         let parameters: Parameters = [
             "toEmail": email,
@@ -265,7 +265,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         
         let values: [String: AnyObject] = ["phone": phone as AnyObject, "lastName": sename as AnyObject, "id": userId as AnyObject, "email": email as AnyObject, "company": company as AnyObject, "firstName": name as AnyObject, "rate": 0.6 as AnyObject, "sum": 0 as AnyObject]
         
-        requestReference.child(userId).updateChildValues(values) { (error, ref) in
+        clientReference.child(userId).updateChildValues(values) { (error, ref) in
             if error != nil {
                 print(error as! NSError)
                 return

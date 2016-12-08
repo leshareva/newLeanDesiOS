@@ -41,7 +41,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         view.addSubview(tableView)
         buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewTaskView)))
         
-        
         setupLoadingView()
         setupbuttonView()
         setupLogoView()
@@ -115,7 +114,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func openConceptFolder() {
         if let folderUrlFromCash = UserDefaults.standard.string(forKey: "folder") {
-           UIApplication.shared.openURL(URL(string: folderUrlFromCash)!)
+//           UIApplication.shared.openURL(URL(string: folderUrlFromCash)!)
+            let googleDriveViewController = GoogleDriveViewController()
+            googleDriveViewController.folderUrl = folderUrlFromCash
+            navigationController?.pushViewController(googleDriveViewController, animated: true)
+            
         }
         
     }
@@ -163,9 +166,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.detailTextLabel?.textColor = .black
             } else if status == "awarenessApprove" {
                 cell.detailTextLabel?.text = "Согласуйте понимание задачи"
-                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
                 cell.notificationsLabel.isHidden = true
-                cell.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.backgroundColor = LeanColor.acceptColor
+                cell.textLabel?.backgroundColor = .clear
                 cell.textLabel?.textColor = .white
                 cell.detailTextLabel?.textColor = .white
             } else if status == "concept" {
@@ -175,9 +178,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.detailTextLabel?.textColor = .black
             } else if status == "conceptApprove" {
                 cell.detailTextLabel?.text = "Согласуйте черновик"
-                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
                 cell.notificationsLabel.isHidden = true
-                cell.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.backgroundColor = LeanColor.acceptColor
                 cell.textLabel?.textColor = .white
                 cell.detailTextLabel?.textColor = .white
             } else if status == "design" {
@@ -187,12 +189,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.detailTextLabel?.textColor = .black
             } else if status == "designApprove" {
                 cell.detailTextLabel?.text = "Согласуйте чистовик"
-                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
                 cell.notificationsLabel.isHidden = true
-                cell.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.backgroundColor = LeanColor.acceptColor
                 cell.textLabel?.textColor = .white
                 cell.detailTextLabel?.textColor = .white
-            } else if status == "source" {
+            } else if status == "sources" {
                 cell.detailTextLabel?.text = "Дизайнер готовит исходники"
                 cell.backgroundColor = .white
                 cell.textLabel?.textColor = .black
@@ -200,7 +201,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.notificationsLabel.isHidden = false
             } else if status == "done" {
                 cell.detailTextLabel?.text = "Закройте задачу"
-                cell.notificationsLabel.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+                cell.notificationsLabel.backgroundColor = LeanColor.acceptColor
                 cell.notificationsLabel.isHidden = false
             }
             
@@ -468,10 +469,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             navigationController?.pushViewController(archiveViewController, animated: true)
             
         } else if setting.name == .Settings {
-            let profileViewController = ProfileViewController()
-            profileViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-            profileViewController.navigationItem.title = setting.name.rawValue
-            present(profileViewController, animated: true, completion: nil)
+            let myProfileViewController = MyProfileViewController()
+            myProfileViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
+            myProfileViewController.navigationItem.title = setting.name.rawValue
+            present(myProfileViewController, animated: true, completion: nil)
         } else {
             let dummySettingsViewController = UIViewController()
             dummySettingsViewController.view.backgroundColor = UIColor.white

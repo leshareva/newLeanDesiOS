@@ -16,32 +16,33 @@ class NoMoneyViewController: UIViewController {
     var sum: Int!
     
     let discriptionLabel: UILabel = {
-        let tv = UILabel()
-        tv.text = "На вашем счете"
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.textColor = UIColor.white
-        tv.textAlignment = .center
-        tv.numberOfLines = 3
-        return tv
+        let tl = UILabel()
+        tl.text = "На вашем счете"
+        tl.translatesAutoresizingMaskIntoConstraints = false
+        tl.font = UIFont.boldSystemFont(ofSize: 24.0)
+        tl.textColor = .black
+        tl.textAlignment = .center
+        return tl
     }()
     
     let priceLabel: UILabel = {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.textColor = UIColor.white
-        tv.font = UIFont.boldSystemFont(ofSize: 48.0)
+        tv.textColor = .red
+        tv.font = UIFont.boldSystemFont(ofSize: 64.0)
         tv.textAlignment = .center
         return tv
     }()
     
     let aboutTextView: UITextView = {
         let tv = UITextView()
-        tv.text = "Для заказа на счету должно быть минимум 1000₽"
+        tv.text = "Пополните счет минимум на 500₽, чтобы оформить заказ"
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.textColor = UIColor.white
+        tv.textColor = .black
         tv.backgroundColor = .clear
         tv.font = UIFont.systemFont(ofSize: 18.0)
         tv.isEditable = false
+        tv.textAlignment = .center
         return tv
     }()
     
@@ -52,11 +53,11 @@ class NoMoneyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = LeanColor.blueColor
+        view.backgroundColor = .white
         UINavigationBar.appearance().barTintColor = LeanColor.blueColor
         navigationController?.navigationBar.isTranslucent = false
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(handleCancel))
         
         priceLabel.text = String(self.sum) + " ₽"
         setupView()
@@ -91,7 +92,7 @@ class NoMoneyViewController: UIViewController {
         buttonView.buttonLabel.text = "Пополнить счет"
         buttonView.translatesAutoresizingMaskIntoConstraints = false
         buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handlePay)))
-        buttonView.acceptTaskButtonView.backgroundColor = UIColor(r: 109, g: 199, b: 82)
+        buttonView.acceptTaskButtonView.backgroundColor = LeanColor.acceptColor
     }
     
     func handlePay() {

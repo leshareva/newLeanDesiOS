@@ -10,7 +10,7 @@ import UIKit
 import Swiftstraints
 import SafariServices
 
-class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewControllerDelegate {
+class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewControllerDelegate, UITextFieldDelegate {
 
     
  
@@ -25,17 +25,19 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         return tv
     }()
     
-    let amountField: UITextView = {
-        let tf = UITextView()
+    
+    let amountField: UITextField = {
+        let tf = UITextField()
         tf.textColor = .gray
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.font = UIFont.systemFont(ofSize: 32, weight: UIFontWeightThin)
-        tf.isSelectable = true
         tf.backgroundColor = UIColor(r: 250, g: 250, b: 250)
         tf.keyboardType = UIKeyboardType.decimalPad
+        tf.placeholder = "0,0"
         return tf
     }()
     
+    let promoLink = UIControls.SectionCell()
     
     
     override func viewDidLoad() {
@@ -43,11 +45,12 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         view.backgroundColor = .white
         amountField.delegate = self
         amountField.textColor = .lightGray
-        amountField.text = "Введите сумму в рублях"
+        
         amountField.becomeFirstResponder()
         
-          navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Оплатить", style: .plain, target: self, action: #selector(handlePay));
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Оплатить", style: .plain, target: self, action: #selector(handlePay));
         
+        promoLink.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handlePromoLink)))
        setupView()
     }
 
@@ -56,19 +59,29 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
     func setupView() {
         view.addSubview(amountField)
         view.addSubview(amountLabel)
+        view.addSubview(promoLink)
         
-        view.addConstraints("V:|-10-[\(amountLabel)]-5-[\(amountField)]")
-        view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|")
-        view.addConstraints(amountLabel.heightAnchor == 50, amountField.heightAnchor == 60)
+        view.addConstraints("V:|-10-[\(amountLabel)]-5-[\(amountField)]-20-[\(promoLink)]")
+        view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|" , "H:|[\(promoLink)]|")
+        view.addConstraints(amountLabel.heightAnchor == 50, amountField.heightAnchor == 60, promoLink.heightAnchor == 50)
+        promoLink.label.text = "Ввести промо-код"
         
     }
     
     
+    func handlePromoLink() {
+        let promoCodeViewController = PromoCodeViewController()
+        navigationController?.pushViewController(promoCodeViewController, animated: true)
+    }
+    
     func handlePay() {
+        guard let amount = amountField.text, !amount.isEmpty  else {
+            return
+        }
+        
         let tinkoffViewController = TinkoffViewController()
-        tinkoffViewController.amount = Int(amountField.text)
-        let navController = UINavigationController(rootViewController: tinkoffViewController)
-        self.present(navController, animated: true, completion: nil)
+        tinkoffViewController.amount = Int(amountField.text!)
+        self.navigationController?.pushViewController(tinkoffViewController, animated: true)
     }
 
     

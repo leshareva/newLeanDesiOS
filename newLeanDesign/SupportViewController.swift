@@ -88,7 +88,8 @@ class SupportViewController: UICollectionViewController, UITextFieldDelegate, UI
         collectionView?.register(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.keyboardDismissMode = .interactive
         
-   
+        navigationItem.title = "Поддержка"
+        self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
         
         setupKeyboardObservers()
     }

@@ -357,7 +357,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         let imageName = UUID().uuidString
         let ref = FIRStorage.storage().reference().child("message_image").child(imageName)
         
-        if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
+        if let uploadData = image.jpegData(.lowest) {
             ref.put(uploadData, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
                     print("Faild upload image:", error as Any!)
@@ -381,6 +381,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
          let fromId = Digits.sharedInstance().session()?.userID as String!
         let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
         let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": image.size.width as AnyObject, "imageHeight": image.size.height as AnyObject, "taskId": taskId as AnyObject, "timestamp": timestamp as AnyObject, "fromId": fromId as AnyObject]
+        
         
         self.sentMessages.append(String(imageUrl))
         self.messages.append(Message(dictionary: properties))

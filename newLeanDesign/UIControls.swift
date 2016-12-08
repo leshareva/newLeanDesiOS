@@ -60,5 +60,47 @@ class UIControls {
         }
         
     }
+    
+    class SectionCell: UIView {
+        
+        let input: UIView = {
+            let view = UIView()
+            view.backgroundColor = UIColor(r: 250, g: 250, b: 250)
+            view.translatesAutoresizingMaskIntoConstraints = false
+            return view
+        }()
+        
+        let label: UILabel = {
+            let tf = UILabel()
+            tf.translatesAutoresizingMaskIntoConstraints = false
+            tf.font = UIFont.systemFont(ofSize: 16)
+            tf.textColor = UIColor(r: 28, g: 125, b: 215)
+            return tf
+        }()
+    
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            
+            translatesAutoresizingMaskIntoConstraints = false
+            
+            addSubview(input)
+            addConstraints("H:|[\(input)]|")
+            addConstraints("V:|[\(input)]|")
+            
+            input.addSubview(label)
+           
+            input.addConstraints("H:|-16-[\(label)]-16-|")
+            input.addConstraints("V:|[\(label)]|")
+            
+        }
+        
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+    }
+    
+    
  
 }

@@ -12,6 +12,7 @@
 		CB0680411DEF16A300D78572 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680401DEF16A300D78572 /* Constant.swift */; };
 		CB0680431DEF54D100D78572 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680421DEF54D100D78572 /* UserView.swift */; };
 		CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */; };
+		CB0D8DEA1DF53DB3008EB997 /* PromoCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0D8DE91DF53DB3008EB997 /* PromoCodeViewController.swift */; };
 		CB15C4FA1DEFEC490067A51E /* UIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB15C4F91DEFEC490067A51E /* UIControls.swift */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* ChatInputView.swift */; };
@@ -22,7 +23,7 @@
 		CB39FADD1D942A78007E9365 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FADC1D942A78007E9365 /* ChatViewController.swift */; };
 		CB39FADF1D942A92007E9365 /* SettingsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FADE1D942A92007E9365 /* SettingsLauncher.swift */; };
 		CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE01D942AAA007E9365 /* NewClientViewController.swift */; };
-		CB39FAE31D942AD9007E9365 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE21D942AD9007E9365 /* ProfileViewController.swift */; };
+		CB39FAE31D942AD9007E9365 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE21D942AD9007E9365 /* MyProfileViewController.swift */; };
 		CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */; };
 		CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAE81D942B2B007E9365 /* NewTaskController+handlers.swift */; };
 		CB39FAEC1D942B6D007E9365 /* ConceptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */; };
@@ -46,6 +47,7 @@
 		CB6C5E141DF02DA9007D74E3 /* WaitingAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */; };
 		CB6C5E161DF085A8007D74E3 /* TinkoffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */; };
 		CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */; };
+		CBB22C3C1DF9E477007EA700 /* GoogleDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB22C3B1DF9E477007EA700 /* GoogleDriveViewController.swift */; };
 		CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */; };
 		CBC9D49C1DEA118A00102C36 /* LicenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */; };
 		CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */; };
@@ -66,6 +68,7 @@
 		CB0680401DEF16A300D78572 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		CB0680421DEF54D100D78572 /* UserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
+		CB0D8DE91DF53DB3008EB997 /* PromoCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoCodeViewController.swift; sourceTree = "<group>"; };
 		CB15C4F91DEFEC490067A51E /* UIControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControls.swift; sourceTree = "<group>"; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
@@ -76,7 +79,7 @@
 		CB39FADC1D942A78007E9365 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		CB39FADE1D942A92007E9365 /* SettingsLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsLauncher.swift; sourceTree = "<group>"; };
 		CB39FAE01D942AAA007E9365 /* NewClientViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewClientViewController.swift; sourceTree = "<group>"; };
-		CB39FAE21D942AD9007E9365 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		CB39FAE21D942AD9007E9365 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		CB39FAE81D942B2B007E9365 /* NewTaskController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NewTaskController+handlers.swift"; sourceTree = "<group>"; };
 		CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConceptViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +105,7 @@
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CB6C74201D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBannerView.swift; sourceTree = "<group>"; };
+		CBB22C3B1DF9E477007EA700 /* GoogleDriveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleDriveViewController.swift; sourceTree = "<group>"; };
 		CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountViewController.swift; sourceTree = "<group>"; };
 		CBB78A9C1DE7D41500360D51 /* LeanDesign.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LeanDesign.entitlements; sourceTree = "<group>"; };
 		CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseViewController.swift; sourceTree = "<group>"; };
@@ -146,19 +150,16 @@
 				CB39FADA1D942A60007E9365 /* LoginController.swift */,
 				CB39FADC1D942A78007E9365 /* ChatViewController.swift */,
 				CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */,
-				CB39FADE1D942A92007E9365 /* SettingsLauncher.swift */,
 				CB39FAE01D942AAA007E9365 /* NewClientViewController.swift */,
-				CB39FAE21D942AD9007E9365 /* ProfileViewController.swift */,
+				CB39FAE21D942AD9007E9365 /* MyProfileViewController.swift */,
 				CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */,
 				CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */,
 				CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */,
-				CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */,
-				CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */,
-				CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */,
-				CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */,
-				CBF891821DDAE1A800437DEA /* PayViewController.swift */,
+				CBB22C3A1DF9E3B8007EA700 /* PayControllers */,
 				CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */,
-				CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */,
+				CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */,
+				CB39FADE1D942A92007E9365 /* SettingsLauncher.swift */,
+				CBB22C3B1DF9E477007EA700 /* GoogleDriveViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -208,6 +209,19 @@
 				CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		CBB22C3A1DF9E3B8007EA700 /* PayControllers */ = {
+			isa = PBXGroup;
+			children = (
+				CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */,
+				CB0D8DE91DF53DB3008EB997 /* PromoCodeViewController.swift */,
+				CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */,
+				CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */,
+				CBF891821DDAE1A800437DEA /* PayViewController.swift */,
+				CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */,
+			);
+			name = PayControllers;
 			sourceTree = "<group>";
 		};
 		CBE682AF1D93EBD300CB3679 = {
@@ -441,6 +455,7 @@
 				CB39FAF81D942BDA007E9365 /* Concept.swift in Sources */,
 				CB6C5E161DF085A8007D74E3 /* TinkoffViewController.swift in Sources */,
 				CB6C5E141DF02DA9007D74E3 /* WaitingAlertView.swift in Sources */,
+				CB0D8DEA1DF53DB3008EB997 /* PromoCodeViewController.swift in Sources */,
 				CB39FAFF1D942C24007E9365 /* SettingCell.swift in Sources */,
 				CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */,
 				CB39FAF21D942BBC007E9365 /* Task.swift in Sources */,
@@ -449,9 +464,10 @@
 				CB39FADF1D942A92007E9365 /* SettingsLauncher.swift in Sources */,
 				CBC9D49C1DEA118A00102C36 /* LicenseViewController.swift in Sources */,
 				CB39FAD91D942A48007E9365 /* NewTaskController.swift in Sources */,
-				CB39FAE31D942AD9007E9365 /* ProfileViewController.swift in Sources */,
+				CB39FAE31D942AD9007E9365 /* MyProfileViewController.swift in Sources */,
 				CB39FADD1D942A78007E9365 /* ChatViewController.swift in Sources */,
 				CB39FB0C1D94E92F007E9365 /* StepsView.swift in Sources */,
+				CBB22C3C1DF9E477007EA700 /* GoogleDriveViewController.swift in Sources */,
 				CB39FADB1D942A60007E9365 /* LoginController.swift in Sources */,
 				CB5F4D0E1DBCC12600530341 /* ZoomingImageView.swift in Sources */,
 				CB39FAEE1D942B8C007E9365 /* Extensions.swift in Sources */,
@@ -584,17 +600,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LeanDesign.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 74DED593Z8;
 				INFOPLIST_FILE = newLeanDesign/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-l\"CardIO\"",
 					"-l\"c++\"",
 					"-l\"icucore\"",
-					"-l\"opencv_core\"",
-					"-l\"opencv_imgproc\"",
 					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
@@ -609,10 +623,6 @@
 					"\"AudioToolbox\"",
 					"-framework",
 					"\"CFNetwork\"",
-					"-framework",
-					"\"Caishen\"",
-					"-framework",
-					"\"CoreData\"",
 					"-framework",
 					"\"CoreGraphics\"",
 					"-framework",
@@ -675,7 +685,6 @@
 					"\"TwitterCore\"",
 					"-framework",
 					"\"UIKit\"",
-					"\"-lc++\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = LeanDesign;
@@ -692,17 +701,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LeanDesign.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 74DED593Z8;
 				INFOPLIST_FILE = newLeanDesign/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-l\"CardIO\"",
 					"-l\"c++\"",
 					"-l\"icucore\"",
-					"-l\"opencv_core\"",
-					"-l\"opencv_imgproc\"",
 					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
@@ -717,10 +724,6 @@
 					"\"AudioToolbox\"",
 					"-framework",
 					"\"CFNetwork\"",
-					"-framework",
-					"\"Caishen\"",
-					"-framework",
-					"\"CoreData\"",
 					"-framework",
 					"\"CoreGraphics\"",
 					"-framework",
@@ -783,7 +786,6 @@
 					"\"TwitterCore\"",
 					"-framework",
 					"\"UIKit\"",
-					"\"-lc++\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = LeanDesign;

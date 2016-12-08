@@ -19,8 +19,6 @@ pod 'Swiftstraints'
 pod 'Flurry-iOS-SDK/FlurrySDK'
 pod 'Flurry-iOS-SDK/FlurryAds'
 pod 'Crashlytics'
-pod 'Caishen', :git => 'https://github.com/prolificinteractive/Caishen.git', :branch => 'swift-3.0'
-pod 'CardIO'
 pod 'Alamofire', '~> 4.0'
 pod 'SWXMLHash', '~> 3.0.0'
 pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"

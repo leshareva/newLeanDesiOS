@@ -57,8 +57,8 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.allowsMultipleSelectionDuringEditing = true
         
         navigationController?.navigationBar.isTranslucent = false
-        
-        fetchUser()
+
+        observeUserTasks()
         
         self.view.addSubview(tableView)
  
@@ -121,17 +121,15 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     
+
     
-    func fetchUser() {
+    func observeUserTasks() {
+        
         tasks.removeAll()
         DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
         })
-        observeUserTasks()
-    }
-    
-    
-    func observeUserTasks() {
+        
         guard let uid = Digits.sharedInstance().session()!.userID else {
             return
         }
@@ -140,21 +138,22 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         ref.observe(.childAdded, with: { (snapshot) in
             
             let taskId = snapshot.key
+            print("archive tasks ", taskId)
             let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
             taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                         let task = Task(dictionary: dictionary)
                         self.tasksDictionary[taskId] = task
                 }
+                
+                self.attemptReloadTable()
                 
                 }, withCancel: nil)
             }, withCancel: nil)
         
     }
     
-    
-    
+
     
     
     func showChatControllerForUser(_ task: Task) {
@@ -173,10 +172,10 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
             present(archiveViewController, animated: true, completion: nil)
             
         } else if setting.name == .Settings {
-            let profileViewController = ProfileViewController()
-            profileViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-            profileViewController.navigationItem.title = setting.name.rawValue
-            present(profileViewController, animated: true, completion: nil)
+            let myProfileViewController = MyProfileViewController()
+            myProfileViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
+            myProfileViewController.navigationItem.title = setting.name.rawValue
+            present(myProfileViewController, animated: true, completion: nil)
         } else {
             let dummySettingsViewController = UIViewController()
             dummySettingsViewController.view.backgroundColor = UIColor.white

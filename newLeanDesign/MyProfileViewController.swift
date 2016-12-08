@@ -7,10 +7,9 @@ import DKImagePickerController
 
 
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let userView = UserView()
-    
     
     lazy var closeButton: UIImageView = {
         let imageView = UIImageView()
@@ -61,7 +60,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         super.viewDidLoad()
         
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
-        
+        userView.isUserInteractionEnabled = true
+        userView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
         setupView()
         loadUserInfo()
         
@@ -104,6 +104,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             }, withCancel: nil)
     }
     
+    
     func handleLogout() {
         
         Digits.sharedInstance().logOut()
@@ -116,6 +117,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let loginController = LoginController()
         self.present(loginController, animated: true, completion: nil)
     }
+    
     
     func handelCancel() {
         self.dismiss(animated: true, completion: nil)
@@ -177,6 +179,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         let values : [String: AnyObject] = ["company": company as AnyObject, "email" : email as AnyObject]
         ref.child(uid).updateChildValues(values)
         saveButton.isHidden = true
+        view.endEditing(true)
     }
     
   
@@ -219,8 +222,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 if let imageUrl = metadata?.downloadURL()?.absoluteString {
                     self.sendMessageWithImageUrl(imageUrl, image: image)
                 }
-                
-                
             })
         }
     }

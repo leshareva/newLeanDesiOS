@@ -13,7 +13,6 @@ import Swiftstraints
 
 class NewTaskController: UIViewController {
 
-    //    var taskListController: TasksListController?
     var taskViewController: TaskViewController?
     
     let textDescription: UITextView = {
@@ -55,8 +54,6 @@ class NewTaskController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-    
-    
     
     
     override func viewDidLoad() {

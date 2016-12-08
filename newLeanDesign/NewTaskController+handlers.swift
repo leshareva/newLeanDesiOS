@@ -10,11 +10,10 @@ import UIKit
 import Firebase
 import DigitsKit
 import DKImagePickerController
+import Alamofire
 
 extension NewTaskController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    
-    
+
     func handleSelectAttachImageView() {
         let pickerController = DKImagePickerController()
         
@@ -33,7 +32,6 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
                     }
                 }
             }
-            
         }
         
         self.present(pickerController, animated: true, completion: nil)
@@ -67,12 +65,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
             }
             
             let taskId = postRef.key
-            
-            
-            
-            
-            
-            
+
             let activeTaskRef = FIRDatabase.database().reference().child("active-tasks").child(fromId)
             activeTaskRef.updateChildValues([taskId: 1])
             
@@ -94,11 +87,17 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         let messageID = messageРostRef.key
         userMessagesRef.updateChildValues([messageID: 1])
         
-        
+        sendPush()
         
         view.endEditing(true)
         self.sendTaskImageToChat(fromId, taskId: taskId)
         dismiss(animated: true, completion: nil)
+    }
+    
+    func sendPush() {
+        Alamofire.request("\(Server.serverUrl)/newTask",
+            method: .get)
+        
     }
     
     func sendTaskImageToChat(_ fromId: String, taskId: String) {

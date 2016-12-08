@@ -17,7 +17,6 @@ class LoginController: UIViewController {
     
     var taskViewController: TaskViewController?
     var newClientViewController: NewClientViewController?
-    var profileViewController: ProfileViewController?
     
     let logoView: UIImageView = {
        let iv = UIImageView()

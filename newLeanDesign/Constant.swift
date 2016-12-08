@@ -16,5 +16,5 @@ struct Server {
 
 struct LeanColor {
     static let blueColor = UIColor(r: 0, g: 127, b: 255)
-    static let secondaryColor = UIColor.lightGray
+    static let acceptColor = UIColor(r: 109, g: 199, b: 82)
 }

@@ -15,12 +15,11 @@ class AcceptPriceViewController: UIViewController {
     var task: Task?
     var time: Int?
     
-    let titleLabel: UITextView = {
-       let tl = UITextView()
+    let titleLabel: UILabel = {
+       let tl = UILabel()
         tl.text = "Стоимость заказа"
         tl.translatesAutoresizingMaskIntoConstraints = false
         tl.font = UIFont.boldSystemFont(ofSize: 24.0)
-        tl.isEditable = false
         tl.textColor = .black
         tl.textAlignment = .center
         return tl
@@ -37,10 +36,41 @@ class AcceptPriceViewController: UIViewController {
     
     let aboutTextView: UITextView = {
         let tv = UITextView()
-        tv.text = "Стоимость задачи определяется исходя из трудозатрат дизайнера"
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textColor = .lightGray
+        tv.textAlignment = .left
+        tv.backgroundColor = .clear
+        tv.font = UIFont.systemFont(ofSize: 12.0)
+        tv.isEditable = false
+        return tv
+    }()
+    
+    let priceTitle: UITextView = {
+        let tv = UITextView()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
-        tv.textAlignment = .center
+        tv.font = UIFont.boldSystemFont(ofSize: 20.0)
+        tv.textAlignment = .left
+        tv.isEditable = false
+        return tv
+    }()
+
+    let labelsList: UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textColor = .black
+        tv.textAlignment = .left
+        tv.backgroundColor = .clear
+        tv.font = UIFont.systemFont(ofSize: 16.0)
+        tv.isEditable = false
+        return tv
+    }()
+    
+    let priceList: UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textColor = .black
+        tv.textAlignment = .left
         tv.backgroundColor = .clear
         tv.font = UIFont.systemFont(ofSize: 16.0)
         tv.isEditable = false
@@ -70,12 +100,12 @@ class AcceptPriceViewController: UIViewController {
     
     let cancelText: UITextView = {
        let tv = UITextView()
-        tv.text = "Если цена вам не подходит, задача отменяется и попадает в архив"
         tv.font = UIFont.systemFont(ofSize: 12.0)
         tv.textColor = .lightGray
         tv.backgroundColor = .clear
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textAlignment = .center
+        tv.isEditable = false
         return tv
     }()
     
@@ -107,7 +137,6 @@ class AcceptPriceViewController: UIViewController {
         })
 
         self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
- 
     }
     
     
@@ -180,6 +209,7 @@ class AcceptPriceViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(priceLabel)
         view.addSubview(aboutTextView)
+
         view.addSubview(acceptButton)
         view.addSubview(cancelButton)
         view.addSubview(cancelText)
@@ -188,15 +218,41 @@ class AcceptPriceViewController: UIViewController {
             return
         }
         
-        priceLabel.text = "\(String(describing: price)) ₽"
+        aboutTextView.text = "Стоимость задачи определяется исходя из трудозатрат дизайнера"
+        priceLabel.text = "\(String(describing: lroundf(Float(price)))) ₽"
         
-        view.addConstraints("H:|[\(titleLabel)]|", "H:|[\(priceLabel)]|", "H:|[\(aboutTextView)]|", "H:|-10-[\(acceptButton)]-10-|", "H:|-10-[\(cancelButton)]-10-|", "H:|-10-[\(cancelText)]-10-|")
-        view.addConstraints("V:|-140-[\(titleLabel)]-2-[\(priceLabel)]-10-[\(aboutTextView)]")
+        view.addSubview(labelsList)
+        view.addSubview(priceList)
+        view.addSubview(priceTitle)
+
+        view.addConstraints(
+                            priceTitle.topAnchor == priceLabel.bottomAnchor + 40,
+                            priceTitle.leftAnchor == view.leftAnchor + 20,
+                            priceTitle.widthAnchor == view.widthAnchor - 20,
+                            priceTitle.heightAnchor == 30,
+                            labelsList.topAnchor == priceTitle.bottomAnchor,
+                            labelsList.heightAnchor == 90,
+                            labelsList.widthAnchor == view.widthAnchor / 2,
+                            labelsList.leftAnchor == view.leftAnchor + 20,
+                            priceList.topAnchor == labelsList.topAnchor,
+                            priceList.widthAnchor == view.widthAnchor / 2,
+                            priceList.leftAnchor == labelsList.rightAnchor + 20,
+                            priceList.heightAnchor == 90,
+                            aboutTextView.topAnchor == priceList.bottomAnchor
+        )
+        
+        let awarenessPrice = Double(price) * 0.10
+        let conceptPrice = Double(price) * 0.50
+        let designPrice = Double(price) * 0.40
+        labelsList.text = "Понимание задачи\nЧерновик\nЧистовик"
+        priceList.text = "\(String(lroundf(Float(awarenessPrice))))₽\n\(String(lroundf(Float(conceptPrice))))₽\n\(String(lroundf(Float(designPrice))))₽"
+        priceTitle.text = "Стоимость состоит из"
+        cancelText.text = "Если цена вам не подходит, задача отменится и попадет в архив. Со счета спишется стоимость понимания задачи."
+        
+        view.addConstraints("H:|[\(titleLabel)]|", "H:|[\(priceLabel)]|", "H:|-20-[\(aboutTextView)]-20-|", "H:|-10-[\(acceptButton)]-10-|", "H:|-10-[\(cancelButton)]-10-|", "H:|-16-[\(cancelText)]-16-|")
+        view.addConstraints("V:|-80-[\(titleLabel)]-2-[\(priceLabel)]")
         view.addConstraints("V:[\(acceptButton)]-10-[\(cancelButton)]-10-[\(cancelText)]-10-|")
-        view.addConstraints(titleLabel.heightAnchor == 40, priceLabel.heightAnchor == 80, aboutTextView.heightAnchor == 100, acceptButton.heightAnchor == 50, cancelButton.heightAnchor == 50, cancelText.heightAnchor == 80)
+        view.addConstraints(titleLabel.heightAnchor == 40, priceLabel.heightAnchor == 80, aboutTextView.heightAnchor == 80,acceptButton.heightAnchor == 50, cancelButton.heightAnchor == 50, cancelText.heightAnchor == 60)
     }
-    
-    
-    
-    
+   
 }

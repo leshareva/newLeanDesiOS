@@ -64,9 +64,9 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: customCellIdentifier, for: indexPath) as! CustomCell
 
         let concept = concepts[indexPath.item]
-
-        if let imageUrl = concept.imgUrl {
-            
+        buttonView.buttonLabel.text = "Принять"
+        
+        if let imageUrl = concept.imgUrl {    
             cell.imageView.loadImageUsingCashWithUrlString(imageUrl)
             cell.textView.isHidden = true
             cell.priceLabel.isHidden = true
@@ -74,6 +74,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             cell.descriptView.isHidden = true
 //            cell.imageWidthAnchor?.constant = s
             
+            buttonView.acceptTaskButtonView.backgroundColor = LeanColor.acceptColor
         } else if let text = concept.text {
  
             cell.imageView.isHidden = true
@@ -164,7 +165,8 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                                 }
 
                             if status == "awarenessApprove" {
-                                if sum < price {
+                                
+                                if sum < (Int(price) / 2) {
                                     self.showFailAlertView(price: price as Int)
                                 } else {
                                     self.showSuccessAlertView(status: status! as String, time: time! as Int, price: price as Int)
@@ -189,8 +191,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         
         alert.addAction(UIAlertAction(title: "Пополнить", style: .default, handler: { (action: UIAlertAction!) in
             let amountViewController = AmountViewController()
-            let navController = UINavigationController(rootViewController: amountViewController)
-            self.present(navController, animated: true, completion: nil)
+            self.navigationController?.pushViewController(amountViewController, animated: true)
         }))
         
         alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: { (action: UIAlertAction!) in
