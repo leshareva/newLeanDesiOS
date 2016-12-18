@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (4.2.0)
+  - Cosmos (7.0.0)
   - Crashlytics (3.8.3):
     - Fabric (~> 1.6.3)
   - CryptoSwift (0.6.6)
@@ -79,6 +80,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
+  - Cosmos (~> 7.0)
   - Crashlytics
   - CryptoSwift (from `https://github.com/krzyzanowskim/CryptoSwift`, branch `master`)
   - Digits
@@ -107,6 +109,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
+  Cosmos: 2c8299147138758f6ebbb247cf1aeed77998bdf9
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
   CryptoSwift: 5e857f6d8a91c41c92c7c6a6950a52434d8d35c2
   Digits: af82d24ec38035cc555b60f55cca5abc68a76bed
@@ -129,6 +132,6 @@ SPEC CHECKSUMS:
   SWXMLHash: 80d2529d74891bb2f15305a0b9e08f2a4f229ee7
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: 208edc0127f9a64df57ff8e7b45e78dadc818705
+PODFILE CHECKSUM: 023d852b5a2a29b5f87d835f568e8941023a5746
 
 COCOAPODS: 1.2.0.beta.1

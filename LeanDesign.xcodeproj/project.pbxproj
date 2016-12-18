@@ -43,6 +43,8 @@
 		CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0D1D952156007E9365 /* EmptyTableView.swift */; };
 		CB39FB101D954FB4007E9365 /* loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB0F1D954FB4007E9365 /* loader.gif */; };
 		CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */; };
+		CB4F7E5E1E014C980057E249 /* ChatViewController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4F7E5D1E014C980057E249 /* ChatViewController+handlers.swift */; };
+		CB4F7E601E014DDD0057E249 /* GetRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4F7E5F1E014DDD0057E249 /* GetRateView.swift */; };
 		CB5F4D0E1DBCC12600530341 /* ZoomingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */; };
 		CB6C5E141DF02DA9007D74E3 /* WaitingAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */; };
 		CB6C5E161DF085A8007D74E3 /* TinkoffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */; };
@@ -56,8 +58,8 @@
 		CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */; };
 		CBF891811DDAD2A800437DEA /* NoMoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */; };
 		CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891821DDAE1A800437DEA /* PayViewController.swift */; };
-		CBFDCB061DD6F41C0038BE90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB051DD6F41C0038BE90 /* GoogleService-Info.plist */; };
-		CBFDCB081DD6F5A30038BE90 /* GoogleService-Info-test.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB071DD6F5A30038BE90 /* GoogleService-Info-test.plist */; };
+		CBFDCB061DD6F41C0038BE90 /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */; };
+		CBFDCB081DD6F5A30038BE90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -99,6 +101,8 @@
 		CB39FB0D1D952156007E9365 /* EmptyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyTableView.swift; sourceTree = "<group>"; };
 		CB39FB0F1D954FB4007E9365 /* loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loader.gif; sourceTree = "<group>"; };
 		CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		CB4F7E5D1E014C980057E249 /* ChatViewController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+handlers.swift"; sourceTree = "<group>"; };
+		CB4F7E5F1E014DDD0057E249 /* GetRateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetRateView.swift; sourceTree = "<group>"; };
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
 		CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingAlertView.swift; sourceTree = "<group>"; };
 		CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinkoffViewController.swift; sourceTree = "<group>"; };
@@ -117,8 +121,8 @@
 		CBE682C71D93EBD400CB3679 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoMoneyViewController.swift; sourceTree = "<group>"; };
 		CBF891821DDAE1A800437DEA /* PayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayViewController.swift; sourceTree = "<group>"; };
-		CBFDCB051DD6F41C0038BE90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		CBFDCB071DD6F5A30038BE90 /* GoogleService-Info-test.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-test.plist"; sourceTree = "<group>"; };
+		CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
+		CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +171,7 @@
 		CB39FAEA1D942B3A007E9365 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				CB4F7E5D1E014C980057E249 /* ChatViewController+handlers.swift */,
 				CB39FAE81D942B2B007E9365 /* NewTaskController+handlers.swift */,
 			);
 			name = Helpers;
@@ -207,6 +212,7 @@
 				CB0680421DEF54D100D78572 /* UserView.swift */,
 				CB15C4F91DEFEC490067A51E /* UIControls.swift */,
 				CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */,
+				CB4F7E5F1E014DDD0057E249 /* GetRateView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -260,8 +266,8 @@
 				CB39FB051D942C6E007E9365 /* spinner.gif */,
 				CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */,
 				CBE682C71D93EBD400CB3679 /* Info.plist */,
-				CBFDCB051DD6F41C0038BE90 /* GoogleService-Info.plist */,
-				CBFDCB071DD6F5A30038BE90 /* GoogleService-Info-test.plist */,
+				CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */,
+				CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */,
 			);
 			path = newLeanDesign;
 			sourceTree = "<group>";
@@ -350,10 +356,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBFDCB061DD6F41C0038BE90 /* GoogleService-Info.plist in Resources */,
+				CBFDCB061DD6F41C0038BE90 /* GoogleService-Info-prod.plist in Resources */,
 				CB39FB061D942C6E007E9365 /* spinner-duo.gif in Resources */,
 				CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */,
-				CBFDCB081DD6F5A30038BE90 /* GoogleService-Info-test.plist in Resources */,
+				CBFDCB081DD6F5A30038BE90 /* GoogleService-Info.plist in Resources */,
 				CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */,
 				CB39FB101D954FB4007E9365 /* loader.gif in Resources */,
 				CB39FB071D942C6E007E9365 /* spinner.gif in Resources */,
@@ -432,6 +438,7 @@
 				CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */,
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
 				CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */,
+				CB4F7E5E1E014C980057E249 /* ChatViewController+handlers.swift in Sources */,
 				CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */,
 				CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */,
 				CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */,
@@ -439,6 +446,7 @@
 				CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */,
 				CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */,
 				CB15C4FA1DEFEC490067A51E /* UIControls.swift in Sources */,
+				CB4F7E601E014DDD0057E249 /* GetRateView.swift in Sources */,
 				CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */,
 				CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */,
 				CB0680411DEF16A300D78572 /* Constant.swift in Sources */,

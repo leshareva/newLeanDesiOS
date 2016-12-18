@@ -11,6 +11,7 @@ import Firebase
 import DigitsKit
 import DKImagePickerController
 import Swiftstraints
+import Cosmos
 
 class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate {
     
@@ -67,7 +68,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
 //                UserDefaults.standard.removeObject(forKey: taskId)
                 self.setupBannerView(taskId: taskId)
             } else if status == "reject" {
-                self.handleDone()
                 self.inputContainerView.isHidden = true
             } else {
                 self.observeMessages()
@@ -236,22 +236,32 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             } else if status == "archiveRejected" {
                 buttonView.isHidden = false
                 buttonView.alertTextView.text = "Вы отменили задачу"
+            } else if status == "archive" {
+                buttonView.isHidden = false
+                buttonView.alertTextView.text = "Открыть папку с исходниками"
+                buttonView.alertButton.isHidden = false
+                buttonView.alertButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
             }
             }, withCancel: nil)
-        
-        
-        
+
     }
     
-    
+    let getRateView = GetRateView()
     
     func handleDone() {
         guard let taskId = task?.taskId, let fromId = task?.fromId else {
             return
         }
         
-        let status = "archiveRejected"
+        let status = "archive"
         
+//        if let keyWindow = UIApplication.shared.keyWindow {
+//            self.getRateView.alpha = 1
+//            self.getRateView.frame = keyWindow.frame
+//            keyWindow.addSubview(self.getRateView)
+//            
+//        }
+
         let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
         taskRef.updateChildValues(["status": status])
        
@@ -267,6 +277,39 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
        
     }
     
+    func handleReject() {
+        guard let taskId = task?.taskId, let fromId = task?.fromId else {
+            return
+        }
+        
+        let status = "archiveRejected"
+        
+        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
+        taskRef.updateChildValues(["status": status])
+        
+        let activeTasksRef = FIRDatabase.database().reference().child("active-tasks").child(fromId).child(taskId)
+        
+        activeTasksRef.removeValue()
+        
+        let archiveRef = FIRDatabase.database().reference().child("user-tasks").child(fromId)
+        archiveRef.updateChildValues([taskId: 1])
+        
+        let taskViewController = TaskViewController()
+        navigationController?.pushViewController(taskViewController, animated: true)
+        
+    }
+    
+   
+    func openConceptFolder() {
+        if let folderUrlFromCash = UserDefaults.standard.string(forKey: "folder") {
+            //           UIApplication.shared.openURL(URL(string: folderUrlFromCash)!)
+            let googleDriveViewController = GoogleDriveViewController()
+            googleDriveViewController.folderUrl = folderUrlFromCash
+            navigationController?.pushViewController(googleDriveViewController, animated: true)
+            
+        }
+        
+    }
 
     
     func openStepInfo(_ sender : MyTapGesture) {

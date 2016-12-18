@@ -87,16 +87,23 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         let messageID = messageРostRef.key
         userMessagesRef.updateChildValues([messageID: 1])
         
-        sendPush()
+        sendPush(uid: fromId, taskId: taskId)
         
         view.endEditing(true)
         self.sendTaskImageToChat(fromId, taskId: taskId)
         dismiss(animated: true, completion: nil)
     }
     
-    func sendPush() {
+    func sendPush(uid: String, taskId: String) {
+        
+        let parameters: Parameters = [
+            "clientId": uid,
+            "taskId": taskId
+        ]
+        
         Alamofire.request("\(Server.serverUrl)/newTask",
-            method: .get)
+            method: .post,
+            parameters: parameters)
         
     }
     

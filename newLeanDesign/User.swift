@@ -32,5 +32,6 @@ class User: NSObject {
     var lastName: String?
     var otherName: String?
     var conceptUrl: String?
+    var favorites: AnyObject?
 }
 

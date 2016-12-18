@@ -22,6 +22,7 @@ pod 'Crashlytics'
 pod 'Alamofire', '~> 4.0'
 pod 'SWXMLHash', '~> 3.0.0'
 pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
+pod 'Cosmos', '~> 7.0'
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|
