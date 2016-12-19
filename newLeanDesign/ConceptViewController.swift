@@ -213,7 +213,6 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             
             let acceptPriceViewController = AcceptPriceViewController()
             acceptPriceViewController.task = task
-            acceptPriceViewController.time = time
             self.present(acceptPriceViewController, animated: true)
             
             

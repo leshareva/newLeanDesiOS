@@ -33,5 +33,6 @@ class User: NSObject {
     var otherName: String?
     var conceptUrl: String?
     var favorites: AnyObject?
+    var portfolio: String?
 }
 

@@ -171,6 +171,18 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.textLabel?.backgroundColor = .clear
                 cell.textLabel?.textColor = .white
                 cell.detailTextLabel?.textColor = .white
+            } else if status == "price" {
+                cell.detailTextLabel?.text = "Готовим оценку"
+                cell.backgroundColor = .white
+                cell.textLabel?.textColor = .black
+                cell.detailTextLabel?.textColor = .black
+            } else if status == "priceApprove" {
+                cell.detailTextLabel?.text = "Согласуйте оцеку"
+                cell.notificationsLabel.isHidden = true
+                cell.backgroundColor = LeanColor.acceptColor
+                cell.textLabel?.backgroundColor = .clear
+                cell.textLabel?.textColor = .white
+                cell.detailTextLabel?.textColor = .white
             } else if status == "concept" {
                 cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
                 cell.backgroundColor = .white
@@ -268,12 +280,26 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let tappy = MyTapGesture(target: self, action: #selector(self.cancelTask(_:)))
                     tappy.task = task
                     self.waitingAlertView.cancelButton.addGestureRecognizer(tappy)
-                    
                 }
+            } else if status == "awareness" {
+                let waitingAwarenessViewController = WaitingAwarenessViewController()
+                waitingAwarenessViewController.task = task
+                self.navigationController?.pushViewController(waitingAwarenessViewController, animated: true)
+            } else if status == "awarenessApprove"{
+                let awarenessViewController = AwarenessViewController()
+                awarenessViewController.task = task
+                let navController = UINavigationController(rootViewController: awarenessViewController)
+                self.present(navController, animated: true, completion: nil)
+            } else if status == "price" {
+                let priceWaitingViewController = PriceWaitingViewController()
+                self.navigationController?.pushViewController(priceWaitingViewController, animated: true)
+            } else if status == "priceApprove"{
+                let acceptPriceViewController = AcceptPriceViewController()
+                acceptPriceViewController.task = task
+                self.present(acceptPriceViewController, animated: true, completion: nil)
             } else {
                 self.showChatControllerForUser(task)
             }
-            
             
         }, withCancel: nil)
               

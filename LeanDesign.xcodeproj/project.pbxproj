@@ -14,6 +14,7 @@
 		CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */; };
 		CB0D8DEA1DF53DB3008EB997 /* PromoCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0D8DE91DF53DB3008EB997 /* PromoCodeViewController.swift */; };
 		CB15C4FA1DEFEC490067A51E /* UIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB15C4F91DEFEC490067A51E /* UIControls.swift */; };
+		CB2A01B21E07BE3D00AE5785 /* PriceWaitingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2A01B11E07BE3D00AE5785 /* PriceWaitingViewController.swift */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* ChatInputView.swift */; };
 		CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD31D942944007E9365 /* TaskViewController.swift */; };
@@ -58,6 +59,8 @@
 		CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */; };
 		CBF891811DDAD2A800437DEA /* NoMoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */; };
 		CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891821DDAE1A800437DEA /* PayViewController.swift */; };
+		CBFD98541E06E3C60047D0D6 /* WaitingAwarenessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFD98531E06E3C60047D0D6 /* WaitingAwarenessViewController.swift */; };
+		CBFD98561E06FADF0047D0D6 /* AwarenessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFD98551E06FADF0047D0D6 /* AwarenessViewController.swift */; };
 		CBFDCB061DD6F41C0038BE90 /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */; };
 		CBFDCB081DD6F5A30038BE90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -72,6 +75,7 @@
 		CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		CB0D8DE91DF53DB3008EB997 /* PromoCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoCodeViewController.swift; sourceTree = "<group>"; };
 		CB15C4F91DEFEC490067A51E /* UIControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControls.swift; sourceTree = "<group>"; };
+		CB2A01B11E07BE3D00AE5785 /* PriceWaitingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceWaitingViewController.swift; sourceTree = "<group>"; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
 		CB39FAD31D942944007E9365 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 		CBE682C71D93EBD400CB3679 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoMoneyViewController.swift; sourceTree = "<group>"; };
 		CBF891821DDAE1A800437DEA /* PayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayViewController.swift; sourceTree = "<group>"; };
+		CBFD98531E06E3C60047D0D6 /* WaitingAwarenessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingAwarenessViewController.swift; sourceTree = "<group>"; };
+		CBFD98551E06FADF0047D0D6 /* AwarenessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwarenessViewController.swift; sourceTree = "<group>"; };
 		CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
 		CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,6 +154,7 @@
 		CB39FAD71D942A24007E9365 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				CBFD98521E06E3990047D0D6 /* AwarenessControllers */,
 				CB39FAD31D942944007E9365 /* TaskViewController.swift */,
 				CB39FAD51D942A17007E9365 /* ArchiveViewController.swift */,
 				CB39FAD81D942A48007E9365 /* NewTaskController.swift */,
@@ -225,7 +232,6 @@
 				CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */,
 				CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */,
 				CBF891821DDAE1A800437DEA /* PayViewController.swift */,
-				CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */,
 			);
 			name = PayControllers;
 			sourceTree = "<group>";
@@ -270,6 +276,17 @@
 				CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */,
 			);
 			path = newLeanDesign;
+			sourceTree = "<group>";
+		};
+		CBFD98521E06E3990047D0D6 /* AwarenessControllers */ = {
+			isa = PBXGroup;
+			children = (
+				CBFD98531E06E3C60047D0D6 /* WaitingAwarenessViewController.swift */,
+				CBFD98551E06FADF0047D0D6 /* AwarenessViewController.swift */,
+				CB2A01B11E07BE3D00AE5785 /* PriceWaitingViewController.swift */,
+				CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */,
+			);
+			name = AwarenessControllers;
 			sourceTree = "<group>";
 		};
 		FAE6F8CEE853257B5119A9F0 /* Pods */ = {
@@ -436,6 +453,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */,
+				CBFD98541E06E3C60047D0D6 /* WaitingAwarenessViewController.swift in Sources */,
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
 				CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */,
 				CB4F7E5E1E014C980057E249 /* ChatViewController+handlers.swift in Sources */,
@@ -448,6 +466,7 @@
 				CB15C4FA1DEFEC490067A51E /* UIControls.swift in Sources */,
 				CB4F7E601E014DDD0057E249 /* GetRateView.swift in Sources */,
 				CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */,
+				CBFD98561E06FADF0047D0D6 /* AwarenessViewController.swift in Sources */,
 				CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */,
 				CB0680411DEF16A300D78572 /* Constant.swift in Sources */,
 				CB39FAF61D942BCF007E9365 /* Message.swift in Sources */,
@@ -460,6 +479,7 @@
 				CB39FAFB1D942C04007E9365 /* TaskCell.swift in Sources */,
 				CB39FAEC1D942B6D007E9365 /* ConceptViewController.swift in Sources */,
 				CB39FAD61D942A17007E9365 /* ArchiveViewController.swift in Sources */,
+				CB2A01B21E07BE3D00AE5785 /* PriceWaitingViewController.swift in Sources */,
 				CB39FAF81D942BDA007E9365 /* Concept.swift in Sources */,
 				CB6C5E161DF085A8007D74E3 /* TinkoffViewController.swift in Sources */,
 				CB6C5E141DF02DA9007D74E3 /* WaitingAlertView.swift in Sources */,

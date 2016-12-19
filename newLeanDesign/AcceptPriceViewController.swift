@@ -13,7 +13,6 @@ import Swiftstraints
 class AcceptPriceViewController: UIViewController {
 
     var task: Task?
-    var time: Int?
     
     let titleLabel: UILabel = {
        let tl = UILabel()
@@ -145,62 +144,50 @@ class AcceptPriceViewController: UIViewController {
         guard let taskId = task?.taskId else {
             return
         }
-        
-        var days: Int?
-        if Int(time!) <= 3 {
-            days = 1
-        } else if Int(time!) > 3 && Int(time!) <= 6 {
-            days = 2
-        } else if Int(time!) > 6 && Int(time!) <= 9 {
-            days = 3
-        }
-        
-        let newstatus = "concept"
         let ref = FIRDatabase.database().reference()
         let taskRef = ref.child("tasks").child(taskId)
         
-        let startDate = NSNumber(value: Int(Date().timeIntervalSince1970))
-        let calculatedDate = (Calendar.current as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: days!, to: Date(), options: NSCalendar.Options.init(rawValue: 0))
-        
-        let endDate = NSNumber(value: Int(calculatedDate!.timeIntervalSince1970))
-        
-        
-        let values : [String: AnyObject] = ["status": newstatus as AnyObject, "start": startDate as AnyObject, "end": endDate as AnyObject]
+        taskRef.observeSingleEvent(of: .value, with: {(snapshot) in
+            guard let time = (snapshot.value as! NSDictionary)["time"] as? Int else {
+                return
+            }
+            print(time)
+            var days: Int?
+            if Int(time) <= 3 {
+                days = 1
+            } else if Int(time) > 3 && Int(time) <= 6 {
+                days = 2
+            } else if Int(time) > 6 && Int(time) <= 9 {
+                days = 3
+            }
 
-        taskRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
-            if error != nil {
-                print(error!)
+            let startDate = NSNumber(value: Int(Date().timeIntervalSince1970))
+            let calculatedDate = (Calendar.current as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: days!, to: Date(), options: NSCalendar.Options.init(rawValue: 0))
+            
+            let endDate = NSNumber(value: Int(calculatedDate!.timeIntervalSince1970))
+            
+            
+            let values : [String: AnyObject] = ["status": "concept" as AnyObject, "start": startDate as AnyObject, "end": endDate as AnyObject]
+            
+            taskRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+            })
+            
+            guard let price = self.task?.price else {
                 return
             }
-        })
-        
-        
-        let awStatus : [String: AnyObject] = ["status": "accept" as AnyObject]
-        taskRef.child("awareness").updateChildValues(awStatus, withCompletionBlock: { (err, ref) in
-            if err != nil {
-                print(err as! NSError)
-                return
-            }
-        })
-        
-        let stepStatus : [String: AnyObject] = ["status": "none" as AnyObject]
-        taskRef.child(newstatus).updateChildValues(stepStatus, withCompletionBlock: { (error, ref) in
-            if error != nil {
-                print(error as! NSError)
-                return
-            }
-        })
-        
-        guard let price = task?.price else {
-            return
-        }
-        
-        let bill = Double(price) * Double(0.1)
-        let conceptViewController = ConceptViewController()
-        conceptViewController.sendBill(bill: Int(bill))
-        
-        self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
-       
+            
+            let bill = Double(price) * Double(0.1)
+            let conceptViewController = ConceptViewController()
+            conceptViewController.sendBill(bill: Int(bill))
+            
+            self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
+  
+        }, withCancel: nil)
+
     }
   
     
