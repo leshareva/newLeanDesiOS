@@ -65,8 +65,9 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             if status == "none" {
                 self.inputContainerView.isHidden = true
             } else if status == "awareness" {
+                self.observeMessages()
 //                UserDefaults.standard.removeObject(forKey: taskId)
-                self.setupBannerView(taskId: taskId)
+//                self.setupBannerView(taskId: taskId)
             } else if status == "reject" {
                 self.inputContainerView.isHidden = true
             } else {

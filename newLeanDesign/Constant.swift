@@ -9,7 +9,7 @@
 import UIKit
 
 struct Server {
-    static let serverUrl = "http://leandesign.pro:8100"
+    static let serverUrl = "http://leandesign.pro:8000"
 //     static let serverUrl = "http://localhost:8100"
 }
 

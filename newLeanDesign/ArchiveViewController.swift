@@ -164,7 +164,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func showControllerForSetting(_ setting: Setting) {
         
-        if setting.name == .Exit {
+        if setting.name == .License {
             //            handleLogout()
             let archiveViewController = ArchiveViewController()
             archiveViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)

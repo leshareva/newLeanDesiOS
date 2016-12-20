@@ -198,7 +198,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.backgroundColor = .white
                 cell.textLabel?.textColor = .black
                 cell.detailTextLabel?.textColor = .black
-                cell.notificationsLabel.isHidden = false
+                cell.notificationsLabel.isHidden = true
             } else if status == "done" {
                 cell.detailTextLabel?.text = "Закройте задачу"
                 cell.notificationsLabel.backgroundColor = LeanColor.acceptColor
@@ -267,6 +267,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     self.waitingAlertView.textView.text = "«\(task.text!)»"
                     let tappy = MyTapGesture(target: self, action: #selector(self.cancelTask(_:)))
                     tappy.task = task
+                    tappy.taskIndex = Int(indexPath.row)
                     self.waitingAlertView.cancelButton.addGestureRecognizer(tappy)
                     
                 }
@@ -292,6 +293,15 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 return
             }
         }
+        
+        let value: [String:AnyObject] = ["toId": "none" as AnyObject]
+        ref.child("tasks").child(taskId).updateChildValues(value, withCompletionBlock: { (err, ref) in
+            if err != nil {
+                print(err!)
+                return
+            }
+        })
+        
         waitingAlertView.alpha = 0
     }
     
@@ -304,7 +314,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         if let uid = Digits.sharedInstance().session()?.userID {
             let clientsRef = FIRDatabase.database().reference().child("clients").child(uid)
-            clientsRef.observe(.value, with: { (snapshot) in
+            clientsRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let sum = (snapshot.value as? NSDictionary)!["sum"] as? Int {
                     if sum <= 100 {
                         let noMoneyViewController = NoMoneyViewController()
@@ -462,7 +472,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func showControllerForSetting(_ setting: Setting) {
         
-        if setting.name == .Archive {
+        
+        if setting.name == .License {
+            let licenseViewController = LicenseViewController()
+            licenseViewController.navigationItem.title = setting.name.rawValue
+            navigationController?.pushViewController(licenseViewController, animated: true)
+            
+        } else if setting.name == .Archive {
             let archiveViewController = ArchiveViewController()
             archiveViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             archiveViewController.navigationItem.title = setting.name.rawValue

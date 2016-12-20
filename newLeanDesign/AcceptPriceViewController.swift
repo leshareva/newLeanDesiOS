@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import Swiftstraints
+import DigitsKit
 
 class AcceptPriceViewController: UIViewController {
 
@@ -127,7 +128,18 @@ class AcceptPriceViewController: UIViewController {
         guard let taskId = task?.taskId else {
             return
         }
+        
+        guard let designerId = task?.toId else {
+            return
+        }
+        
+        
+        guard let userId = Digits.sharedInstance().session()?.userID else {
+            return
+        }
+        
         let ref = FIRDatabase.database().reference()
+        
         let value: [String: AnyObject] = ["status": "reject" as AnyObject]
         ref.child("tasks").child(taskId).updateChildValues(value, withCompletionBlock: { (error, ref) in
             if error != nil {
@@ -135,6 +147,10 @@ class AcceptPriceViewController: UIViewController {
                 return
             }
         })
+        
+        ref.child("active-tasks").child(userId).child(taskId).removeValue()
+        ref.child("active-tasks").child(designerId).child(taskId).removeValue()
+        ref.child("user-tasks").child(userId).child(taskId).updateChildValues([taskId: 1])
 
         self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
     }
@@ -191,16 +207,21 @@ class AcceptPriceViewController: UIViewController {
             }
         })
         
-        guard let price = task?.price else {
-            return
-        }
+        taskRef.observeSingleEvent(of: .value, with: {(snapshot) in
+            guard let price = (snapshot.value as! NSDictionary)["price"] as? Int else {
+                return
+            }
+            print(price)
+            let bill = Double(price) * Double(0.1)
+            let conceptViewController = ConceptViewController()
+            conceptViewController.sendBill(bill: Int(bill))
+            
+            self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
+
+            
+        }, withCancel: nil)
         
-        let bill = Double(price) * Double(0.1)
-        let conceptViewController = ConceptViewController()
-        conceptViewController.sendBill(bill: Int(bill))
         
-        self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
-       
     }
   
     
@@ -214,12 +235,33 @@ class AcceptPriceViewController: UIViewController {
         view.addSubview(cancelButton)
         view.addSubview(cancelText)
         
-        guard let price = task?.price else {
+        
+        guard let taskId = task?.taskId else {
             return
         }
+        let ref = FIRDatabase.database().reference()
+        let taskRef = ref.child("tasks").child(taskId)
+        taskRef.observeSingleEvent(of: .value, with: {(snapshot) in
+            guard let price = (snapshot.value as! NSDictionary)["price"] as? Int else {
+                return
+            }
+            
+            self.priceLabel.text = "\(String(describing: lroundf(Float(price)))) ₽"
+            self.aboutTextView.text = "Стоимость задачи определяется исходя из трудозатрат дизайнера"
+            
+            let awarenessPrice = Double(price) * 0.10
+            let conceptPrice = Double(price) * 0.50
+            let designPrice = Double(price) * 0.40
+            self.labelsList.text = "Понимание задачи\nЧерновик\nЧистовик"
+            self.priceList.text = "\(String(lroundf(Float(awarenessPrice))))₽\n\(String(lroundf(Float(conceptPrice))))₽\n\(String(lroundf(Float(designPrice))))₽"
+            self.priceTitle.text = "Стоимость состоит из"
+            self.cancelText.text = "Если цена вам не подходит, задача отменится и попадет в архив. Со счета спишется стоимость понимания задачи."
+
+        })
         
-        aboutTextView.text = "Стоимость задачи определяется исходя из трудозатрат дизайнера"
-        priceLabel.text = "\(String(describing: lroundf(Float(price)))) ₽"
+        
+        
+        
         
         view.addSubview(labelsList)
         view.addSubview(priceList)
@@ -241,13 +283,6 @@ class AcceptPriceViewController: UIViewController {
                             aboutTextView.topAnchor == priceList.bottomAnchor
         )
         
-        let awarenessPrice = Double(price) * 0.10
-        let conceptPrice = Double(price) * 0.50
-        let designPrice = Double(price) * 0.40
-        labelsList.text = "Понимание задачи\nЧерновик\nЧистовик"
-        priceList.text = "\(String(lroundf(Float(awarenessPrice))))₽\n\(String(lroundf(Float(conceptPrice))))₽\n\(String(lroundf(Float(designPrice))))₽"
-        priceTitle.text = "Стоимость состоит из"
-        cancelText.text = "Если цена вам не подходит, задача отменится и попадет в архив. Со счета спишется стоимость понимания задачи."
         
         view.addConstraints("H:|[\(titleLabel)]|", "H:|[\(priceLabel)]|", "H:|-20-[\(aboutTextView)]-20-|", "H:|-10-[\(acceptButton)]-10-|", "H:|-10-[\(cancelButton)]-10-|", "H:|-16-[\(cancelText)]-16-|")
         view.addConstraints("V:|-80-[\(titleLabel)]-2-[\(priceLabel)]")

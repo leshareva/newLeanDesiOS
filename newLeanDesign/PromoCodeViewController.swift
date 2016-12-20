@@ -6,16 +6,26 @@ import DigitsKit
 class PromoCodeViewController: UIViewController {
 
     let textField = UIControls.TextField()
-
+    let errorText: UILabel = {
+       let uil = UILabel()
+        uil.text = "Ошибка"
+        uil.translatesAutoresizingMaskIntoConstraints = false
+        uil.textColor = .red
+        return uil
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(textField)
-        view.addConstraints("H:|[\(textField)]|")
-        view.addConstraints("V:|[\(textField)]")
-        view.addConstraints(textField.heightAnchor == 50)
+        view.addSubview(errorText)
+        view.addConstraints("H:|[\(textField)]|", "H:|-10-[\(errorText)]-10-|")
+        view.addConstraints("V:|[\(textField)]-10-[\(errorText)]")
+        view.addConstraints(textField.heightAnchor == 50, errorText.heightAnchor == 40)
         view.backgroundColor = .white
         textField.label.text = "Промо-код"
         textField.field.becomeFirstResponder()
+        errorText.isHidden = true
+        
+        
         
         navigationController?.navigationBar.isTranslucent = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Отправить", style: .plain, target: self, action: #selector(handleSend))
@@ -51,7 +61,8 @@ class PromoCodeViewController: UIViewController {
                 }, withCancel: nil)
   
             } else {
-                print("wrong code")
+                self.errorText.text = "Код не действителен"
+                self.errorText.isHidden = false
             }
         }, withCancel: nil)
     }

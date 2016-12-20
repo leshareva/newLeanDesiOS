@@ -37,6 +37,13 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         return tf
     }()
     
+    let tinkoffLogo: UIImageView = {
+        let iv = UIImageView()
+        iv.image = UIImage(named: "tinkoff")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
     let promoLink = UIControls.SectionCell()
     
     
@@ -60,12 +67,13 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         view.addSubview(amountField)
         view.addSubview(amountLabel)
         view.addSubview(promoLink)
+        view.addSubview(tinkoffLogo)
         
         view.addConstraints("V:|-10-[\(amountLabel)]-5-[\(amountField)]-20-[\(promoLink)]")
-        view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|" , "H:|[\(promoLink)]|")
+        view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|" , "H:|[\(promoLink)]")
         view.addConstraints(amountLabel.heightAnchor == 50, amountField.heightAnchor == 60, promoLink.heightAnchor == 50)
         promoLink.label.text = "Ввести промо-код"
-        
+        view.addConstraints(tinkoffLogo.centerYAnchor == amountField.centerYAnchor, tinkoffLogo.rightAnchor == amountField.rightAnchor - 20, tinkoffLogo.heightAnchor == amountField.heightAnchor - 30, tinkoffLogo.widthAnchor == 85)
     }
     
     
