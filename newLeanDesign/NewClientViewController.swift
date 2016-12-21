@@ -257,7 +257,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
             "company": company
         ]
         
-        Alamofire.request("\(Server.serverUrl)/createFolder",
+        Alamofire.request("\(Server.serverUrl)/newclient",
                           method: .post,
                           parameters: parameters)
         

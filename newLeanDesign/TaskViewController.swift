@@ -173,11 +173,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.detailTextLabel?.textColor = .white
             } else if status == "concept" {
                 cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
+                cell.textLabel?.backgroundColor = .clear
                 cell.backgroundColor = .white
                 cell.textLabel?.textColor = .black
                 cell.detailTextLabel?.textColor = .black
             } else if status == "conceptApprove" {
                 cell.detailTextLabel?.text = "Согласуйте черновик"
+                cell.textLabel?.backgroundColor = .clear
                 cell.notificationsLabel.isHidden = true
                 cell.backgroundColor = LeanColor.acceptColor
                 cell.textLabel?.textColor = .white

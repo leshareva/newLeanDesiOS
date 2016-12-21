@@ -166,7 +166,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
 
                             if status == "awarenessApprove" {
                                 
-                                if sum < (Int(price) / 2) {
+                                if sum < (Int(price)) {
                                     self.showFailAlertView(price: price as Int)
                                 } else {
                                     self.showSuccessAlertView(status: status! as String, time: time! as Int, price: price as Int)
@@ -263,7 +263,10 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
     
     func sendBill(bill: Int) {
         
-        if let uid = Digits.sharedInstance().session()?.userID {
+        
+        guard let uid = Digits.sharedInstance().session()?.userID, let taskId = task?.taskId else {
+            return
+        }
             
             let clientRef = self.ref.child("clients").child(uid)
             clientRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -280,7 +283,10 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                 }
             }, withCancel: nil)
             
-        }
+            
+            
+        
+        
     }
     
     func sendApproveToDB(_ taskId: String, status: String, newstatus: String, time: Int) {

@@ -139,6 +139,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
                     if self.sentMessages.contains(text){
                     } else {
                         self.messages.append(Message(dictionary: dictionary))
+                        print(self.messages)
                     }
                 }
                 
