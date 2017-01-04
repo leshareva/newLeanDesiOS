@@ -11,7 +11,6 @@ import Firebase
 import DigitsKit
 
 class Message: NSObject {
-    var status: String?
     var name: String?
     var photoUrl: String?
     var taskId: String?
@@ -22,17 +21,12 @@ class Message: NSObject {
     var imageUrl: String?
     var imageWidth: NSNumber?
     var imageHeight: NSNumber?
-    var awareness: String?
-    var concept: String?
-    var design: String?
-    var source: String?
     func chatPartnerId() -> String? {
         return fromId == Digits.sharedInstance().session()?.userID ? toId : fromId
     }
     
     init(dictionary: [String: AnyObject]) {
         super.init()
-        status = dictionary["status"] as? String
         name = dictionary["name"] as? String
         photoUrl = dictionary["photoUrl"] as? String
         taskId = dictionary["taskId"] as? String
@@ -43,8 +37,6 @@ class Message: NSObject {
         imageUrl = dictionary["imageUrl"] as? String
         imageWidth = dictionary["imageWidth"] as? NSNumber
         imageHeight = dictionary["imageHeight"] as? NSNumber
-        awareness = dictionary["awareness"] as? String
-        concept = dictionary["concept"] as? String
     }
     
     

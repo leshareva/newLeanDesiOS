@@ -12,7 +12,7 @@ import Swiftstraints
 
 class UserProfileViewController: UIViewController {
     
-    var task: Task? {
+    var userId: String? {
         didSet {
             obserUserInfo()
         }
@@ -90,19 +90,13 @@ class UserProfileViewController: UIViewController {
     }
     
     func obserUserInfo() {
-        
-        guard let taskId = self.task?.taskId else {
-            return
-        }
-        
+
         let ref = FIRDatabase.database().reference()
-        ref.child("tasks").child(taskId).observe(.value, with: { (snapshot) in
-            if let designerId = (snapshot.value as? NSDictionary)!["toId"] as? String {
-                ref.child("designers").child(designerId).observe(.value, with: { (snap) in
+                ref.child("designers").child(userId!).observe(.value, with: { (snap) in
                     if let imageUrl = (snap.value as? NSDictionary)!["photoUrl"] as? String {
                         self.taskImageView.loadImageUsingCashWithUrlString(imageUrl)
                     }
-                    if let name = (snap.value as? NSDictionary)!["name"] as? String {
+                    if let name = (snap.value as? NSDictionary)!["firstName"] as? String {
                         self.nameLabel.text = name
                     }
                     
@@ -115,10 +109,7 @@ class UserProfileViewController: UIViewController {
                         self.phoneLabel.text = phone
                     }
                     
-                    }, withCancel: nil)
-            }
-
-            }, withCancel: nil)
+                    }, withCancel: nil)  
     }
     
 }

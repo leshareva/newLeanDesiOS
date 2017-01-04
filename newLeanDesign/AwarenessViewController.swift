@@ -3,10 +3,15 @@
 import UIKit
 import Swiftstraints
 import Firebase
+import Alamofire
+import DigitsKit
 
 class AwarenessViewController: UIViewController {
     
     var task: Task?
+    
+    
+    
     
     lazy var titleView: UITextView = {
         let tv = UITextView()
@@ -15,7 +20,7 @@ class AwarenessViewController: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
         tv.textAlignment = .center
-        tv.font = UIFont.systemFont(ofSize: 28.0)
+        tv.font = UIFont.systemFont(ofSize: 24.0)
         tv.isEditable = false
         tv.isSelectable = false
         return tv
@@ -37,7 +42,7 @@ class AwarenessViewController: UIViewController {
     lazy var acceptButton: UIButton = {
         let btn = UIButton()
         btn.backgroundColor = UIColor(r: 0, g: 127, b: 255)
-        btn.setTitle("Принимаю", for: .normal)
+        btn.setTitle("Все верно", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.addTarget(self, action: #selector(handleAccept), for: .touchUpInside)
         return btn
@@ -55,10 +60,20 @@ class AwarenessViewController: UIViewController {
         return btn
     }()
     
+    let textlabel: UILabel = {
+        let tv = UILabel()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.text = "Следущим шагом мы назовем стоимость"
+        tv.font = UIFont.systemFont(ofSize: 12.0)
+        tv.textAlignment = .center
+        return tv
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         getAwarenessDetails()
+        setReadStatus()
     }
     
     
@@ -68,12 +83,15 @@ class AwarenessViewController: UIViewController {
         view.addSubview(awarenessText)
         view.addSubview(acceptButton)
         view.addSubview(discussButton)
+        view.addSubview(textlabel)
         
-        view.addConstraints("V:|-40-[\(titleView)]-20-[\(awarenessText)]|", "V:[\(acceptButton)]-10-[\(discussButton)]-16-|")
-        view.addConstraints("H:|-16-[\(titleView)]-16-|","H:|-16-[\(awarenessText)]-16-|", "H:|-16-[\(acceptButton)]-16-|", "H:|-16-[\(discussButton)]-16-|")
-        view.addConstraints(titleView.heightAnchor == 100,
+        view.addConstraints("V:|-40-[\(titleView)]-20-[\(awarenessText)]|", "V:[\(textlabel)]-10-[\(acceptButton)]-10-[\(discussButton)]-16-|")
+        view.addConstraints("H:|-16-[\(titleView)]-16-|","H:|-16-[\(awarenessText)]-16-|", "H:|-16-[\(acceptButton)]-16-|", "H:|-16-[\(discussButton)]-16-|", "H:|-16-[\(textlabel)]-16-|")
+        
+        view.addConstraints(titleView.heightAnchor == 150,
                             acceptButton.heightAnchor == 50,
-                            discussButton.heightAnchor == 50)
+                            discussButton.heightAnchor == 50,
+                            textlabel.heightAnchor == 20)
 
     }
     
@@ -91,11 +109,12 @@ class AwarenessViewController: UIViewController {
         }
     }
     
-    func handleAccept() {
+    
+    func setReadStatus() {
         if let taskId = self.task?.taskId {
             let ref = FIRDatabase.database().reference()
-            let values: [String: AnyObject] = ["status": "price" as AnyObject]
-            ref.child("tasks").child(taskId).updateChildValues(values, withCompletionBlock: { (err, ref) in
+            let values: [String: AnyObject] = ["status": "read" as AnyObject]
+            ref.child("tasks").child(taskId).child("awareness").updateChildValues(values, withCompletionBlock: { (err, ref) in
                 if err != nil {
                     print(err)
                     return
@@ -104,7 +123,82 @@ class AwarenessViewController: UIViewController {
         }
     }
     
+    
+    func handleAccept() {
+        if let taskId = self.task?.taskId {
+            
+            guard let designerId = task?.toId else {
+                return
+            }
+            
+            let ref = FIRDatabase.database().reference()
+            let values: [String: AnyObject] = ["status": "price" as AnyObject]
+            ref.child("tasks").child(taskId).updateChildValues(values, withCompletionBlock: { (err, ref) in
+                if err != nil {
+                    print(err)
+                    return
+                }
+            })
+            
+            
+            //send push to server
+            let parameters: Parameters = [
+                "userId": designerId,
+                "message": "Клиент утвердил понимание задачи",
+                "taskId": taskId
+            ]
+            
+            Alamofire.request("\(Server.serverUrl)/push",
+                method: .post,
+                parameters: parameters).responseJSON { response in
+                    
+                    if let result = response.result.value as? [String: Any] {}
+            }
+            
+            dismiss(animated: true, completion: nil)
+            
+        }
+    }
+    
+    
+    
+    
     func handleDiscuss() {
+        
+        guard let taskId = self.task?.taskId, let designerId = task?.toId else {
+            return
+        }
+        
+        let ref = FIRDatabase.database().reference()
+        let values: [String: AnyObject] = ["status": "discuss" as AnyObject]
+        ref.child("tasks").child(taskId).child("awareness").updateChildValues(values, withCompletionBlock: { (err, ref) in
+            if err != nil {
+                print(err)
+                return
+            }
+        })
+
+        
+        //send push notification
+        let parameters: Parameters = [
+            "userId": designerId,
+            "message": "Клиент хочет обсудить понимание задачи",
+            "taskId": taskId
+        ]
+        
+        Alamofire.request("\(Server.serverUrl)/push",
+            method: .post,
+            parameters: parameters).responseJSON { response in
+                if let result = response.result.value as? [String: Any] {}
+        }
+
+        
+        
+            let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
+            chatController.task = task
+            dismiss(animated: true, completion: nil)
+            navigationController?.pushViewController(chatController, animated: true)
+        
         
     }
 }

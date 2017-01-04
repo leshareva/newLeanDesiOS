@@ -138,7 +138,6 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         ref.observe(.childAdded, with: { (snapshot) in
             
             let taskId = snapshot.key
-            print("archive tasks ", taskId)
             let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
             taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let dictionary = snapshot.value as? [String: AnyObject] {
@@ -164,12 +163,17 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func showControllerForSetting(_ setting: Setting) {
         
-        if setting.name == .Exit {
-            //            handleLogout()
+        
+        if setting.name == .License {
+            let licenseViewController = LicenseViewController()
+            licenseViewController.navigationItem.title = setting.name.rawValue
+            navigationController?.pushViewController(licenseViewController, animated: true)
+            
+        } else if setting.name == .Archive {
             let archiveViewController = ArchiveViewController()
             archiveViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             archiveViewController.navigationItem.title = setting.name.rawValue
-            present(archiveViewController, animated: true, completion: nil)
+            navigationController?.pushViewController(archiveViewController, animated: true)
             
         } else if setting.name == .Settings {
             let myProfileViewController = MyProfileViewController()
@@ -186,6 +190,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
     }
+
     
     
     fileprivate func attemptReloadTable() {

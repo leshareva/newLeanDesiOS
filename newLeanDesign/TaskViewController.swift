@@ -9,10 +9,12 @@
 import Foundation
 import UIKit
 import Firebase
+import FirebaseMessaging
 import AVFoundation
 import DigitsKit
 import Swiftstraints
 import Alamofire
+import Toast_Swift
 
 
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -22,13 +24,18 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     var tasks = [Task]()
     var user: User?
     var tasksDictionary = [String: Task]()
-//    var beepSoundEffect: AVAudioPlayer!
     
+    let waitingAlertView = WaitingAlertView()
 
     let emptyTableView = EmptyTableView()
     let loaderView = UIView()
     let buttonView = ButtonView()
     var timer: Timer?
+    
+    
+    let inboxView = UIView()
+    var userName: String?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +45,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
 
         fetchUser()
+        
         view.addSubview(tableView)
         buttonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openNewTaskView)))
         
@@ -46,20 +54,72 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         setupLogoView()
         setupTableView()
         
+        
+        let refreshedToken = FIRInstanceID.instanceID().token()
+        if (refreshedToken != nil) {
+            if let userId = Digits.sharedInstance().session()?.userID  {
+                let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
+                clientsReference.updateChildValues([refreshedToken!: 1])
+            } else {
+                print("error: No Digits")
+            }
+        }
+        
+        
+        guard let uid = Digits.sharedInstance().session()?.userID else {
+            return
+        }
+        
+        let ref = FIRDatabase.database().reference()
+        ref.child("clients").child(uid).child("inbox").observe(.childAdded, with: {(snapshot) in
+            
+            if snapshot.value != nil {
+                if let bill = (snapshot.value as! NSDictionary)["bill"], let stage = (snapshot.value as! NSDictionary)["stage"] as? String {
+                    self.view.makeToast("Со счета списано \(String(describing: bill)) ₽ за \(stage)" )
+                    ref.child("clients").child(uid).child("inbox").child(snapshot.key).removeValue()
+                }
+                
+                
+            }
+            
+        }, withCancel: nil)
+        
+        
     }
+
+    
+    
     
     func setupLogoView() {
-        let logoView = UIImageView()
-        logoView.frame = CGRect(x: 0, y: 10, width: 30, height: 36)
-        logoView.image = UIImage(named: "support")
-        logoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleOpenSupportChat)))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: logoView)
+        
+        let supportIconView = SupportIconView()
+        supportIconView.frame = CGRect(x: 0, y: 10, width: 30, height: 36)
+        
+        
+        guard let uid = Digits.sharedInstance().session()?.userID else {
+            print("No Digits ID")
+            return
+        }
+        
+        let ref = FIRDatabase.database().reference()
+        ref.child("clients").child(uid).child("unread").observe( .value, with: {(snapshot) in
+            if snapshot.hasChild("support") {
+                supportIconView.bubble.isHidden = false
+            } else {
+                supportIconView.bubble.isHidden = true
+            }
+        }, withCancel: nil)
+        
+        
+        supportIconView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleOpenSupportChat)))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: supportIconView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         self.buttonView.alpha = 0
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -67,60 +127,34 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
             self.buttonView.alpha = 1
-            self.view.layoutIfNeeded()
             }, completion: nil)
-    }
-    
-
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let companyView = CompanyView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
-        companyView.backgroundColor = UIColor.white
-
-        if let uid = Digits.sharedInstance().session()?.userID {
-            let clientsRef = FIRDatabase.database().reference().child("clients")
-            clientsRef.child(uid).observe(.value, with: { (snapshot) in
-                
-                companyView.companyNameLabel.text =  (snapshot.value as? NSDictionary)!["company"] as? String
-                
-                if let sum =  (snapshot.value as? NSDictionary)!["sum"] as? NSNumber {
-                    companyView.priceLabel.text = String(describing: sum) + " ₽"
-                }
-                
-                guard let conceptUrl =  (snapshot.value as? NSDictionary)!["conceptUrl"] as? String else {
-                    return
-                }
-                
-                 UserDefaults.standard.set(conceptUrl, forKey: "folder")
-                
-                companyView.conceptButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
-                
-                }, withCancel: nil)
-            
-            companyView.payButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handlePay)))
-            
+        
+        if UserDefaults.standard.bool(forKey: "WhoReaded") {
+            emptyTableView.tipView.isHidden = true
         } else {
-            print("No DigitsID")
+            UIView.animate(withDuration: 0.5, delay: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                self.emptyTableView.tipView.bubble.backgroundColor = UIColor(r: 123, g: 195, b: 64)
+                self.emptyTableView.tipView.alpha = 1
+            }, completion: nil)
+            
         }
         
-        return companyView
     }
+    
+    
+  
     
     func handlePay() {
         let amountViewController = AmountViewController()
         navigationController?.pushViewController(amountViewController, animated: true)
     }
-    
-    
-    func openConceptFolder() {
-        if let folderUrlFromCash = UserDefaults.standard.string(forKey: "folder") {
-//           UIApplication.shared.openURL(URL(string: folderUrlFromCash)!)
-            let googleDriveViewController = GoogleDriveViewController()
-            googleDriveViewController.folderUrl = folderUrlFromCash
-            navigationController?.pushViewController(googleDriveViewController, animated: true)
-            
-        }
+ 
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let companyView = CompanyView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
+        companyView.backgroundColor = UIColor.white
+        setupCompanyView(companyView: companyView)
         
+        return companyView
     }
     
     
@@ -130,6 +164,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tasks.count == 0 {
+            self.loaderView.isHidden = true
             tableView.separatorStyle = .none
             tableView.backgroundView?.isHidden = false
         } else {
@@ -146,101 +181,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.text
         cell.notificationsLabel.isHidden = true
-        let taskId = task.taskId!
         
-        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-        taskRef.observe(.value, with: { (snapshot) in
-            guard let status = (snapshot.value as? NSDictionary)!["status"] as? String else {
-                return
-            }
-            
-            if status == "none" {
-                cell.detailTextLabel?.text = "Подбираем дизайнера"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "awareness" {
-                cell.detailTextLabel?.text = "Дизайнер принял задачу"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "awarenessApprove" {
-                cell.detailTextLabel?.text = "Согласуйте понимание задачи"
-                cell.notificationsLabel.isHidden = true
-                cell.backgroundColor = LeanColor.acceptColor
-                cell.textLabel?.backgroundColor = .clear
-                cell.textLabel?.textColor = .white
-                cell.detailTextLabel?.textColor = .white
-            } else if status == "price" {
-                cell.detailTextLabel?.text = "Готовим оценку"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "priceApprove" {
-                cell.detailTextLabel?.text = "Согласуйте оцеку"
-                cell.notificationsLabel.isHidden = true
-                cell.backgroundColor = LeanColor.acceptColor
-                cell.textLabel?.backgroundColor = .clear
-                cell.textLabel?.textColor = .white
-                cell.detailTextLabel?.textColor = .white
-            } else if status == "concept" {
-                cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "conceptApprove" {
-                cell.detailTextLabel?.text = "Согласуйте черновик"
-                cell.notificationsLabel.isHidden = true
-                cell.backgroundColor = LeanColor.acceptColor
-                cell.textLabel?.textColor = .white
-                cell.detailTextLabel?.textColor = .white
-            } else if status == "design" {
-                cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "designApprove" {
-                cell.detailTextLabel?.text = "Согласуйте чистовик"
-                cell.notificationsLabel.isHidden = true
-                cell.backgroundColor = LeanColor.acceptColor
-                cell.textLabel?.textColor = .white
-                cell.detailTextLabel?.textColor = .white
-            } else if status == "sources" {
-                cell.detailTextLabel?.text = "Дизайнер готовит исходники"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-                cell.notificationsLabel.isHidden = false
-            } else if status == "done" {
-                cell.detailTextLabel?.text = "Закройте задачу"
-                cell.notificationsLabel.backgroundColor = LeanColor.acceptColor
-                cell.notificationsLabel.isHidden = false
-            }
-            
-            if let taskImageUrl = (snapshot.value as? NSDictionary)!["imageUrl"] as? String {
-                cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
-            } else {
-                cell.taskImageView.image = UIImage.gifWithName("spinner-duo")
-            }
-
-            
-            }, withCancel: nil)
-        
-        
-        let messageRef = FIRDatabase.database().reference().child("task-messages").child(task.taskId!)
-        messageRef.observe(.childAdded, with: { (snapshot) in
-
-            let ref = FIRDatabase.database().reference().child("messages").child(snapshot.key)
-            ref.observeSingleEvent(of: .value, with: { (snapshot) in
-                let status = (snapshot.value as? NSDictionary)!["status"] as? String
-                if status == task.fromId {
-                    cell.notificationsLabel.isHidden = false
-                }
-                }, withCancel: nil)
-            
-            
-            }, withCancel: nil)
-        
+        setupCell(task: task, cell: cell)
+    
         
         return cell
     }
@@ -249,76 +192,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         return true
     }
 
-    
-    let waitingAlertView = WaitingAlertView()
-    
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let task = tasks[indexPath.row]
-        
-        
-        guard let taskId = task.taskId else {
-            return
-        }
-        
-        let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let dictionary = snapshot.value as? [String: AnyObject] else {
-                return
-            }
-            
-            let status = dictionary["status"] as! String
-         
-            
-            if status == "none" {
-                if let keyWindow = UIApplication.shared.keyWindow {
-                    self.waitingAlertView.alpha = 1
-                    self.waitingAlertView.frame = keyWindow.frame
-                    keyWindow.addSubview(self.waitingAlertView)
-                    
-                    self.waitingAlertView.textView.text = "«\(task.text!)»"
-                    let tappy = MyTapGesture(target: self, action: #selector(self.cancelTask(_:)))
-                    tappy.task = task
-                    self.waitingAlertView.cancelButton.addGestureRecognizer(tappy)
-                }
-            } else if status == "awareness" {
-                let waitingAwarenessViewController = WaitingAwarenessViewController()
-                waitingAwarenessViewController.task = task
-                self.navigationController?.pushViewController(waitingAwarenessViewController, animated: true)
-            } else if status == "awarenessApprove"{
-                let awarenessViewController = AwarenessViewController()
-                awarenessViewController.task = task
-                let navController = UINavigationController(rootViewController: awarenessViewController)
-                self.present(navController, animated: true, completion: nil)
-            } else if status == "price" {
-                let priceWaitingViewController = PriceWaitingViewController()
-                self.navigationController?.pushViewController(priceWaitingViewController, animated: true)
-            } else if status == "priceApprove"{
-                let acceptPriceViewController = AcceptPriceViewController()
-                acceptPriceViewController.task = task
-                self.present(acceptPriceViewController, animated: true, completion: nil)
-            } else {
-                self.showChatControllerForUser(task)
-            }
-            
-        }, withCancel: nil)
-              
-        
-    }
-    
-    func cancelTask(_ sender: MyTapGesture) {
-        guard let uid = Digits.sharedInstance().session()?.userID, let taskId = sender.task?.taskId else {
-            return
-        }
-        
-        let ref = FIRDatabase.database().reference()
-        ref.child("active-tasks").child(uid).child(taskId).removeValue { (error, ref) in
-            if error != nil {
-                print(error!)
-                return
-            }
-        }
-        waitingAlertView.alpha = 0
+        openTaskDetail(task: task)
     }
     
     
@@ -327,31 +204,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func openNewTaskView() {
-
-        if let uid = Digits.sharedInstance().session()?.userID {
-            let clientsRef = FIRDatabase.database().reference().child("clients").child(uid)
-            clientsRef.observe(.value, with: { (snapshot) in
-                if let sum = (snapshot.value as? NSDictionary)!["sum"] as? Int {
-                    if sum <= 100 {
-                        let noMoneyViewController = NoMoneyViewController()
-                        noMoneyViewController.sum = sum
-                        let navController = UINavigationController(rootViewController: noMoneyViewController)
-                        self.present(navController, animated: true, completion: nil)
-                    } else {
-                        let newTaskController = NewTaskController()
-                        let navController = UINavigationController(rootViewController: newTaskController)
-                        self.present(navController, animated: true, completion: nil)
-                    }
-                }
-                
-                }, withCancel: nil)
-        }
-        
+        let newTaskController = NewTaskController()
+        let navController = UINavigationController(rootViewController: newTaskController)
+        self.present(navController, animated: true, completion: nil)
+      
     }
     
-
-    
-    
+ 
     lazy var settingsLauncher: SettingsLauncher = {
         let launcher = SettingsLauncher()
         launcher.taskViewController = self
@@ -360,7 +219,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func handleMore() {
         settingsLauncher.showSettings()
-        
     }
     
 
@@ -381,6 +239,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
      func setupTableView() {
+
+        
         let screenSize: CGRect = UIScreen.main.bounds
         tableView.frame         =   CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height - 70);
         tableView.delegate      =   self
@@ -389,7 +249,12 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.register(TaskCell.self, forCellReuseIdentifier: cellId)
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.backgroundView = emptyTableView
+        emptyTableView.tipView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openTip)))
+        
+        
+        
     }
+    
     
     func setupbuttonView() {
         self.view.addSubview(self.buttonView)
@@ -423,6 +288,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         })
        
         observeUserTasks()
+        
     }
     
 
@@ -434,17 +300,17 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             return
         }
         
-        let ref = FIRDatabase.database().reference().child("active-tasks").child(uid)
+        let ref = FIRDatabase.database().reference().child("clients").child(uid).child("activeTasks")
         ref.observe(.childAdded, with: { (snapshot) in
                 let taskId = snapshot.key
                 let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-                taskRef.queryOrdered(byChild: "time").observeSingleEvent(of: .value, with: { (snapshot) in
+                taskRef.queryOrdered(byChild: "time").observe(.value, with: { (snapshot) in
                     
                         if let dictionary = snapshot.value as? [String: AnyObject] {
                             let task = Task(dictionary: dictionary)
                             self.tasksDictionary[taskId] = task
                         }
-                    
+                  
                     self.attemptReloadTable()
                     self.loaderView.isHidden = true
                     }, withCancel: nil)
@@ -456,6 +322,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.attemptReloadTable()
             self.loaderView.isHidden = true
         }, withCancel: nil)
+        
+        
+        
         
     }
     
@@ -470,9 +339,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func handleReloadTable() {
         self.tasks = Array(self.tasksDictionary.values)
-//        self.tasks.sort(by: { (task1, task2) -> Bool in
-//            return (task1.timestamp?.intValue)! > (task2.timestamp?.intValue)!
-//        })
         //this will crash because of background thread, so lets call this on dispatch_async main thread
         DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
@@ -486,9 +352,14 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationController?.pushViewController(chatController, animated: true)
     }
     
+    
     func showControllerForSetting(_ setting: Setting) {
-        
-        if setting.name == .Archive {
+        if setting.name == .License {
+            let licenseViewController = LicenseViewController()
+            licenseViewController.navigationItem.title = setting.name.rawValue
+            navigationController?.pushViewController(licenseViewController, animated: true)
+            
+        } else if setting.name == .Archive {
             let archiveViewController = ArchiveViewController()
             archiveViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             archiveViewController.navigationItem.title = setting.name.rawValue
@@ -507,13 +378,11 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
             navigationController?.pushViewController(dummySettingsViewController, animated: true)
         }
-        
     }
     
     
     func handleOpenSupportChat() {
         let supportViewController = SupportViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        
         navigationController?.pushViewController(supportViewController, animated: true)
     }
     

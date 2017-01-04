@@ -16,13 +16,8 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
 
     func handleSelectAttachImageView() {
         let pickerController = DKImagePickerController()
-        
-        
+
         pickerController.didSelectAssets = { (assets: [DKAsset]) in
-            print("didSelectAssets")
-            print(assets)
-            
-            
             for each in assets {
                 each.fetchOriginalImage(false) {
                     (image: UIImage?, info: [AnyHashable: Any]?) in
@@ -48,65 +43,28 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
             return
         }
 
-        let ref = FIRDatabase.database().reference().child("tasks")
-        let postRef = ref.childByAutoId()
         let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
-        let taskId = postRef.key
-        let toId = "designStudio"
         let phone = Digits.sharedInstance().session()?.phoneNumber
         
-        let values : [String : AnyObject] = ["fromId": fromId as AnyObject, "text": taskText as AnyObject, "taskId": taskId as AnyObject, "status": "none" as AnyObject, "toId": toId as AnyObject, "price": 0 as AnyObject, "phone": phone! as AnyObject, "rate": 0.5 as AnyObject, "timestamp": timestamp]
-        
-        postRef.setValue(values)
-        postRef.updateChildValues(values) { (error, ref) in
-            if error != nil {
-                print(error!)
-                return
-            }
-            
-            let taskId = postRef.key
-
-            let activeTaskRef = FIRDatabase.database().reference().child("active-tasks").child(fromId)
-            activeTaskRef.updateChildValues([taskId: 1])
-            
-        }
-        
-        
-        let messageRef = FIRDatabase.database().reference().child("messages")
-        let messageРostRef = messageRef.childByAutoId()
-        let messageValues = ["text": taskText, "taskId": taskId, "fromId": fromId, "toId": toId]
-        messageРostRef.updateChildValues(messageValues) { (error, ref) in
-            if error != nil {
-                print(error!)
-                return
-            }
-            
-        }
-        
-        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
-        let messageID = messageРostRef.key
-        userMessagesRef.updateChildValues([messageID: 1])
-        
-        sendPush(uid: fromId, taskId: taskId)
-        
-        view.endEditing(true)
-        self.sendTaskImageToChat(fromId, taskId: taskId)
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func sendPush(uid: String, taskId: String) {
-        
         let parameters: Parameters = [
-            "clientId": uid,
-            "taskId": taskId
+            "fromId": fromId as AnyObject, "text": taskText as AnyObject, "status": "none" as AnyObject, "toId": "designStudio" as AnyObject, "price": 0 as AnyObject, "phone": phone! as AnyObject, "rate": 0.5 as AnyObject, "timestamp": timestamp
         ]
         
         Alamofire.request("\(Server.serverUrl)/newTask",
             method: .post,
-            parameters: parameters)
+            parameters: parameters).responseJSON { response in
+
+                if let result = response.result.value as? [String: Any] {
+                    let taskId = result["taskId"]
+                    self.sendTaskImageToChat(fromId, taskId: taskId! as! String)
+                }
+        }
         
+        view.endEditing(true)
+        dismiss(animated: true, completion: nil)
     }
     
+
     func sendTaskImageToChat(_ fromId: String, taskId: String) {
 //        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
         let image = attachImageView.image
@@ -137,6 +95,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         sendMessageWithProperties(properties, taskId: taskId)
     }
     
+    
     fileprivate func sendMessageWithProperties(_ properties: [String: AnyObject], taskId: String) {
 //        let taskId = task?.taskId as String!
         let ref = FIRDatabase.database().reference().child("messages")
@@ -162,5 +121,19 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         userMessagesRef.updateChildValues([messageID: 1])
         
     }
+    
+    
+   
+    func handleAboutPrice() {
+        let howMuchController = HowMuchViewController()
+        navigationController?.pushViewController(howMuchController, animated: true)
+    }
+    
+    func handleAboutTasks() {
+        let howTaskingViewController = HowTaskingViewController()
+        navigationController?.pushViewController(howTaskingViewController, animated: true)
+    }
+    
+    
  
 }

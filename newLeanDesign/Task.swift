@@ -10,7 +10,7 @@ import UIKit
 import DigitsKit
 
 class Task: NSObject {
-    var awareness: AnyObject?
+    var awareness: [String : String]?
     var concept: AnyObject?
     var design: AnyObject?
     var sources: AnyObject?
@@ -31,7 +31,7 @@ class Task: NSObject {
     var toId: String?
     var time: NSNumber?
     var timestamp: NSNumber?
-    
+    var unread: [String : AnyObject]?
     func chatPartnerId() -> String? {
         return fromId == Digits.sharedInstance().session()?.userID ? toId : fromId
     }
@@ -39,7 +39,7 @@ class Task: NSObject {
     init(dictionary: [String: AnyObject]) {
         super.init()
         
-        awareness = dictionary["awareness"] as AnyObject
+        awareness = dictionary["awareness"] as? [String : String]
         concept = dictionary["concept"] as AnyObject
         design = dictionary["design"] as AnyObject
         sources = dictionary["sources"] as AnyObject
@@ -59,6 +59,7 @@ class Task: NSObject {
         toId = dictionary["toId"] as? String
         time = dictionary["time"] as? NSNumber
         timestamp = dictionary["timestamp"] as? NSNumber
+        unread = dictionary["unread"] as? [String : AnyObject]
     }
     
 }

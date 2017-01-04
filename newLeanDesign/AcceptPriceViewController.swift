@@ -9,6 +9,9 @@
 import UIKit
 import Firebase
 import Swiftstraints
+import Alamofire
+import DigitsKit
+import Toast_Swift
 
 class AcceptPriceViewController: UIViewController {
 
@@ -89,7 +92,7 @@ class AcceptPriceViewController: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .white
         btn.setTitleColor( .black, for: .normal)
-        btn.setTitle("Цена не подходит", for: .normal)
+        btn.setTitle("Отменить задачу", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.lightGray.cgColor
@@ -111,6 +114,7 @@ class AcceptPriceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(handleDismiss))
         setupView()
     }
     
@@ -122,124 +126,157 @@ class AcceptPriceViewController: UIViewController {
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
     }
     
+    
     func handleCancel() {
-        guard let taskId = task?.taskId else {
+        
+        let alert = UIAlertController(title: "Отменить задачу?", message: "Задача будет помещена в архив. С вашего счета мы ничего не спишем", preferredStyle: UIAlertControllerStyle.alert)
+        
+        alert.addAction(UIAlertAction(title: "Отменить", style: .default, handler: { (action: UIAlertAction!) in
+            self.navigationController?.popToRootViewController(animated: true)
+            self.sendRejectTask()
+            
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Назад", style: .default, handler: { (action: UIAlertAction!) in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+
+        
+        
+    }
+    
+    func handleDismiss() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func sendRejectTask() {
+        guard let taskId = task?.taskId, let userId = Digits.sharedInstance().session()?.userID, let designerId = task?.toId else {
             return
         }
-        let ref = FIRDatabase.database().reference()
-        let value: [String: AnyObject] = ["status": "reject" as AnyObject]
-        ref.child("tasks").child(taskId).updateChildValues(value, withCompletionBlock: { (error, ref) in
-            if error != nil {
-                print(error as! NSError)
-                return
-            }
-        })
-
+        
+        let parameters: Parameters = [
+            "userId": userId,
+            "taskId": taskId,
+            "subject": "reject"
+        ]
+        
+        Alamofire.request("\(Server.serverUrl)/tasks",
+            method: .post,
+            parameters: parameters)
+        
         self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
+        
+        TaskMethods.sendPush(message: "Клиент отменил задачу", toId: designerId, taskId: taskId)
+        
+        
     }
     
     
     
     func handleAccept() {
-        guard let taskId = task?.taskId else {
+
+        guard let taskId = task?.taskId, let price = task?.price, let userId = Digits.sharedInstance().session()?.userID, let designerId = task?.toId else {
             return
         }
-        let ref = FIRDatabase.database().reference()
-        let taskRef = ref.child("tasks").child(taskId)
         
-        taskRef.observeSingleEvent(of: .value, with: {(snapshot) in
-            guard let time = (snapshot.value as! NSDictionary)["time"] as? Int else {
-                return
-            }
-            print(time)
-            var days: Int?
-            if Int(time) <= 3 {
-                days = 1
-            } else if Int(time) > 3 && Int(time) <= 6 {
-                days = 2
-            } else if Int(time) > 6 && Int(time) <= 9 {
-                days = 3
-            }
+        let ref = FIRDatabase.database().reference()
+        ref.child("clients").child(userId).observeSingleEvent(of: .value, with: {(snapshot) in
+            if let sum = (snapshot.value as! NSDictionary)["sum"] as? Int {
+                if sum < Int(price) {
+                    let noMoneyViewController = NoMoneyViewController()
+                    noMoneyViewController.sum = sum
+                    noMoneyViewController.price = price as Int!
+                    self.navigationController?.pushViewController(noMoneyViewController, animated: true)
+                } else {
+                    let parameters: Parameters = [
+                        "taskId": taskId
+                    ]
+                    
+                    Alamofire.request("\(Server.serverUrl)/workdone",
+                        method: .post,
+                        parameters: parameters).responseJSON { response in
+                            
+                            if let result = response.result.value as? [String: Any] {
+                               print(result)
+                                self.view.makeToast("This is a piece of toast")
+                            }
+                    }
 
-            let startDate = NSNumber(value: Int(Date().timeIntervalSince1970))
-            let calculatedDate = (Calendar.current as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: days!, to: Date(), options: NSCalendar.Options.init(rawValue: 0))
-            
-            let endDate = NSNumber(value: Int(calculatedDate!.timeIntervalSince1970))
-            
-            
-            let values : [String: AnyObject] = ["status": "concept" as AnyObject, "start": startDate as AnyObject, "end": endDate as AnyObject]
-            
-            taskRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
-                if error != nil {
-                    print(error!)
-                    return
+                    
+                    TaskMethods.sendPush(message: "Клиент согласовал понимание задачи", toId: designerId, taskId: taskId)
+                    self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
                 }
-            })
-            
-            guard let price = self.task?.price else {
-                return
             }
-            
-            let bill = Double(price) * Double(0.1)
-            let conceptViewController = ConceptViewController()
-            conceptViewController.sendBill(bill: Int(bill))
-            
-            self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
-  
         }, withCancel: nil)
+        
+        
 
     }
-  
     
     
     func setupView() {
         view.addSubview(titleLabel)
         view.addSubview(priceLabel)
-        view.addSubview(aboutTextView)
-
+        
+        
         view.addSubview(acceptButton)
         view.addSubview(cancelButton)
         view.addSubview(cancelText)
         
-        guard let price = task?.price else {
+        
+        guard let taskId = task?.taskId else {
             return
         }
-        
-        aboutTextView.text = "Стоимость задачи определяется исходя из трудозатрат дизайнера"
-        priceLabel.text = "\(String(describing: lroundf(Float(price)))) ₽"
+        let ref = FIRDatabase.database().reference()
+        let taskRef = ref.child("tasks").child(taskId)
+        taskRef.observeSingleEvent(of: .value, with: {(snapshot) in
+            guard let price = (snapshot.value as! NSDictionary)["price"] as? Int else {
+                return
+            }
+            
+            self.priceLabel.text = "\(String(describing: lroundf(Float(price)))) ₽"
+            
+            
+            let awarenessPrice = Double(price) * 0.10
+            let conceptPrice = Double(price) * 0.50
+            let designPrice = Double(price) * 0.40
+            self.labelsList.text = "Понимание задачи\nЧерновик\nЧистовик"
+            self.priceList.text = "\(String(lroundf(Float(awarenessPrice))))₽\n\(String(lroundf(Float(conceptPrice))))₽\n\(String(lroundf(Float(designPrice))))₽"
+            self.priceTitle.text = "Деньги снимаются поэтапно"
+            self.cancelText.text = "Если цена вам не подходит, задача отменится и попадет в архив."
+            
+        })
         
         view.addSubview(labelsList)
         view.addSubview(priceList)
         view.addSubview(priceTitle)
-
+        
         view.addConstraints(
-                            priceTitle.topAnchor == priceLabel.bottomAnchor + 40,
-                            priceTitle.leftAnchor == view.leftAnchor + 20,
-                            priceTitle.widthAnchor == view.widthAnchor - 20,
-                            priceTitle.heightAnchor == 30,
-                            labelsList.topAnchor == priceTitle.bottomAnchor,
-                            labelsList.heightAnchor == 90,
-                            labelsList.widthAnchor == view.widthAnchor / 2,
-                            labelsList.leftAnchor == view.leftAnchor + 20,
-                            priceList.topAnchor == labelsList.topAnchor,
-                            priceList.widthAnchor == view.widthAnchor / 2,
-                            priceList.leftAnchor == labelsList.rightAnchor + 20,
-                            priceList.heightAnchor == 90,
-                            aboutTextView.topAnchor == priceList.bottomAnchor
+            priceTitle.topAnchor == priceLabel.bottomAnchor + 40,
+            priceTitle.leftAnchor == view.leftAnchor + 20,
+            priceTitle.widthAnchor == view.widthAnchor - 20,
+            priceTitle.heightAnchor == 30,
+            labelsList.topAnchor == priceTitle.bottomAnchor,
+            labelsList.heightAnchor == 90,
+            labelsList.widthAnchor == view.widthAnchor / 2,
+            labelsList.leftAnchor == view.leftAnchor + 20,
+            priceList.topAnchor == labelsList.topAnchor,
+            priceList.widthAnchor == view.widthAnchor / 2,
+            priceList.leftAnchor == labelsList.rightAnchor + 20,
+            priceList.heightAnchor == 90
         )
         
-        let awarenessPrice = Double(price) * 0.10
-        let conceptPrice = Double(price) * 0.50
-        let designPrice = Double(price) * 0.40
-        labelsList.text = "Понимание задачи\nЧерновик\nЧистовик"
-        priceList.text = "\(String(lroundf(Float(awarenessPrice))))₽\n\(String(lroundf(Float(conceptPrice))))₽\n\(String(lroundf(Float(designPrice))))₽"
-        priceTitle.text = "Стоимость состоит из"
-        cancelText.text = "Если цена вам не подходит, задача отменится и попадет в архив. Со счета спишется стоимость понимания задачи."
         
-        view.addConstraints("H:|[\(titleLabel)]|", "H:|[\(priceLabel)]|", "H:|-20-[\(aboutTextView)]-20-|", "H:|-10-[\(acceptButton)]-10-|", "H:|-10-[\(cancelButton)]-10-|", "H:|-16-[\(cancelText)]-16-|")
+        view.addConstraints("H:|[\(titleLabel)]|", "H:|[\(priceLabel)]|", "H:|-10-[\(acceptButton)]-10-|", "H:|-10-[\(cancelButton)]-10-|", "H:|-16-[\(cancelText)]-16-|")
         view.addConstraints("V:|-80-[\(titleLabel)]-2-[\(priceLabel)]")
         view.addConstraints("V:[\(acceptButton)]-10-[\(cancelButton)]-10-[\(cancelText)]-10-|")
-        view.addConstraints(titleLabel.heightAnchor == 40, priceLabel.heightAnchor == 80, aboutTextView.heightAnchor == 80,acceptButton.heightAnchor == 50, cancelButton.heightAnchor == 50, cancelText.heightAnchor == 60)
+        view.addConstraints(titleLabel.heightAnchor == 40, priceLabel.heightAnchor == 80, acceptButton.heightAnchor == 50, cancelButton.heightAnchor == 50, cancelText.heightAnchor == 60)
     }
    
+    
+   
+    
 }
+

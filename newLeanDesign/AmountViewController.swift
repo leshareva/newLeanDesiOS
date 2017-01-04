@@ -9,6 +9,7 @@
 import UIKit
 import Swiftstraints
 import SafariServices
+import Alamofire
 
 class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewControllerDelegate, UITextFieldDelegate {
 
@@ -37,8 +38,16 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         return tf
     }()
     
-    let promoLink = UIControls.SectionCell()
+    let tinkoffLogo: UIImageView = {
+        let iv = UIImageView()
+        iv.image = UIImage(named: "tinkoff")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
     
+    
+    let promoLink = UIControls.SectionCell()
+    let billLink = UIControls.SectionCell()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,10 +56,12 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         amountField.textColor = .lightGray
         
         amountField.becomeFirstResponder()
-        
+     
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Оплатить", style: .plain, target: self, action: #selector(handlePay));
         
         promoLink.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handlePromoLink)))
+        billLink.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleBillLink)))
+        
        setupView()
     }
 
@@ -60,14 +71,19 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         view.addSubview(amountField)
         view.addSubview(amountLabel)
         view.addSubview(promoLink)
+        view.addSubview(tinkoffLogo)
+        view.addSubview(billLink)
         
         view.addConstraints("V:|-10-[\(amountLabel)]-5-[\(amountField)]-20-[\(promoLink)]")
-        view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|" , "H:|[\(promoLink)]|")
-        view.addConstraints(amountLabel.heightAnchor == 50, amountField.heightAnchor == 60, promoLink.heightAnchor == 50)
+        view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|" , "H:|[\(promoLink)]-6-[\(billLink)]")
+        view.addConstraints(amountLabel.heightAnchor == 50, amountField.heightAnchor == 60, promoLink.heightAnchor == 50, billLink.heightAnchor == 50)
         promoLink.label.text = "Ввести промо-код"
-        
+        billLink.label.text = "Выставить счет"
+        view.addConstraints(tinkoffLogo.centerYAnchor == amountField.centerYAnchor, tinkoffLogo.rightAnchor == amountField.rightAnchor - 20, tinkoffLogo.heightAnchor == amountField.heightAnchor - 30, tinkoffLogo.widthAnchor == 85,
+                            billLink.topAnchor == promoLink.topAnchor,
+                            billLink.widthAnchor == (view.widthAnchor / 2) - 2,
+                            promoLink.widthAnchor == (view.widthAnchor / 2) - 4)
     }
-    
     
     func handlePromoLink() {
         let promoCodeViewController = PromoCodeViewController()
@@ -84,6 +100,13 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         self.navigationController?.pushViewController(tinkoffViewController, animated: true)
     }
 
+    
+    func handleBillLink() {
+        let payByBillController = PayByBillController()
+        self.navigationController?.pushViewController(payByBillController, animated: true)
+        
+    }
+    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == .lightGray {
@@ -103,6 +126,10 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
             textView.text = "Введите сумму в рублях"
             textView.textColor = UIColor.lightGray
         }
+    }
+    
+    func handleCancel() {
+        self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
 }

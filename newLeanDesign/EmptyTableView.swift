@@ -37,11 +37,19 @@ class EmptyTableView: UIView {
         return tl
     }()
     
+    let tipView: TipView = {
+        let tip = TipView()
+        tip.translatesAutoresizingMaskIntoConstraints = false
+        tip.label.text = "Что за дизайнеры?"
+        return tip
+    }()
+    
     func setupView() {
         self.backgroundColor = UIColor.white
-        
+        tipView.alpha = 0
         self.addSubview(emptyImageView)
         self.addSubview(emptyTextView)
+        self.addSubview(tipView)
         self.addConstraints(emptyImageView.centerYAnchor == self.centerYAnchor + 20,
                             emptyImageView.centerXAnchor == self.centerXAnchor,
                             emptyImageView.heightAnchor == 150,
@@ -49,7 +57,20 @@ class EmptyTableView: UIView {
                             emptyTextView.centerXAnchor == self.centerXAnchor,
                             emptyTextView.topAnchor == emptyImageView.bottomAnchor - 10,
                             emptyTextView.widthAnchor == self.widthAnchor - 40,
-                            emptyTextView.heightAnchor == 60)
+                            emptyTextView.heightAnchor == 30,
+                            tipView.centerXAnchor == self.centerXAnchor,
+                            tipView.heightAnchor == 40,
+                            tipView.widthAnchor == self.widthAnchor - 62,
+                            tipView.topAnchor == emptyTextView.bottomAnchor + 16
+                            )
+        
+        
+        
+        
+        
         
     }
+    
+  
+    
 }

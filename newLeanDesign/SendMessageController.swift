@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import DigitsKit
+import Alamofire
 
 class SendMessageController: UIViewController {
     
@@ -22,25 +23,44 @@ class SendMessageController: UIViewController {
         
         let childRef = ref.childByAutoId()
         let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
-        let toId = "uzpW1sRJa0MNcU0mwL2pvLmHCsQ2"
         
-        var values: [String: AnyObject] = ["timestamp": timestamp, "fromId": fromId as AnyObject]
-        
-        properties.forEach({values[$0] = $1})
-        
-        childRef.updateChildValues(values) { (error, ref) in
-            if error != nil {
-                print(error as! NSError)
-                return
+        FIRDatabase.database().reference().child("admin").observeSingleEvent(of: .childAdded, with: {(snapshot) in
+            let toId = snapshot.key
+            
+            var values: [String: AnyObject] = ["timestamp": timestamp, "fromId": fromId as AnyObject]
+            
+            properties.forEach({values[$0] = $1})
+            
+            childRef.updateChildValues(values) { (error, ref) in
+                if error != nil {
+                    print(error as! NSError)
+                    return
+                }
             }
-        }
+            
+            let userMessagesRef = FIRDatabase.database().reference().child("support-messages").child(fromId).child(toId)
+            let messageID = childRef.key
+            userMessagesRef.updateChildValues([messageID: 1])
+            
+            let recipientUserMessagesRef = FIRDatabase.database().reference().child("support-messages").child(toId).child(fromId)
+            recipientUserMessagesRef.updateChildValues([messageID: 1])
+            
+            var message = "";
+            if (properties["text"] != nil) {
+                message = properties["text"] as! String
+            } else {
+                message = "Новое сообщение"
+            }
+            
+            //send Push notification
+            TaskMethods.sendPush(message: message, toId: String(toId), taskId: nil)
+            
+            
+        }, withCancel: nil)
         
-        let userMessagesRef = FIRDatabase.database().reference().child("support-messages").child(fromId).child(toId)
-        let messageID = childRef.key
-        userMessagesRef.updateChildValues([messageID: 1])
         
-        let recipientUserMessagesRef = FIRDatabase.database().reference().child("support-messages").child(toId).child(fromId)
-        recipientUserMessagesRef.updateChildValues([messageID: 1])
+        
+        
         
     }
     
@@ -51,9 +71,6 @@ class SendMessageController: UIViewController {
         let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
         
         let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-        
-      
-
         
         taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let toId = (snapshot.value as? NSDictionary)?["toId"] as? String else {
@@ -93,31 +110,20 @@ class SendMessageController: UIViewController {
                     let messageID = childRef.key
                     userMessagesRef.updateChildValues([messageID: 1])
 
-                    let notificationRef = FIRDatabase.database().reference().child("notifications").child(toId).childByAutoId()
-                    notificationRef.updateChildValues(["taskId": taskId])
+                    let notificationRef = FIRDatabase.database().reference().child("designers").child(toId).child("unread").child(taskId)
+                    notificationRef.updateChildValues([messageID: 1])
                     
                     
-                    let tokenRef = FIRDatabase.database().reference().child("user-token").child(toId)
-                    tokenRef.observe(.childAdded, with: { (snapshot) in
-                        
-                        let token = snapshot.key
-                        print(token)
-                        let pushRef = FIRDatabase.database().reference().child("push").childByAutoId()
-                        let pushValues: [String: AnyObject] = ["token": token as AnyObject, "designerId": toId as AnyObject, "taskId": taskId as AnyObject]
-                        pushRef.updateChildValues(pushValues) { (error, ref) in
-                            if error != nil {
-                                print(error as! NSError)
-                                return
-                            }
-                        }
-                        
-                        
-                    }, withCancel: nil)
+                    var message = "";
+                    if (properties["text"] != nil) {
+                        message = properties["text"] as! String
+                    } else {
+                        message = "Новое сообщение"
+                    }
                     
-                    
-                    
-                    
-                    
+                    //send Push notification
+                   TaskMethods.sendPush(message: message, toId: toId, taskId: taskId)
+  
                    
                 }
                 
@@ -127,6 +133,8 @@ class SendMessageController: UIViewController {
         
         
     }
+    
+    
  
     
 }

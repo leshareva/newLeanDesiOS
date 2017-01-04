@@ -60,8 +60,9 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         super.viewDidLoad()
         
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
-        userView.isUserInteractionEnabled = true
-        userView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
+        userView.profilePic.isUserInteractionEnabled = true
+        
+        userView.profilePic.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
         setupView()
         loadUserInfo()
         
@@ -106,16 +107,9 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
     
     
     func handleLogout() {
-        
-        Digits.sharedInstance().logOut()
-        
-        do {
-            try FIRAuth.auth()?.signOut()
-        } catch let logoutError {
-            print(logoutError)
-        }
+        UserMethods.signOut()
         let loginController = LoginController()
-        self.present(loginController, animated: true, completion: nil)
+        self.present(loginController, animated: true)
     }
     
     
@@ -144,6 +138,8 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         view.addSubview(saveButton)
         view.addSubview(logoutButton)
         view.addSubview(userView)
+        logoutButton.isHidden = true
+        
         
         view.addConstraints("V:|-20-[\(closeButton)]", "V:|-20-[\(saveButton)]")
         view.addConstraints("H:|-8-[\(closeButton)]", "H:[\(saveButton)]-8-|")

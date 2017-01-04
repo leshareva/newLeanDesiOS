@@ -250,14 +250,13 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         
         let parameters: Parameters = [
             "toEmail": email,
-            "subject": "Добро пожаловать в Лин",
             "mailKind": "welcome",
             "name": name,
             "clientId": userId,
             "company": company
         ]
         
-        Alamofire.request("\(Server.serverUrl)/createFolder",
+        Alamofire.request("\(Server.serverUrl)/newclient",
                           method: .post,
                           parameters: parameters)
         

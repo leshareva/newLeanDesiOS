@@ -19,6 +19,14 @@ class ChatInputView: UIView, UITextFieldDelegate {
         }
     }
     
+    var supportViewController: SupportViewController? {
+        didSet {
+            sendButton.addTarget(supportViewController, action: #selector(SupportViewController.handleSend), for: .touchUpInside)
+            
+            uploadImage.addGestureRecognizer(UITapGestureRecognizer(target: supportViewController, action: #selector(SupportViewController.handleUploadTap)))
+        }
+    }
+    
     let sendButton: UIButton = {
         let btn = UIButton()
         btn.setTitleColor(.black, for: .normal)

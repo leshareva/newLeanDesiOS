@@ -26,27 +26,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         Fabric.with([Digits.self, Crashlytics.self])
-
+        FIRApp.configure()
+        Fabric.with([Digits.self])
         
         Flurry.setDebugLogEnabled(true);
         Flurry.startSession("ZXPZJMMTYDFZRBRHW339");
         
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.makeKeyAndVisible()
-        
-        window?.rootViewController = UINavigationController(rootViewController: StartViewController())
-        
-//        var rootView: StartViewController = StartViewController()
-//        
-//        if let window = self.window{
-//            window.rootViewController = rootView
-//        }
-        
-        
-        UINavigationBar.appearance().barTintColor = UIColor(r: 0, g: 127, b: 255)
-        UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.lightContent, animated: true)
-        
-        UINavigationBar.appearance().tintColor = UIColor.white
         
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.tokenRefreshNotification(_:)), name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
         
@@ -54,17 +39,68 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notificationTypes: UIUserNotificationType = [UIUserNotificationType.alert, UIUserNotificationType.badge, UIUserNotificationType.sound]
         let notificationSettings = UIUserNotificationSettings(types: notificationTypes, categories: nil)
         
-        FIRApp.configure()
-        Fabric.with([Digits.self])
         
         application.registerForRemoteNotifications()
         application.registerUserNotificationSettings(notificationSettings)
         
+        
+        if !UserDefaults.standard.bool(forKey: "HowMuchReaded") {
+            UserDefaults.standard.set(false, forKey: "HowMuchReaded")
+        }
+        
+        if !UserDefaults.standard.bool(forKey: "WhoReaded") {
+            UserDefaults.standard.set(false, forKey: "WhoReaded")
+        }
+        
+        if !UserDefaults.standard.bool(forKey: "HowTaskingReaded") {
+            UserDefaults.standard.set(false, forKey: "HowTaskingReaded")
+        }
+        
+        if UserDefaults.standard.integer(forKey: "sum") == nil {
+            UserDefaults.standard.set(0, forKey: "sum")
+        }
+        
+        
+        
+        let userDefaults = UserDefaults.standard
+        if userDefaults.value(forKey: "appFirstTimeOpend") == nil {
+            
+            //if app is first time opened then it will be nil
+            userDefaults.setValue(true, forKey: "appFirstTimeOpend")
+            // signOut from FIRAuth
+            do {
+                Digits.sharedInstance().logOut()
+                try FIRAuth.auth()?.signOut()
+            }catch {
+                
+            }
+            
+            
+            // go to beginning of app
+            startApp()
 
+        } else {
+            //go to where you want
+            startApp()
+        }
+    
+        
         // Override point for customization after application launch.
         return true
     }
     
+    
+    func startApp() {
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        
+        window?.rootViewController = UINavigationController(rootViewController: StartViewController())
+        
+        UINavigationBar.appearance().barTintColor = UIColor(r: 0, g: 127, b: 255)
+        UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.lightContent, animated: true)
+        
+        UINavigationBar.appearance().tintColor = UIColor.white
+    }
 
     
     // Handle refresh notification token
@@ -125,13 +161,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication)
     {
         connectToFcm()
-        let refreshedToken = FIRInstanceID.instanceID().token()
-        if (refreshedToken != nil) {
-            if let userId = Digits.sharedInstance().session()?.userID  {
-                let clientsReference = FIRDatabase.database().reference().child("user-token").child(userId)
-                clientsReference.updateChildValues([refreshedToken!: 1])
-            }
-        }
         application.applicationIconBadgeNumber = 0;
     }
 
@@ -152,22 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("App already open")
         } else {
             print("App opened from Notification")
-            
-            if let taskId = userInfo["gcm.notification.taskId"] as? String {
-                print(taskId)
-   //             let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
-                
-//                let taskViewController = TaskViewController()
-//                
-//                let dictionary: [String: AnyObject] = ["taskId": taskId]
-//                let task = Task()
-//                
-//                task.setValuesForKeysWithDictionary(dictionary)
-//                taskViewController.showChatControllerForUser(task)
-            }
-            
-            
-            
+            window?.rootViewController = UINavigationController(rootViewController: StartViewController())
         }
         
         

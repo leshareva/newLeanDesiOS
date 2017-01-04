@@ -20,7 +20,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     
     var task: Task? {
         didSet {
-            checkTaskStatus()
+            observeMessages()
         }
     }
     
@@ -52,60 +52,19 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         setupNavbarWithUser()
         setupStepsView()
         setupKeyboardObservers()
+        deleteUnread()
     }
     
-    
-    func checkTaskStatus() {
-        guard let taskId = self.task?.taskId else {
+
+    func deleteUnread() {
+        guard let taskId = self.task?.taskId, let userId = Digits.sharedInstance().session()?.userID else {
             return
         }
-        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-        taskRef.observe(.value, with: { (snapshot) in
-            let status = (snapshot.value! as! NSDictionary)["status"]  as! String
-            if status == "none" {
-                self.inputContainerView.isHidden = true
-            } else if status == "awareness" {
-//                UserDefaults.standard.removeObject(forKey: taskId)
-                self.setupBannerView(taskId: taskId)
-            } else if status == "reject" {
-                self.inputContainerView.isHidden = true
-            } else {
-                self.observeMessages()
-            }
-        }, withCancel: nil)
+        
+        let unreadRef = FIRDatabase.database().reference().child("clients").child(userId).child("unread").child(taskId)
+        unreadRef.removeValue()
         
     }
-    
-    let chatBannerView = ChatBannerView()
-    
-    func setupBannerView(taskId: String) {
-        if !UserDefaults.standard.bool(forKey: taskId) {
-            UserDefaults.standard.set(false, forKey: taskId)
-        }
-        if UserDefaults.standard.bool(forKey: taskId) {
-            self.observeMessages()
-            self.inputContainerView.isHidden = false
-        } else {
-            let theHeight = self.view.frame.size.height
-            chatBannerView.frame = CGRect(x: 0, y: theHeight - 150, width: self.view.frame.size.width, height: 150)
-            self.view.addSubview(chatBannerView)
-            chatBannerView.startChatButton.addTarget(self, action: #selector(self.skipBanner), for: .touchUpInside)
-            self.inputContainerView.isHidden = true
-           
-        }
-    }
-    
-    
-    func skipBanner() {
-        guard let taskId = task?.taskId else {
-            return
-        }
-        UserDefaults.standard.set(true, forKey: taskId)
-        self.chatBannerView.isHidden = true
-        self.inputContainerView.isHidden = false
-        self.observeMessages()
-    }
-    
     
     func observeMessages() {
         guard let taskId = self.task?.taskId else {
@@ -160,223 +119,33 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }
     
 
-    
-    
-    
-    func setupStepsView() {
 
-        let containerView = StepsView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 30))
-        view.addSubview(containerView)
-        
-        let buttonView = ButtonView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 50))
-        view.addSubview(buttonView)
-        
-        let taskId = task?.taskId
-        let ref = FIRDatabase.database().reference().child("tasks").child(taskId!)
-        ref.observe(.value, with: { (snapshot) in
-            let status = (snapshot.value as? NSDictionary)!["status"] as! String
-            
-            let tappy = MyTapGesture(target: self, action: #selector(self.openStepInfo(_:)))
-
-            if status == "none" {
-                buttonView.alertButton.isHidden = false
-                buttonView.alertButton.backgroundColor = StepsView.activeColor
-                buttonView.alertTextView.text = "Мы подбираем дизайнера"
-            } else  if status == "awareness" {
-                containerView.stepOne.backgroundColor = StepsView.activeColor
-                containerView.textOne.textColor = StepsView.activeTextColor
-                buttonView.isHidden = true
-            } else if status == "awarenessApprove" {
-                buttonView.alertTextView.text = "Согласуйте понимание задачи"
-                buttonView.alertButton.isHidden = false
-                buttonView.isHidden = false
-                buttonView.alertButton.addGestureRecognizer(tappy)
-                tappy.status = "awareness"
-            } else if status == "concept" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
-                containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.activeColor
-                containerView.textTwo.textColor = StepsView.activeTextColor
-                buttonView.isHidden = true
-            } else if status == "conceptApprove" {
-                buttonView.isHidden = false
-                buttonView.alertButton.isHidden = false
-                buttonView.alertTextView.text = "Согласуйте черновик"
-                buttonView.alertButton.addGestureRecognizer(tappy)
-                tappy.status = "concept"
-            }else if status == "design" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
-                containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.doneColor
-                containerView.textTwo.textColor = StepsView.doneTextColor
-                containerView.stepThree.backgroundColor = StepsView.activeColor
-                containerView.textThree.textColor = StepsView.activeTextColor
-                buttonView.isHidden = true
-            } else if status == "designApprove" {
-                buttonView.isHidden = false
-                buttonView.alertTextView.text = "Согласуйте чистовик"
-                buttonView.alertButton.isHidden = false
-                buttonView.alertButton.addGestureRecognizer(tappy)
-                tappy.status = "design"
-            } else if status == "sources" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
-                containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.doneColor
-                containerView.textTwo.textColor = StepsView.doneTextColor
-                containerView.stepThree.backgroundColor = StepsView.doneColor
-                containerView.textThree.textColor = StepsView.doneTextColor
-                containerView.stepFour.backgroundColor = StepsView.activeColor
-                containerView.textFour.textColor = StepsView.activeTextColor
-                buttonView.isHidden = true
-            } else if status == "done" {
-                buttonView.isHidden = false
-                buttonView.alertTextView.text = "Задача закрыта, исходники лежат в вашей папке"
-                buttonView.alertButton.isHidden = false
-                buttonView.alertButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleDone)))
-            } else if status == "archiveRejected" {
-                buttonView.isHidden = false
-                buttonView.alertTextView.text = "Вы отменили задачу"
-            } else if status == "archive" {
-                buttonView.isHidden = false
-                buttonView.alertTextView.text = "Открыть папку с исходниками"
-                buttonView.alertButton.isHidden = false
-                buttonView.alertButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
-            }
-            }, withCancel: nil)
-
-    }
-    
-    let getRateView = GetRateView()
-    
-    func handleDone() {
-        guard let taskId = task?.taskId, let fromId = task?.fromId else {
-            return
-        }
-        
-        let status = "archive"
-        
-//        if let keyWindow = UIApplication.shared.keyWindow {
-//            self.getRateView.alpha = 1
-//            self.getRateView.frame = keyWindow.frame
-//            keyWindow.addSubview(self.getRateView)
-//            
-//        }
-
-        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-        taskRef.updateChildValues(["status": status])
-       
-        let activeTasksRef = FIRDatabase.database().reference().child("active-tasks").child(fromId).child(taskId)
-        
-        activeTasksRef.removeValue()
-        
-        let archiveRef = FIRDatabase.database().reference().child("user-tasks").child(fromId)
-        archiveRef.updateChildValues([taskId: 1])
-        
-        let taskViewController = TaskViewController()
-        navigationController?.pushViewController(taskViewController, animated: true)
-       
-    }
-    
-    func handleReject() {
-        guard let taskId = task?.taskId, let fromId = task?.fromId else {
-            return
-        }
-        
-        let status = "archiveRejected"
-        
-        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-        taskRef.updateChildValues(["status": status])
-        
-        let activeTasksRef = FIRDatabase.database().reference().child("active-tasks").child(fromId).child(taskId)
-        
-        activeTasksRef.removeValue()
-        
-        let archiveRef = FIRDatabase.database().reference().child("user-tasks").child(fromId)
-        archiveRef.updateChildValues([taskId: 1])
-        
-        let taskViewController = TaskViewController()
-        navigationController?.pushViewController(taskViewController, animated: true)
-        
-    }
-    
-   
-    func openConceptFolder() {
-        if let folderUrlFromCash = UserDefaults.standard.string(forKey: "folder") {
-            //           UIApplication.shared.openURL(URL(string: folderUrlFromCash)!)
-            let googleDriveViewController = GoogleDriveViewController()
-            googleDriveViewController.folderUrl = folderUrlFromCash
-            navigationController?.pushViewController(googleDriveViewController, animated: true)
-            
-        }
-        
-    }
-
-    
-    func openStepInfo(_ sender : MyTapGesture) {
-        let status = sender.status
-
-        let flowLayout = UICollectionViewFlowLayout()
-        let conceptViewController = ConceptViewController(collectionViewLayout: flowLayout)
-        conceptViewController.view.backgroundColor = UIColor.white
-        conceptViewController.task = task
-        
-        if let taskId = self.task?.taskId {
-            let ref = FIRDatabase.database().reference().child("tasks").child(taskId).child(status!)
-            ref.observe(.childAdded, with: { (snapshot) in
-                guard let dictionary = snapshot.value as? [String : AnyObject] else {
-                    return
-                }
-
-                conceptViewController.concepts.append(Concept(dictionary: dictionary))
-                DispatchQueue.main.async(execute: {
-                    conceptViewController.collectionView?.reloadData()
-                })
-                
-                }, withCancel: nil)
-            
-        }
-        
-        let navController = UINavigationController(rootViewController: conceptViewController)
-        present(navController, animated: true, completion: nil)
-        
-    }
-    
-    
     func setupNavbarWithUser() {
-        let titleView = UIImageView()
-        titleView.frame = CGRect(x: 0, y: 0, width: 36, height: 36)
-
-        titleView.layer.cornerRadius = 18
-        titleView.layer.masksToBounds = true
+        let titleView = TitleNavBarView(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
         titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openDesignerProfile)))
-        titleView.isUserInteractionEnabled = true
         
-        if let taskId = task!.taskId {
-            
-            let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
-            ref.observe(.value, with: { (snapshot) in
-                if let imageUrl = (snapshot.value as? NSDictionary)!["imageUrl"] as? String {
-                    self.designerPic = imageUrl
-                     titleView.loadImageUsingCashWithUrlString(imageUrl)
-                }
-                }, withCancel: nil)
+        
+        guard let designerId = task?.toId else {
+            return
         }
-
+            
+        let ref = FIRDatabase.database().reference().child("designers").child(designerId)
+         ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let imageUrl = (snapshot.value as? NSDictionary)!["photoUrl"] as? String {
+                        self.designerPic = imageUrl
+                        titleView.userPic.loadImageUsingCashWithUrlString(imageUrl)
+                    }
+                    
+                    if let name = (snapshot.value as? NSDictionary)!["firstName"] as? String {
+                     titleView.nameLabel.text = name
+                    }
+                }, withCancel: nil)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: titleView)
     }
     
-    func openDesignerProfile() {
-        let userProfileViewController = UserProfileViewController()
-        userProfileViewController.task = task
-        userProfileViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-        navigationController?.pushViewController(userProfileViewController, animated: true)
-    }
-    
-   
-  
+
     
     var assets: [DKAsset]?
-    
     
     func handleUploadTap() {
         let pickerController = DKImagePickerController()
@@ -463,9 +232,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
             self.sendMessageController.sendMessageWithProperties(properties, taskId: taskId!)
             
             inputContainerView.messageField.text = nil
-        }
-        
-        
+        } 
     }
     
     
@@ -556,10 +323,6 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
            cell.profileImageView.loadImageUsingCashWithUrlString(self.designerPic!)
         }
         
-        
-//        if let photoUrl = message.photoUrl {
-//            cell.profileImageView.loadImageUsingCashWithUrlString(photoUrl)
-//        }
         return cell
     }
 
@@ -702,4 +465,5 @@ class MyTapGesture: UITapGestureRecognizer {
     var task: Task?
     var indexPath: IndexPath?
     var taskIndex: Int?
+    var string: String?
 }

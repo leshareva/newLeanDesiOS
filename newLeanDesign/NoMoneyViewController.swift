@@ -14,6 +14,7 @@ import Swiftstraints
 class NoMoneyViewController: UIViewController {
     
     var sum: Int!
+    var price: Int!
     
     let discriptionLabel: UILabel = {
         let tl = UILabel()
@@ -36,7 +37,7 @@ class NoMoneyViewController: UIViewController {
     
     let aboutTextView: UITextView = {
         let tv = UITextView()
-        tv.text = "Пополните счет минимум на 500₽, чтобы оформить заказ"
+        
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
         tv.backgroundColor = .clear
@@ -57,9 +58,8 @@ class NoMoneyViewController: UIViewController {
         UINavigationBar.appearance().barTintColor = LeanColor.blueColor
         navigationController?.navigationBar.isTranslucent = false
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(handleCancel))
-        
         priceLabel.text = String(self.sum) + " ₽"
+        aboutTextView.text = "Пополните счет на " + String(self.price) + " ₽, чтобы задача пошла в работу"
         setupView()
 
         
@@ -97,7 +97,7 @@ class NoMoneyViewController: UIViewController {
     
     func handlePay() {
         let amountViewController = AmountViewController()
-        navigationController?.pushViewController(amountViewController, animated: true)
+       self.navigationController?.pushViewController(amountViewController, animated: true)
     }
     
     

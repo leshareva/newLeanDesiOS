@@ -8,6 +8,7 @@
 
 import UIKit
 import Swiftstraints
+import EFCountingLabel
 
 class CompanyView: UIView {
     
@@ -58,8 +59,26 @@ class CompanyView: UIView {
         return btn
     }()
     
-    let priceLabel: UILabel = {
-        let label = UILabel()
+    var priceLabel: EFCountingLabel = {
+        let label = EFCountingLabel()
+        label.method = .linear
+        label.format = "%d"
+        
+        label.attributedFormatBlock = {
+            (value) in
+            let highlight = [NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 20)]
+            let normal = [NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 20)]
+            
+            let prefix = String(format: "%d", Int(value))
+            let postfix = String(format: " ₽")
+            
+            let prefixAttr = NSMutableAttributedString(string: prefix, attributes: highlight)
+            let postfixAttr = NSAttributedString(string: postfix, attributes: normal)
+            
+            prefixAttr.append(postfixAttr)
+            return prefixAttr
+        }
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -118,6 +137,8 @@ class CompanyView: UIView {
     
     
     func setupViews() {
+
+        
         self.addSubview(companyNameLabel)
 //        self.addSubview(logoView)
         self.addSubview(aboutPriceLabel)

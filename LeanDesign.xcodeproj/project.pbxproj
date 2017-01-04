@@ -17,6 +17,10 @@
 		CB2A01B21E07BE3D00AE5785 /* PriceWaitingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2A01B11E07BE3D00AE5785 /* PriceWaitingViewController.swift */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* ChatInputView.swift */; };
+		CB353C771E15A16200E74E92 /* SourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB353C761E15A16200E74E92 /* SourceCell.swift */; };
+		CB353C791E15A2BC00E74E92 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB353C781E15A2BC00E74E92 /* Source.swift */; };
+		CB353C7B1E163BA600E74E92 /* SourceTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB353C7A1E163BA600E74E92 /* SourceTitle.swift */; };
+		CB353C7D1E16621B00E74E92 /* SourceFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB353C7C1E16621B00E74E92 /* SourceFooter.swift */; };
 		CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD31D942944007E9365 /* TaskViewController.swift */; };
 		CB39FAD61D942A17007E9365 /* ArchiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD51D942A17007E9365 /* ArchiveViewController.swift */; };
 		CB39FAD91D942A48007E9365 /* NewTaskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD81D942A48007E9365 /* NewTaskController.swift */; };
@@ -44,19 +48,34 @@
 		CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FB0D1D952156007E9365 /* EmptyTableView.swift */; };
 		CB39FB101D954FB4007E9365 /* loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = CB39FB0F1D954FB4007E9365 /* loader.gif */; };
 		CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */; };
+		CB4CF1971E140A3D00E21800 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4CF1961E140A3D00E21800 /* Helpers.swift */; };
+		CB4CF1991E140F0800E21800 /* PayByBill.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4CF1981E140F0800E21800 /* PayByBill.swift */; };
+		CB4CF19B1E14DA0F00E21800 /* HowMuchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4CF19A1E14DA0F00E21800 /* HowMuchViewController.swift */; };
 		CB4F7E5E1E014C980057E249 /* ChatViewController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4F7E5D1E014C980057E249 /* ChatViewController+handlers.swift */; };
 		CB4F7E601E014DDD0057E249 /* GetRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4F7E5F1E014DDD0057E249 /* GetRateView.swift */; };
 		CB5F4D0E1DBCC12600530341 /* ZoomingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */; };
+		CB67233C1E0BCD5E002DC2E6 /* TaskViewController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB67233B1E0BCD5E002DC2E6 /* TaskViewController+handlers.swift */; };
 		CB6C5E141DF02DA9007D74E3 /* WaitingAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */; };
 		CB6C5E161DF085A8007D74E3 /* TinkoffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */; };
+		CB6E31421E0FC6DA00A7AF6E /* CompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6E31411E0FC6DA00A7AF6E /* CompleteViewController.swift */; };
+		CB72EBD91E0C53AB0019267A /* ConceptViewController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB72EBD81E0C53AB0019267A /* ConceptViewController+handlers.swift */; };
+		CB72EBDB1E0C56780019267A /* ConceptCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB72EBDA1E0C56780019267A /* ConceptCell.swift */; };
 		CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */; };
 		CBB22C3C1DF9E477007EA700 /* GoogleDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB22C3B1DF9E477007EA700 /* GoogleDriveViewController.swift */; };
 		CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */; };
+		CBC6823F1E1D18E200CCE93E /* SupportIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC6823E1E1D18E200CCE93E /* SupportIconView.swift */; };
 		CBC9D49C1DEA118A00102C36 /* LicenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */; };
+		CBD5C0FE1E1BC66C0050AA04 /* WhoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD5C0FD1E1BC66C0050AA04 /* WhoViewController.swift */; };
+		CBD5C1001E1BE4120050AA04 /* TasksMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD5C0FF1E1BE4120050AA04 /* TasksMethods.swift */; };
+		CBD5C1021E1BE4EA0050AA04 /* UserMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD5C1011E1BE4EA0050AA04 /* UserMethods.swift */; };
+		CBD5C1041E1BF5720050AA04 /* TitleNavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD5C1031E1BF5720050AA04 /* TitleNavBarView.swift */; };
+		CBD5C1061E1CC1DF0050AA04 /* ChatMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD5C1051E1CC1DF0050AA04 /* ChatMethods.swift */; };
 		CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */; };
 		CBE682C11D93EBD400CB3679 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682BF1D93EBD400CB3679 /* Main.storyboard */; };
 		CBE682C31D93EBD400CB3679 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C21D93EBD400CB3679 /* Assets.xcassets */; };
 		CBE682C61D93EBD400CB3679 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBE682C41D93EBD400CB3679 /* LaunchScreen.storyboard */; };
+		CBF50ADB1E1532980025B950 /* TipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF50ADA1E1532980025B950 /* TipView.swift */; };
+		CBF50ADE1E154B650025B950 /* HowTaskingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF50ADD1E154B650025B950 /* HowTaskingViewController.swift */; };
 		CBF891811DDAD2A800437DEA /* NoMoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */; };
 		CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF891821DDAE1A800437DEA /* PayViewController.swift */; };
 		CBFD98541E06E3C60047D0D6 /* WaitingAwarenessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFD98531E06E3C60047D0D6 /* WaitingAwarenessViewController.swift */; };
@@ -78,6 +97,10 @@
 		CB2A01B11E07BE3D00AE5785 /* PriceWaitingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceWaitingViewController.swift; sourceTree = "<group>"; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
+		CB353C761E15A16200E74E92 /* SourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceCell.swift; sourceTree = "<group>"; };
+		CB353C781E15A2BC00E74E92 /* Source.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Source.swift; sourceTree = "<group>"; };
+		CB353C7A1E163BA600E74E92 /* SourceTitle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceTitle.swift; sourceTree = "<group>"; };
+		CB353C7C1E16621B00E74E92 /* SourceFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceFooter.swift; sourceTree = "<group>"; };
 		CB39FAD31D942944007E9365 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		CB39FAD51D942A17007E9365 /* ArchiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveViewController.swift; sourceTree = "<group>"; };
 		CB39FAD81D942A48007E9365 /* NewTaskController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTaskController.swift; sourceTree = "<group>"; };
@@ -105,24 +128,39 @@
 		CB39FB0D1D952156007E9365 /* EmptyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyTableView.swift; sourceTree = "<group>"; };
 		CB39FB0F1D954FB4007E9365 /* loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loader.gif; sourceTree = "<group>"; };
 		CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		CB4CF1961E140A3D00E21800 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		CB4CF1981E140F0800E21800 /* PayByBill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayByBill.swift; sourceTree = "<group>"; };
+		CB4CF19A1E14DA0F00E21800 /* HowMuchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HowMuchViewController.swift; sourceTree = "<group>"; };
 		CB4F7E5D1E014C980057E249 /* ChatViewController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+handlers.swift"; sourceTree = "<group>"; };
 		CB4F7E5F1E014DDD0057E249 /* GetRateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetRateView.swift; sourceTree = "<group>"; };
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
+		CB67233B1E0BCD5E002DC2E6 /* TaskViewController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TaskViewController+handlers.swift"; sourceTree = "<group>"; };
 		CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingAlertView.swift; sourceTree = "<group>"; };
 		CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinkoffViewController.swift; sourceTree = "<group>"; };
 		CB6C741F1D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CB6C74201D99BAED00441588 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		CB6E31411E0FC6DA00A7AF6E /* CompleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteViewController.swift; sourceTree = "<group>"; };
+		CB72EBD81E0C53AB0019267A /* ConceptViewController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ConceptViewController+handlers.swift"; sourceTree = "<group>"; };
+		CB72EBDA1E0C56780019267A /* ConceptCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConceptCell.swift; sourceTree = "<group>"; };
 		CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBannerView.swift; sourceTree = "<group>"; };
 		CBB22C3B1DF9E477007EA700 /* GoogleDriveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleDriveViewController.swift; sourceTree = "<group>"; };
 		CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountViewController.swift; sourceTree = "<group>"; };
 		CBB78A9C1DE7D41500360D51 /* LeanDesign.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LeanDesign.entitlements; sourceTree = "<group>"; };
+		CBC6823E1E1D18E200CCE93E /* SupportIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportIconView.swift; sourceTree = "<group>"; };
 		CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LicenseViewController.swift; sourceTree = "<group>"; };
+		CBD5C0FD1E1BC66C0050AA04 /* WhoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhoViewController.swift; sourceTree = "<group>"; };
+		CBD5C0FF1E1BE4120050AA04 /* TasksMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksMethods.swift; sourceTree = "<group>"; };
+		CBD5C1011E1BE4EA0050AA04 /* UserMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserMethods.swift; sourceTree = "<group>"; };
+		CBD5C1031E1BF5720050AA04 /* TitleNavBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleNavBarView.swift; sourceTree = "<group>"; };
+		CBD5C1051E1CC1DF0050AA04 /* ChatMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMethods.swift; sourceTree = "<group>"; };
 		CBE682B81D93EBD300CB3679 /* LeanDesign.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeanDesign.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBE682BB1D93EBD400CB3679 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBE682C01D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CBE682C21D93EBD400CB3679 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBE682C51D93EBD400CB3679 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBE682C71D93EBD400CB3679 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CBF50ADA1E1532980025B950 /* TipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipView.swift; sourceTree = "<group>"; };
+		CBF50ADD1E154B650025B950 /* HowTaskingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HowTaskingViewController.swift; sourceTree = "<group>"; };
 		CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoMoneyViewController.swift; sourceTree = "<group>"; };
 		CBF891821DDAE1A800437DEA /* PayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayViewController.swift; sourceTree = "<group>"; };
 		CBFD98531E06E3C60047D0D6 /* WaitingAwarenessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingAwarenessViewController.swift; sourceTree = "<group>"; };
@@ -151,26 +189,71 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CB169EEB1E0E510600947834 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				CB39FADC1D942A78007E9365 /* ChatViewController.swift */,
+				CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */,
+				CB4F7E5D1E014C980057E249 /* ChatViewController+handlers.swift */,
+				CBD5C1031E1BF5720050AA04 /* TitleNavBarView.swift */,
+			);
+			name = Chat;
+			sourceTree = "<group>";
+		};
+		CB3290EE1E10556700D97371 /* NewTaskControllers */ = {
+			isa = PBXGroup;
+			children = (
+				CB39FAD81D942A48007E9365 /* NewTaskController.swift */,
+				CB39FAE81D942B2B007E9365 /* NewTaskController+handlers.swift */,
+			);
+			name = NewTaskControllers;
+			sourceTree = "<group>";
+		};
+		CB3290EF1E10559000D97371 /* TasksViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB39FAD31D942944007E9365 /* TaskViewController.swift */,
+				CB67233B1E0BCD5E002DC2E6 /* TaskViewController+handlers.swift */,
+			);
+			name = TasksViewController;
+			sourceTree = "<group>";
+		};
+		CB353C7E1E166A3A00E74E92 /* SourcesViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CB353C761E15A16200E74E92 /* SourceCell.swift */,
+				CB353C7A1E163BA600E74E92 /* SourceTitle.swift */,
+				CB353C7C1E16621B00E74E92 /* SourceFooter.swift */,
+				CB353C781E15A2BC00E74E92 /* Source.swift */,
+				CB6E31411E0FC6DA00A7AF6E /* CompleteViewController.swift */,
+			);
+			name = SourcesViewController;
+			sourceTree = "<group>";
+		};
 		CB39FAD71D942A24007E9365 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				CBF50ADC1E154B2C0025B950 /* Tips */,
+				CB169EEB1E0E510600947834 /* Chat */,
+				CBB22C3A1DF9E3B8007EA700 /* PayControllers */,
 				CBFD98521E06E3990047D0D6 /* AwarenessControllers */,
-				CB39FAD31D942944007E9365 /* TaskViewController.swift */,
+				CB3290EF1E10559000D97371 /* TasksViewController */,
 				CB39FAD51D942A17007E9365 /* ArchiveViewController.swift */,
-				CB39FAD81D942A48007E9365 /* NewTaskController.swift */,
+				CB3290EE1E10556700D97371 /* NewTaskControllers */,
 				CB39FADA1D942A60007E9365 /* LoginController.swift */,
-				CB39FADC1D942A78007E9365 /* ChatViewController.swift */,
 				CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */,
 				CB39FAE01D942AAA007E9365 /* NewClientViewController.swift */,
 				CB39FAE21D942AD9007E9365 /* MyProfileViewController.swift */,
 				CB39FAE41D942AED007E9365 /* UserProfileViewController.swift */,
 				CB39FAEB1D942B6D007E9365 /* ConceptViewController.swift */,
-				CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */,
-				CBB22C3A1DF9E3B8007EA700 /* PayControllers */,
+				CB353C7E1E166A3A00E74E92 /* SourcesViewController */,
 				CBC9D49B1DEA118A00102C36 /* LicenseViewController.swift */,
 				CB3BDF171DCEF5BD00479CEE /* StartViewController.swift */,
 				CB39FADE1D942A92007E9365 /* SettingsLauncher.swift */,
 				CBB22C3B1DF9E477007EA700 /* GoogleDriveViewController.swift */,
+				CBD5C0FF1E1BE4120050AA04 /* TasksMethods.swift */,
+				CBD5C1011E1BE4EA0050AA04 /* UserMethods.swift */,
+				CBD5C1051E1CC1DF0050AA04 /* ChatMethods.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -178,8 +261,8 @@
 		CB39FAEA1D942B3A007E9365 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				CB4F7E5D1E014C980057E249 /* ChatViewController+handlers.swift */,
-				CB39FAE81D942B2B007E9365 /* NewTaskController+handlers.swift */,
+				CB4CF1961E140A3D00E21800 /* Helpers.swift */,
+				CB72EBD81E0C53AB0019267A /* ConceptViewController+handlers.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -209,6 +292,7 @@
 				CB39FAFA1D942C04007E9365 /* TaskCell.swift */,
 				CB39FAFC1D942C18007E9365 /* ChatMessageCell.swift */,
 				CB39FAFE1D942C24007E9365 /* SettingCell.swift */,
+				CB72EBDA1E0C56780019267A /* ConceptCell.swift */,
 				CB39FB001D942C32007E9365 /* CompanyView.swift */,
 				CB39FB0B1D94E92F007E9365 /* StepsView.swift */,
 				CBA702E61DD8219F009F3AD1 /* ChatBannerView.swift */,
@@ -220,6 +304,8 @@
 				CB15C4F91DEFEC490067A51E /* UIControls.swift */,
 				CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */,
 				CB4F7E5F1E014DDD0057E249 /* GetRateView.swift */,
+				CBF50ADA1E1532980025B950 /* TipView.swift */,
+				CBC6823E1E1D18E200CCE93E /* SupportIconView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -230,6 +316,7 @@
 				CBF891801DDAD2A800437DEA /* NoMoneyViewController.swift */,
 				CB0D8DE91DF53DB3008EB997 /* PromoCodeViewController.swift */,
 				CBB75F251DE9EEF00079C7EC /* AmountViewController.swift */,
+				CB4CF1981E140F0800E21800 /* PayByBill.swift */,
 				CB6C5E151DF085A8007D74E3 /* TinkoffViewController.swift */,
 				CBF891821DDAE1A800437DEA /* PayViewController.swift */,
 			);
@@ -276,6 +363,16 @@
 				CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */,
 			);
 			path = newLeanDesign;
+			sourceTree = "<group>";
+		};
+		CBF50ADC1E154B2C0025B950 /* Tips */ = {
+			isa = PBXGroup;
+			children = (
+				CB4CF19A1E14DA0F00E21800 /* HowMuchViewController.swift */,
+				CBF50ADD1E154B650025B950 /* HowTaskingViewController.swift */,
+				CBD5C0FD1E1BC66C0050AA04 /* WhoViewController.swift */,
+			);
+			name = Tips;
 			sourceTree = "<group>";
 		};
 		CBFD98521E06E3990047D0D6 /* AwarenessControllers */ = {
@@ -454,25 +551,41 @@
 			files = (
 				CBA702E71DD8219F009F3AD1 /* ChatBannerView.swift in Sources */,
 				CBFD98541E06E3C60047D0D6 /* WaitingAwarenessViewController.swift in Sources */,
+				CB72EBDB1E0C56780019267A /* ConceptCell.swift in Sources */,
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
 				CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */,
+				CB353C7D1E16621B00E74E92 /* SourceFooter.swift in Sources */,
 				CB4F7E5E1E014C980057E249 /* ChatViewController+handlers.swift in Sources */,
+				CBD5C1041E1BF5720050AA04 /* TitleNavBarView.swift in Sources */,
+				CB4CF19B1E14DA0F00E21800 /* HowMuchViewController.swift in Sources */,
 				CB3BDF181DCEF5BD00479CEE /* StartViewController.swift in Sources */,
+				CB353C7B1E163BA600E74E92 /* SourceTitle.swift in Sources */,
 				CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */,
 				CB39FB0E1D952156007E9365 /* EmptyTableView.swift in Sources */,
 				CB39FAFD1D942C18007E9365 /* ChatMessageCell.swift in Sources */,
 				CB39FAE11D942AAA007E9365 /* NewClientViewController.swift in Sources */,
 				CB39FAE51D942AED007E9365 /* UserProfileViewController.swift in Sources */,
 				CB15C4FA1DEFEC490067A51E /* UIControls.swift in Sources */,
+				CBF50ADB1E1532980025B950 /* TipView.swift in Sources */,
+				CBD5C1021E1BE4EA0050AA04 /* UserMethods.swift in Sources */,
 				CB4F7E601E014DDD0057E249 /* GetRateView.swift in Sources */,
+				CB353C791E15A2BC00E74E92 /* Source.swift in Sources */,
+				CBC6823F1E1D18E200CCE93E /* SupportIconView.swift in Sources */,
+				CB353C771E15A16200E74E92 /* SourceCell.swift in Sources */,
 				CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */,
+				CB4CF1991E140F0800E21800 /* PayByBill.swift in Sources */,
 				CBFD98561E06FADF0047D0D6 /* AwarenessViewController.swift in Sources */,
 				CBF891831DDAE1A800437DEA /* PayViewController.swift in Sources */,
 				CB0680411DEF16A300D78572 /* Constant.swift in Sources */,
 				CB39FAF61D942BCF007E9365 /* Message.swift in Sources */,
+				CBD5C0FE1E1BC66C0050AA04 /* WhoViewController.swift in Sources */,
 				CB39FB031D942C3F007E9365 /* ButtonView.swift in Sources */,
+				CB6E31421E0FC6DA00A7AF6E /* CompleteViewController.swift in Sources */,
+				CBD5C1001E1BE4120050AA04 /* TasksMethods.swift in Sources */,
+				CBF50ADE1E154B650025B950 /* HowTaskingViewController.swift in Sources */,
 				CBF891811DDAD2A800437DEA /* NoMoneyViewController.swift in Sources */,
 				CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */,
+				CB4CF1971E140A3D00E21800 /* Helpers.swift in Sources */,
 				CBE682BC1D93EBD400CB3679 /* AppDelegate.swift in Sources */,
 				CB39FAF41D942BC4007E9365 /* User.swift in Sources */,
 				CB0680431DEF54D100D78572 /* UserView.swift in Sources */,
@@ -491,6 +604,7 @@
 				CB39FB011D942C32007E9365 /* CompanyView.swift in Sources */,
 				CB39FADF1D942A92007E9365 /* SettingsLauncher.swift in Sources */,
 				CBC9D49C1DEA118A00102C36 /* LicenseViewController.swift in Sources */,
+				CB72EBD91E0C53AB0019267A /* ConceptViewController+handlers.swift in Sources */,
 				CB39FAD91D942A48007E9365 /* NewTaskController.swift in Sources */,
 				CB39FAE31D942AD9007E9365 /* MyProfileViewController.swift in Sources */,
 				CB39FADD1D942A78007E9365 /* ChatViewController.swift in Sources */,
@@ -498,6 +612,8 @@
 				CBB22C3C1DF9E477007EA700 /* GoogleDriveViewController.swift in Sources */,
 				CB39FADB1D942A60007E9365 /* LoginController.swift in Sources */,
 				CB5F4D0E1DBCC12600530341 /* ZoomingImageView.swift in Sources */,
+				CB67233C1E0BCD5E002DC2E6 /* TaskViewController+handlers.swift in Sources */,
+				CBD5C1061E1CC1DF0050AA04 /* ChatMethods.swift in Sources */,
 				CB39FAEE1D942B8C007E9365 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

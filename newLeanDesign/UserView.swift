@@ -16,7 +16,6 @@ class UserView: UIView {
         imageView.image = UIImage.gifWithName("spinner-duo")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-//        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
         imageView.isUserInteractionEnabled = true
         imageView.layer.cornerRadius = 38
         imageView.layer.masksToBounds = true

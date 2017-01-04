@@ -9,28 +9,19 @@
 import UIKit
 
 class User: NSObject {
+    var inbox: AnyObject?
+    var activeTasks: AnyObject?
     var bills: AnyObject?
-    var userToken: String?
-    var BIK: String?
-    var KPP: String?
-    var OGRN: String?
-    var checkAccount: String?
     var company: String?
-    var corespondentAccount: String?
-    var name: String?
-    var postAddress: String?
-    var registeredAddress: String?
     var sum: NSNumber?
     var id: String?
     var email: String?
     var phone: String?
     var rate: NSNumber?
     var photoUrl: String?
-    var token: String?
     var status: String?
     var firstName: String?
     var lastName: String?
-    var otherName: String?
     var conceptUrl: String?
     var favorites: AnyObject?
     var portfolio: String?

@@ -10,6 +10,7 @@ import Firebase
 class WaitingAwarenessViewController: UIViewController {
     
     var task: Task?
+    var userPhone: String?
     
     let userPic: UIImageView = {
         let iv = UIImageView()
@@ -35,7 +36,6 @@ class WaitingAwarenessViewController: UIViewController {
     lazy var nameText: UITextView = {
         let tv = UITextView()
         tv.backgroundColor = .clear
-        tv.text = "Имя"
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
         tv.textAlignment = .center
@@ -48,7 +48,7 @@ class WaitingAwarenessViewController: UIViewController {
     let descriptionText: UITextView = {
         let tv = UITextView()
         tv.backgroundColor = .clear
-        tv.text = "Дизайнер готовит понимание задачи, в ближайшее время позвонит вам и задаст уточняющие вопросы"
+        tv.text = "Дизайнер позвонит вам, чтобы разобраться в задаче"
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
         tv.textAlignment = .center
@@ -62,7 +62,7 @@ class WaitingAwarenessViewController: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .white
         btn.setTitleColor( .black, for: .normal)
-        btn.setTitle("Позвонить", for: .normal)
+        btn.setTitle("Написать дизайнеру", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.lightGray.cgColor
@@ -81,8 +81,7 @@ class WaitingAwarenessViewController: UIViewController {
     
     
     func getUserInfo(taskId: String) {
-        
-        
+ 
         let ref = FIRDatabase.database().reference()
         
         ref.child("tasks").child(taskId).observeSingleEvent(of: .value, with: {(snapshot) in
@@ -97,6 +96,8 @@ class WaitingAwarenessViewController: UIViewController {
                         return
                 }
                 
+                self.userPhone = phone
+              
                 self.nameText.text = name
                 self.userPic.loadImageUsingCashWithUrlString(photoUrl as! String)
 
@@ -131,7 +132,9 @@ class WaitingAwarenessViewController: UIViewController {
     
     
     func handleCall() {
-        
+        let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        chatController.task = task
+        navigationController?.pushViewController(chatController, animated: true)
     }
     
     

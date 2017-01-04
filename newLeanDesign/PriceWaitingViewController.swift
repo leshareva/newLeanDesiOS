@@ -17,7 +17,7 @@ class PriceWaitingViewController: UIViewController {
     let titleView: UITextView = {
         let tv = UITextView()
         tv.backgroundColor = .clear
-        tv.text = "Еще чуть-чуть и мы назовем стоимость"
+        tv.text = "Еще чуть-чуть и назовем стоимость"
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
         tv.textAlignment = .center
@@ -30,7 +30,7 @@ class PriceWaitingViewController: UIViewController {
     let descriptionText: UITextView = {
         let tv = UITextView()
         tv.backgroundColor = .clear
-        tv.text = "Мы собрали всю необходимую инфомрацию и подготовим оценку"
+        tv.text = "Мы собрали всю необходимую информацию и подготовим оценку"
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
         tv.textAlignment = .center
