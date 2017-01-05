@@ -55,9 +55,6 @@ PODS:
   - FirebaseStorage (1.0.5):
     - FirebaseAnalytics (~> 3.5)
     - GTMSessionFetcher/Core (~> 1.1)
-  - Flurry-iOS-SDK/FlurryAds (7.6.6):
-    - Flurry-iOS-SDK/FlurrySDK
-  - Flurry-iOS-SDK/FlurrySDK (7.6.6)
   - GoogleInterchangeUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
   - GoogleSymbolUtilities (1.1.2)
@@ -94,8 +91,6 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Messaging
   - Firebase/Storage
-  - Flurry-iOS-SDK/FlurryAds
-  - Flurry-iOS-SDK/FlurrySDK
   - Swiftstraints
   - SWXMLHash (~> 3.0.0)
   - Toast-Swift (~> 2.0.0)
@@ -128,7 +123,6 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
   FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
   FirebaseStorage: 5738284835edb57f0e81d4ae5832bb17c1e4b5fa
-  Flurry-iOS-SDK: 97bbeec09cca666c2f1772f6e161c4f8ccff611e
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
@@ -138,6 +132,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 5b2f8f720f7e78e48511f693df1f9c9a6e38a25a
   TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
 
-PODFILE CHECKSUM: 8807417a2fc0463ef2bd289f7e2f106f38ec214f
+PODFILE CHECKSUM: c8d3118a12b492fa8801e18c058b463aacdd04c7
 
 COCOAPODS: 1.2.0.beta.1

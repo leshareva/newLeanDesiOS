@@ -184,7 +184,7 @@ class NewTaskController: UIViewController {
     }
     
     func handleKeyboardWillHide(_ notification: Notification) {
-                let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
+        
         let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
         containerViewBottomAnchor?.constant = 0
         UIView.animate(withDuration: keyboardDuration!, animations: {

@@ -39,9 +39,9 @@ extension ChatViewController {
                 containerView.textOne.textColor = StepsView.activeTextColor
                 buttonView.isHidden = true
             } else if status == "awarenessApprove" {
-                var awareness = (snapshot.value as? NSDictionary)!["awareness"] as? AnyObject
+                let awareness = (snapshot.value as? NSDictionary)!["awareness"] as AnyObject
                 
-                if awareness!["status"] as! String == "discuss" {
+                if awareness["status"] as! String == "discuss" {
                     buttonView.isHidden = true
                 } else {
                     buttonView.alertTextView.text = "Согласуйте понимание задачи"
@@ -119,7 +119,7 @@ extension ChatViewController {
                 buttonView.isHidden = true
             } else if status == "done" {
                 buttonView.isHidden = false
-                buttonView.alertTextView.text = "Задача закрыта, исходники лежат в вашей папке"
+                buttonView.alertTextView.text = "Задача закрыта. Примите исходники"
                 buttonView.alertButton.isHidden = false
             } else if status == "archiveRejected" {
                 buttonView.isHidden = false

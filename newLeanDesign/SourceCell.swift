@@ -20,6 +20,16 @@ class SourceCell: UITableViewCell {
         return iv
     }()
     
+    let thumbImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFill
+        iv.isUserInteractionEnabled = true
+        iv.layer.cornerRadius = 25
+        iv.clipsToBounds = true
+        return iv
+    }()
+    
     let linkImageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named: "link")
@@ -33,6 +43,7 @@ class SourceCell: UITableViewCell {
         
         addSubview(extensionImageView)
         addSubview(linkImageView)
+        addSubview(thumbImageView)
         
         extensionImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive = true
         extensionImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
@@ -43,6 +54,12 @@ class SourceCell: UITableViewCell {
                        linkImageView.widthAnchor == 20,
                        linkImageView.heightAnchor == 20,
                        linkImageView.rightAnchor == self.rightAnchor - 32)
+        
+        thumbImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20).isActive = true
+        thumbImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        thumbImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        thumbImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
         
     }
     

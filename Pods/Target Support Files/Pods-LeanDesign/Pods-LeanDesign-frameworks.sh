@@ -93,22 +93,24 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Cosmos/Cosmos.framework"
   install_framework "$BUILT_PRODUCTS_DIR/CryptoSwift/CryptoSwift.framework"
   install_framework "$BUILT_PRODUCTS_DIR/DKImagePickerController/DKImagePickerController.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Flurry-iOS-SDK/Flurry_iOS_SDK.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/EFCountingLabel/EFCountingLabel.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleToolboxForMac/GoogleToolboxForMac.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SWXMLHash/SWXMLHash.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Swiftstraints/Swiftstraints.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Toast-Swift/Toast_Swift.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Alamofire/Alamofire.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Cosmos/Cosmos.framework"
   install_framework "$BUILT_PRODUCTS_DIR/CryptoSwift/CryptoSwift.framework"
   install_framework "$BUILT_PRODUCTS_DIR/DKImagePickerController/DKImagePickerController.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Flurry-iOS-SDK/Flurry_iOS_SDK.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/EFCountingLabel/EFCountingLabel.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleToolboxForMac/GoogleToolboxForMac.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SWXMLHash/SWXMLHash.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Swiftstraints/Swiftstraints.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Toast-Swift/Toast_Swift.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

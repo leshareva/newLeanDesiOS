@@ -26,7 +26,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ConceptCell.self, forCellWithReuseIdentifier: customCellIdentifier)
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Обсудить", style: .plain, target: self, action: #selector(closeView))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "В чат", style: .plain, target: self, action: #selector(closeView))
         
         self.buttonView.acceptTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleApproveView)))
         
@@ -125,9 +125,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
                     if let uid = Digits.sharedInstance().session()?.userID {
                         let clientRef = self.ref.child("clients").child(uid)
                         clientRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                                guard let sum = (snapshot.value as! NSDictionary)["sum"] as? Int else {
-                                    return
-                                }
+                            
                                 self.showSuccessAlertView(status: status! as String, time: time! as Int, price: price as Int)
                         }, withCancel: nil)
                     }

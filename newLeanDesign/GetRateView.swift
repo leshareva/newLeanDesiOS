@@ -54,7 +54,7 @@ class GetRateView: UIView {
     lazy var textView: CosmosView = {
         let tv = CosmosView()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        return tv as! CosmosView
+        return tv
     }()
     
     lazy var cancelButton: UIButton = {

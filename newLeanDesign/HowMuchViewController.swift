@@ -38,7 +38,7 @@ class HowMuchViewController: UIViewController {
     func attributedText()->NSAttributedString{
             let string = "Сколько стоит?\nСредняя стоимость задач в лине от 500 до 7000₽. Точную стоимость мы назовем после того как разберемся в задаче. Дизайнер свяжется с вами, составит понимание и в системе отобразится стоимость. Понимание задачи - бесплатный этап.\n\nКогда снимают деньги?\nМы снимаем деньги только если вы нажали кнопку согласовать этап." as NSString
             
-            var attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 15.0)])
+            let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 15.0)])
             
             let boldFontAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 15.0)]
 

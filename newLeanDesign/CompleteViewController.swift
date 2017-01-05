@@ -61,7 +61,7 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
  
     
     func observeSources() {
-        guard let uid = Digits.sharedInstance().session()!.userID, let taskId = task?.taskId else {
+        guard let taskId = task?.taskId else {
             return
         }
         
@@ -125,10 +125,13 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         cell.textLabel?.text = source.name
 
         if (source.thumbnailLink != nil) {
-            cell.extensionImageView.loadImageUsingCashWithUrlString(source.thumbnailLink!)
+            cell.thumbImageView.loadImageUsingCashWithUrlString(source.thumbnailLink!)
         } else {
             if source.extension == "psd" {
                 cell.extensionImageView.image = UIImage(named: "psd")
+                cell.thumbImageView.isHidden = true
+            } else {
+                
             }
         }
         
@@ -145,7 +148,19 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let source = sources[indexPath.row]
+        let id = source.id
+        let myWebsite = NSURL(string:"https://drive.google.com/file/d/\(id)")
         
+        guard let url = myWebsite else {
+            print("nothing found")
+            return
+        }
+        
+        let shareItems:Array = [url]
+        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
+        activityViewController.excludedActivityTypes = [UIActivityType.print, UIActivityType.postToWeibo, UIActivityType.copyToPasteboard, UIActivityType.addToReadingList, UIActivityType.postToVimeo]
+        self.present(activityViewController, animated: true, completion: nil)
         
     }
     
@@ -215,7 +230,7 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
     
     func attributedText(string: NSString, range: String)->NSAttributedString{
         
-        var attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 14.0)])
+        let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 14.0)])
         
         let boldFontAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 24.0)]
         

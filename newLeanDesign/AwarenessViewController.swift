@@ -63,7 +63,7 @@ class AwarenessViewController: UIViewController {
     let textlabel: UILabel = {
         let tv = UILabel()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.text = "Следущим шагом мы назовем стоимость"
+        tv.text = "Следующим шагом мы назовем стоимость"
         tv.font = UIFont.systemFont(ofSize: 12.0)
         tv.textAlignment = .center
         return tv
@@ -116,7 +116,7 @@ class AwarenessViewController: UIViewController {
             let values: [String: AnyObject] = ["status": "read" as AnyObject]
             ref.child("tasks").child(taskId).child("awareness").updateChildValues(values, withCompletionBlock: { (err, ref) in
                 if err != nil {
-                    print(err)
+                    print(err!)
                     return
                 }
             })
@@ -135,7 +135,7 @@ class AwarenessViewController: UIViewController {
             let values: [String: AnyObject] = ["status": "price" as AnyObject]
             ref.child("tasks").child(taskId).updateChildValues(values, withCompletionBlock: { (err, ref) in
                 if err != nil {
-                    print(err)
+                    print(err!)
                     return
                 }
             })
@@ -152,7 +152,7 @@ class AwarenessViewController: UIViewController {
                 method: .post,
                 parameters: parameters).responseJSON { response in
                     
-                    if let result = response.result.value as? [String: Any] {}
+                    if (response.result.value as? [String: Any]) != nil {}
             }
             
             dismiss(animated: true, completion: nil)
@@ -189,7 +189,7 @@ class AwarenessViewController: UIViewController {
         Alamofire.request("\(Server.serverUrl)/push",
             method: .post,
             parameters: parameters).responseJSON { response in
-                if let result = response.result.value as? [String: Any] {}
+                if (response.result.value as? [String: Any]) != nil {}
         }
 
         

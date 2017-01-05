@@ -29,7 +29,7 @@ extension ConceptViewController {
                 let values : [String: AnyObject] = ["status" : "discuss" as AnyObject]
                 ref.child(stage).updateChildValues(values, withCompletionBlock: { (err, ref) in
                     if err != nil {
-                        print(err)
+                        print(err!)
                         return
                     }
                 })

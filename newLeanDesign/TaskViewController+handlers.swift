@@ -61,7 +61,7 @@ extension TaskViewController {
     
     func openTaskDetail(task: Task) {
         
-        guard let taskId = task.taskId, let uid = Digits.sharedInstance().session()?.userID else {
+        guard let taskId = task.taskId else {
             return
         }
         

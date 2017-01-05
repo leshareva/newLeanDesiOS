@@ -99,7 +99,7 @@ class WaitingAwarenessViewController: UIViewController {
                 self.userPhone = phone
               
                 self.nameText.text = name
-                self.userPic.loadImageUsingCashWithUrlString(photoUrl as! String)
+                self.userPic.loadImageUsingCashWithUrlString(photoUrl)
 
             }, withCancel: nil)
             

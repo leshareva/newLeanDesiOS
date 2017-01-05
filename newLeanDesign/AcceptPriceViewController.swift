@@ -21,7 +21,7 @@ class AcceptPriceViewController: UIViewController {
        let tl = UILabel()
         tl.text = "Стоимость заказа"
         tl.translatesAutoresizingMaskIntoConstraints = false
-        tl.font = UIFont.boldSystemFont(ofSize: 24.0)
+        tl.font = UIFont.boldSystemFont(ofSize: 16.0)
         tl.textColor = .black
         tl.textAlignment = .center
         return tl
@@ -51,7 +51,7 @@ class AcceptPriceViewController: UIViewController {
         let tv = UITextView()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
-        tv.font = UIFont.boldSystemFont(ofSize: 20.0)
+        tv.font = UIFont.boldSystemFont(ofSize: 16.0)
         tv.textAlignment = .left
         tv.isEditable = false
         return tv
@@ -254,7 +254,7 @@ class AcceptPriceViewController: UIViewController {
         view.addSubview(priceTitle)
         
         view.addConstraints(
-            priceTitle.topAnchor == priceLabel.bottomAnchor + 40,
+            priceTitle.topAnchor == priceLabel.bottomAnchor + 20,
             priceTitle.leftAnchor == view.leftAnchor + 20,
             priceTitle.widthAnchor == view.widthAnchor - 20,
             priceTitle.heightAnchor == 30,
@@ -270,9 +270,9 @@ class AcceptPriceViewController: UIViewController {
         
         
         view.addConstraints("H:|[\(titleLabel)]|", "H:|[\(priceLabel)]|", "H:|-10-[\(acceptButton)]-10-|", "H:|-10-[\(cancelButton)]-10-|", "H:|-16-[\(cancelText)]-16-|")
-        view.addConstraints("V:|-80-[\(titleLabel)]-2-[\(priceLabel)]")
+        view.addConstraints("V:|-90-[\(titleLabel)]-2-[\(priceLabel)]")
         view.addConstraints("V:[\(acceptButton)]-10-[\(cancelButton)]-10-[\(cancelText)]-10-|")
-        view.addConstraints(titleLabel.heightAnchor == 40, priceLabel.heightAnchor == 80, acceptButton.heightAnchor == 50, cancelButton.heightAnchor == 50, cancelText.heightAnchor == 60)
+        view.addConstraints(titleLabel.heightAnchor == 20, priceLabel.heightAnchor == 80, acceptButton.heightAnchor == 50, cancelButton.heightAnchor == 50, cancelText.heightAnchor == 60)
     }
    
     

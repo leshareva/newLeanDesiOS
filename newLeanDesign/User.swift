@@ -25,5 +25,7 @@ class User: NSObject {
     var conceptUrl: String?
     var favorites: AnyObject?
     var portfolio: String?
+    var inn: String?
+    var fullCompany: String?
 }
 

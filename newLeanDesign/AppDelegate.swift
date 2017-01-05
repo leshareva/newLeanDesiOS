@@ -11,7 +11,6 @@ import Firebase
 import FirebaseMessaging
 import Fabric
 import DigitsKit
-import Flurry_iOS_SDK
 import Crashlytics
 
 
@@ -28,9 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Digits.self, Crashlytics.self])
         FIRApp.configure()
         Fabric.with([Digits.self])
-        
-        Flurry.setDebugLogEnabled(true);
-        Flurry.startSession("ZXPZJMMTYDFZRBRHW339");
+
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.tokenRefreshNotification(_:)), name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)

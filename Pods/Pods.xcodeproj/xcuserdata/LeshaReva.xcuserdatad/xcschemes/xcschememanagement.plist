@@ -24,7 +24,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Flurry-iOS-SDK.xcscheme</key>
+		<key>EFCountingLabel.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -54,6 +54,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Toast-Swift.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -62,7 +67,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3AEF2118FACD57F445394DF47FE15DEC</key>
+		<key>3DE80436174877000D7A7056DFE1DE4B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>566280D50113CADBEE66938C3F5B9273</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>589961C99F8E0BA18EBD16A6D741380A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -77,17 +92,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7C8BD656D68E24751A9DA961BA67C51A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>88E9EC28B8B46C3631E6B242B50F4442</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8E3F5FF230381E4FB433C66EA47EA3F5</key>
+		<key>935A5D36ADA93ADF899E615221678C37</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -97,7 +107,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D034B194562D7758FCAFE9EB939C703E</key>
+		<key>DD43FD7054C494A7C03EBA4DF5A0BB3F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
