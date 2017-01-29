@@ -34,7 +34,7 @@ class CompanyView: UIView {
     
     let aboutPriceLabel: UILabel = {
         let label = UILabel()
-        label.text = "СУММА НА СЧЕТУ"
+        label.text = "НА СЧЕТУ"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 10.0)
         label.textColor = UIColor(r: 180, g: 180, b: 180)
@@ -108,7 +108,7 @@ class CompanyView: UIView {
     
     lazy var conceptButton: UILabel = {
         let label = UILabel()
-        label.text = "Папка с макетами"
+        label.text = "Мои макеты"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = true
         return label
@@ -154,7 +154,7 @@ class CompanyView: UIView {
 //        self.addConstraints("V:|-16-[\(logoView)]", "V:|-16-[\(companyNameLabel)]-12-[\(aboutPriceLabel)]-4-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
         
         self.addConstraints("H:|-16-[\(companyNameLabel)]|")
-        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-12-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
+        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-2-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
         self.addConstraints(
                             aboutPriceLabel.leftAnchor == companyNameLabel.leftAnchor,
                             priceLabel.leftAnchor == companyNameLabel.leftAnchor,

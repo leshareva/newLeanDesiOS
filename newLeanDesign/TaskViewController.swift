@@ -18,8 +18,10 @@ import Toast_Swift
 
 
 class TaskViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+    var activityIndicatorView: UIActivityIndicatorView!
     let cellId = "cellId"
+    let dispatchQueue = DispatchQueue(label: "Dispatch Queue", attributes: [], target: nil)
+    
     var tableView: UITableView  =  UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     var tasks = [Task]()
     var user: User?
@@ -42,7 +44,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "point")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMore))
         navigationController?.navigationBar.isTranslucent = false
         self.view.backgroundColor = UIColor.white
-        
 
         fetchUser()
         
@@ -120,7 +121,36 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.tableView.reloadData()
         self.buttonView.alpha = 0
         
+        
+        if (tasks.count == 0) {
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+            
+            activityIndicatorView.startAnimating()
+            
+            dispatchQueue.async {
+                Thread.sleep(forTimeInterval: 3)
+                
+                OperationQueue.main.addOperation() {
+                    
+                    if (self.tasks.count == 0) {
+                        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+                        self.tableView.backgroundView = self.emptyTableView
+                        self.activityIndicatorView.stopAnimating()
+                    }
+                    
+                }
+            }
+            
+        }
+        
     }
+    
+    let tipView: TipView = {
+        let tip = TipView()
+        tip.translatesAutoresizingMaskIntoConstraints = false
+        tip.label.text = "Что за дизайнеры?"
+        return tip
+    }()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -128,17 +158,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         UIView.animate(withDuration: 0.5, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
             self.buttonView.alpha = 1
             }, completion: nil)
-        
-        if UserDefaults.standard.bool(forKey: "WhoReaded") {
-            emptyTableView.tipView.isHidden = true
-        } else {
-            UIView.animate(withDuration: 0.5, delay: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
-                self.emptyTableView.tipView.bubble.backgroundColor = UIColor(r: 123, g: 195, b: 64)
-                self.emptyTableView.tipView.alpha = 1
-            }, completion: nil)
-            
-        }
-        
+  
     }
     
     
@@ -177,14 +197,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! TaskCell
-        
+
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.text
         cell.notificationsLabel.isHidden = true
         
         setupCell(task: task, cell: cell)
-    
-        
+
         return cell
     }
 
@@ -239,8 +258,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
      func setupTableView() {
-
-        
         let screenSize: CGRect = UIScreen.main.bounds
         tableView.frame         =   CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height - 70);
         tableView.delegate      =   self
@@ -248,20 +265,20 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.register(TaskCell.self, forCellReuseIdentifier: cellId)
         tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.backgroundView = emptyTableView
-        emptyTableView.tipView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openTip)))
+        activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        tableView.backgroundView = activityIndicatorView
         
-        
-        
+  
     }
     
     
     func setupbuttonView() {
         self.view.addSubview(self.buttonView)
+        buttonView.buttonLabel.font = UIFont.systemFont(ofSize: 20.0)
         buttonView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints(buttonView.widthAnchor == self.view.widthAnchor,
                                  buttonView.bottomAnchor == self.view.bottomAnchor,
-                                 buttonView.heightAnchor == 50)
+                                 buttonView.heightAnchor == 70)
         buttonView.buttonLabel.text = "Добавить задачу"
     }
     
@@ -302,19 +319,21 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let ref = FIRDatabase.database().reference().child("clients").child(uid).child("activeTasks")
         ref.observe(.childAdded, with: { (snapshot) in
+            
                 let taskId = snapshot.key
                 let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
                 taskRef.queryOrdered(byChild: "time").observe(.value, with: { (snapshot) in
                     
-                        if let dictionary = snapshot.value as? [String: AnyObject] {
-                            let task = Task(dictionary: dictionary)
-                            self.tasksDictionary[taskId] = task
-                        }
-                  
+                    if let dictionary = snapshot.value as? [String: AnyObject] {
+                        let task = Task(dictionary: dictionary)
+                        self.tasksDictionary[taskId] = task
+                    }
+                    
                     self.attemptReloadTable()
                     self.loaderView.isHidden = true
-                    }, withCancel: nil)
+                }, withCancel: nil)
             
+ 
             }, withCancel: nil)
         
         ref.observe(.childRemoved, with: { (snap) in

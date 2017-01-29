@@ -26,7 +26,7 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ConceptCell.self, forCellWithReuseIdentifier: customCellIdentifier)
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "В чат", style: .plain, target: self, action: #selector(closeView))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Обсудить", style: .plain, target: self, action: #selector(closeView))
         
         self.buttonView.acceptTaskButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleApproveView)))
         

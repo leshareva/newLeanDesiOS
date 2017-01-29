@@ -16,7 +16,7 @@ class WhoViewController: UIViewController {
     let textView: UITextView = {
         let tv = UITextView()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        
+        tv.isEditable = false
         return tv
     }()
     
@@ -38,7 +38,7 @@ class WhoViewController: UIViewController {
     func attributedText()->NSAttributedString{
         let string = "Что за дизайнеры?\nВ системе работают дизайнеры команды Мысмаксом. Это не фрилансеры, а отобранные дизайнеры. Уровень наших работ можно посмотреть на нашем сайте.\n\nКому попадет моя задача?\nВаша задача автоматически попадает свободному дизайнеру." as NSString
         
-        var attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 15.0)])
+        let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 15.0)])
         
         let boldFontAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 15.0)]
         

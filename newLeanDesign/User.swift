@@ -9,6 +9,7 @@
 import UIKit
 
 class User: NSObject {
+    var unread: AnyObject?
     var inbox: AnyObject?
     var activeTasks: AnyObject?
     var bills: AnyObject?
@@ -27,5 +28,7 @@ class User: NSObject {
     var portfolio: String?
     var inn: String?
     var fullCompany: String?
+    var age: String?
+    var city: String?
 }
 

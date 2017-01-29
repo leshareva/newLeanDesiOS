@@ -14,7 +14,7 @@ import Swiftstraints
 class NewTaskController: UIViewController {
 
     var taskViewController: TaskViewController?
-    
+    var attachCounter = 0
     let textDescription: UITextView = {
         let td = UITextView()
         td.text = "Расскажите коротко о задаче. Дизайнер свяжется с вами и уточнит детали."
@@ -46,6 +46,16 @@ class NewTaskController: UIViewController {
     lazy var attachImageView: UIImageView = {
         let imageView = UIImageView()
 //        imageView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 20
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
+    
+    lazy var attachButton: UIImageView = {
+        let imageView = UIImageView()
         imageView.image = UIImage(named: "attach")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectAttachImageView)))
@@ -56,6 +66,7 @@ class NewTaskController: UIViewController {
         return imageView
     }()
     
+   
     lazy var priceView: UIView = {
         let uv = UIView()
         uv.translatesAutoresizingMaskIntoConstraints = false
@@ -71,8 +82,6 @@ class NewTaskController: UIViewController {
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelNewTask))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Добавить", style: .plain, target: self, action: #selector(addNewTask));
-        
-
         setupInputForOrder()
     }
 
@@ -127,13 +136,19 @@ class NewTaskController: UIViewController {
             
             fixOnKeysView.addSubview(tipView)
             fixOnKeysView.addSubview(attachImageView)
-            fixOnKeysView.addConstraints("H:|-16-[\(tipView)]-10-[\(attachImageView)]-10-|")
-            fixOnKeysView.addConstraints("V:|-10-[\(tipView)]-16-|", "V:|-10-[\(attachImageView)]-16-|")
+            fixOnKeysView.addSubview(attachButton)
+            fixOnKeysView.addConstraints("H:|-10-[\(tipView)]-10-[\(attachImageView)]-10-[\(attachButton)]-10-|")
+            fixOnKeysView.addConstraints("V:[\(tipView)]-26-|", "V:|-10-[\(attachImageView)]-16-|", "V:|-10-[\(attachButton)]-16-|")
+            
+            fixOnKeysView.addConstraints(
+                tipView.heightAnchor == 33,
+                attachImageView.heightAnchor == 40,
+                                          attachImageView.widthAnchor == 40,
+                                          attachButton.widthAnchor == 40,
+                                          attachButton.heightAnchor == 40)
+      
+            
             tipView.alpha = 0
-            tipView.bubble.backgroundColor = UIColor(r: 88, g: 165, b: 24)
-
-            fixOnKeysView.addConstraints( attachImageView.heightAnchor == 40,
-            attachImageView.widthAnchor == 40)
             
             if UserDefaults.standard.bool(forKey: "HowMuchReaded") {
                 self.tipView.alpha = 0
@@ -142,21 +157,16 @@ class NewTaskController: UIViewController {
                 if UserDefaults.standard.bool(forKey: "HowTaskingReaded") {
                    self.tipView.alpha = 0
                 } else {
-                    UIView.animate(withDuration: 0.5, delay: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
-                        self.tipView.label.text = "В каком формате ставить задачу?"
-                        self.tipView.bubble.backgroundColor = UIColor(r: 239, g: 148, b: 34)
+                   
+                        self.tipView.label.text = "Как ставить задачу?"
                         self.tipView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleAboutTasks)))
                         self.tipView.alpha = 1
-                    }, completion: nil)
                 }
                 
             } else {
-                UIView.animate(withDuration: 0.5, delay: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
-                     self.tipView.label.text = "Сколько стоит дизайн в Лине?"
-                    self.tipView.bubble.backgroundColor = UIColor(r: 123, g: 195, b: 64)
+                     self.tipView.label.text = "Сколько стоит?"
                      self.tipView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleAboutPrice)))
                      self.tipView.alpha = 1
-                }, completion: nil)
             }
             
              return fixOnKeysView
@@ -172,6 +182,7 @@ class NewTaskController: UIViewController {
         
         NotificationCenter.default.removeObserver(self)
     }
+    
     
     
     func handleKeyboardWillShow(_ notification: Notification) {

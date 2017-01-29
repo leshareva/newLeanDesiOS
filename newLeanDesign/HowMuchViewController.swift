@@ -16,7 +16,7 @@ class HowMuchViewController: UIViewController {
     let textView: UITextView = {
         let tv = UITextView()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        
+        tv.isEditable = false
         return tv
     }()
     

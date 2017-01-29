@@ -11,9 +11,6 @@ extension ConceptViewController {
         guard let taskId = task!.taskId else {
             return
         }
-        
-        
-        
         dismiss(animated: true, completion: nil)
         let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
         

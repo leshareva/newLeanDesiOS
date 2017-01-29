@@ -52,6 +52,9 @@ class SendMessageController: UIViewController {
                 message = "Новое сообщение"
             }
             
+            let notificationRef = FIRDatabase.database().reference().child("admin").child(toId).child("unread").child(fromId)
+            notificationRef.updateChildValues([messageID: 1])
+            
             //send Push notification
             TaskMethods.sendPush(message: message, toId: String(toId), taskId: nil)
             
@@ -85,14 +88,10 @@ class SendMessageController: UIViewController {
                 
                 if snapshot.hasChild("photoUrl") {
                     photoUrl = (snapshot.value as? NSDictionary)!["photoUrl"] as? String
-                } else {
-                    photoUrl = "/img/profile_placeholder.png"
                 }
                 
-                if snapshot.hasChild("name") {
-                    name = (snapshot.value as? NSDictionary)!["name"] as? String
-                } else {
-                    name = "none"
+                if snapshot.hasChild("firstName") {
+                    name = (snapshot.value as? NSDictionary)!["firstName"] as? String
                 }
                 
                 var values: [String: AnyObject] = ["taskId": taskId as AnyObject, "timestamp": timestamp, "fromId": fromId as AnyObject, "status": toId as AnyObject, "photoUrl": photoUrl! as AnyObject, "name": name! as AnyObject]

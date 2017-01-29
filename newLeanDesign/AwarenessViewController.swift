@@ -173,7 +173,7 @@ class AwarenessViewController: UIViewController {
         let values: [String: AnyObject] = ["status": "discuss" as AnyObject]
         ref.child("tasks").child(taskId).child("awareness").updateChildValues(values, withCompletionBlock: { (err, ref) in
             if err != nil {
-                print(err)
+                print(err!)
                 return
             }
         })

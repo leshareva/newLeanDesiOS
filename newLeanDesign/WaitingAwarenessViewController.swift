@@ -89,7 +89,7 @@ class WaitingAwarenessViewController: UIViewController {
                 return
             }
             
-            ref.child("designers").child(designerId as! String).observeSingleEvent(of: .value, with: { (snapshot)  in
+            ref.child("designers").child(designerId ).observeSingleEvent(of: .value, with: { (snapshot)  in
                 guard let name = (snapshot.value as? NSDictionary)!["firstName"] as? String,
                     let phone = (snapshot.value as? NSDictionary)!["phone"] as? String,
                     let photoUrl = (snapshot.value as! NSDictionary)["photoUrl"] as? String else {

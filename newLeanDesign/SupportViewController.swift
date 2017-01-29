@@ -30,6 +30,17 @@ class SupportViewController: UICollectionViewController, UITextFieldDelegate, UI
     }()
     
     
+    func deleteUnread() {
+        guard let userId = Digits.sharedInstance().session()?.userID else {
+            return
+        }
+        
+        let unreadRef = FIRDatabase.database().reference().child("clients").child(userId).child("unread").child("support")
+        unreadRef.removeValue()
+        
+    }
+    
+    
     func observeMessages() {
       
         guard let uid = Digits.sharedInstance().session()!.userID else {
@@ -96,6 +107,7 @@ class SupportViewController: UICollectionViewController, UITextFieldDelegate, UI
         setupNavbarWithUser()
         setupKeyboardObservers()
         observeMessages()
+        deleteUnread()
     }
     
     

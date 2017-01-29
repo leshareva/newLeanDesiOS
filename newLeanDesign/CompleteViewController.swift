@@ -123,7 +123,7 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         
         let source = sources[indexPath.row]
         cell.textLabel?.text = source.name
-
+            print(sources)
         if (source.thumbnailLink != nil) {
             cell.thumbImageView.loadImageUsingCashWithUrlString(source.thumbnailLink!)
         } else {
@@ -149,8 +149,9 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let source = sources[indexPath.row]
+        
         let id = source.id
-        let myWebsite = NSURL(string:"https://drive.google.com/file/d/\(id)")
+        let myWebsite = NSURL(string:"https://drive.google.com/file/d/\(id!)")
         
         guard let url = myWebsite else {
             print("nothing found")
@@ -176,7 +177,7 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         sourceTitle.backgroundColor = .white
         
         if let price = task?.price  {
-            sourceTitle.priceLabel.attributedText = attributedText(string: "Оплачено\n\(price)" as NSString, range: String(describing: price))
+            sourceTitle.priceLabel.attributedText = attributedText(string: "Оплачено\n\(Int(price)) рубля" as NSString, range: String(describing: Int(price)))
             
             
         }

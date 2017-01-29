@@ -8,6 +8,8 @@
 
 import UIKit
 import ImageIO
+
+
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
@@ -66,7 +68,7 @@ extension UIImageView {
             ai.stopAnimating()
             ai.removeFromSuperview()
             
-            DispatchQueue.main.async(execute: {
+            DispatchQueue.main.async{
                 
                 if let downloadedImage = UIImage(data: data!) {
                     imageCashe.setObject(downloadedImage, forKey: urlString as NSString)
@@ -76,7 +78,7 @@ extension UIImageView {
                 }
                 
                 
-            })
+            }
             
             
         }).resume()

@@ -63,21 +63,22 @@ extension ChatViewController {
                 buttonView.isHidden = true
             } else if status == "conceptApprove" {
                 
-                guard var concept = (snapshot.value as? NSDictionary)!["concept"] as? AnyObject else {
+                guard let concept = (snapshot.value as! NSDictionary)["concept"] as? AnyObject else {
                     return
                 }
                 guard let conceptStatus = concept["status"] else {
                     return
                 }
                 
+                buttonView.isHidden = false
+                buttonView.alertButton.isHidden = false
+                buttonView.alertButton.addGestureRecognizer(tappy)
+                tappy.status = "concept"
+                
                 if conceptStatus as! String == "discuss" {
-                    buttonView.isHidden = true
+                   buttonView.alertTextView.text = "Посмотреть черновик"
                 } else {
-                    buttonView.isHidden = false
-                    buttonView.alertButton.isHidden = false
                     buttonView.alertTextView.text = "Согласуйте черновик"
-                    buttonView.alertButton.addGestureRecognizer(tappy)
-                    tappy.status = "concept"
                 }
                 
             } else if status == "design" {
@@ -90,21 +91,22 @@ extension ChatViewController {
                 buttonView.isHidden = true
             } else if status == "designApprove" {
                 
-                guard var design = (snapshot.value as? NSDictionary)!["design"] as? AnyObject else {
+                guard let design = (snapshot.value as! NSDictionary)["design"] as? AnyObject else {
                     return
                 }
                 guard let desStatus = design["status"] else {
                     return
                 }
+                buttonView.isHidden = false
+                
+                buttonView.alertButton.isHidden = false
+                buttonView.alertButton.addGestureRecognizer(tappy)
+                tappy.status = "design"
                 
                 if desStatus as! String == "discuss" {
-                    buttonView.isHidden = true
+                    buttonView.alertTextView.text = "Посмотреть чистовик"
                 } else {
-                    buttonView.isHidden = false
                     buttonView.alertTextView.text = "Согласуйте чистовик"
-                    buttonView.alertButton.isHidden = false
-                    buttonView.alertButton.addGestureRecognizer(tappy)
-                    tappy.status = "design"
                 }
                 
             } else if status == "sources" {
@@ -146,6 +148,7 @@ extension ChatViewController {
     
     func openTaskResult() {
         let completeViewController = CompleteViewController()
+        completeViewController.task = self.task
         completeViewController.archiveButton.isHidden = true
         self.present(completeViewController, animated: true, completion: nil)
     }

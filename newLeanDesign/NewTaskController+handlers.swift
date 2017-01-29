@@ -24,13 +24,14 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
                     
                     if let selectedImage = image {
                         self.attachImageView.image = selectedImage
+                        self.attachCounter = self.attachCounter + 1
+                        self.attachImageView.isHidden = false
                     }
                 }
             }
         }
         
         self.present(pickerController, animated: true, completion: nil)
-        
     }
     
     

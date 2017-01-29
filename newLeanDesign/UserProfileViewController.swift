@@ -17,8 +17,7 @@ class UserProfileViewController: UIViewController {
             obserUserInfo()
         }
     }
-    
-    
+
     let taskImageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage.gifWithName("spinner-duo")

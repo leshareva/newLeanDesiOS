@@ -17,7 +17,7 @@ class HowTaskingViewController: UIViewController {
     let textView: UITextView = {
         let tv = UITextView()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        
+        tv.isEditable = false
         return tv
     }()
     
@@ -39,7 +39,7 @@ class HowTaskingViewController: UIViewController {
     func attributedText()->NSAttributedString{
         let string = "В каком формате ставить задачу?\nДостаточно очень коротко описать суть задачи. После дизайнер разберется в задаче и сам опишет задание на работу.\n\nНапример:\n«Нужно сделать визитку» или «Нужно разработать логотип для магазина одежды" as NSString
         
-        var attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 15.0)])
+        let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 15.0)])
         
         let boldFontAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 15.0)]
         

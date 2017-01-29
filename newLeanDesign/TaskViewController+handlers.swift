@@ -12,6 +12,13 @@ extension TaskViewController {
     
     func setupCompanyView(companyView: CompanyView) {
         
+        if tasks.count == 0 {
+            companyView.titleTableLabel.isHidden = true
+        } else {
+            companyView.titleTableLabel.isHidden = false
+        }
+        
+        
         let oldSum = UserDefaults.standard.integer(forKey: "sum")
         
         if let uid = Digits.sharedInstance().session()?.userID {
@@ -88,7 +95,7 @@ extension TaskViewController {
             } else if status == "awareness" {
 
                 let unreadRef = FIRDatabase.database().reference().child("task-messages")
-                unreadRef.observe( .value, with: { (snapshot) in
+                unreadRef.observeSingleEvent(of: .value, with: { (snapshot) in
                     if snapshot.hasChild(taskId) {
                         self.showChatControllerForUser(task)
                     } else {
@@ -291,8 +298,6 @@ extension TaskViewController {
                         cell.detailTextLabel?.textColor = .white
                     }
                 }
-                
-               
             } else if status == "sources" {
                 cell.detailTextLabel?.text = "Дизайнер готовит исходники"
                 cell.backgroundColor = .white
@@ -308,7 +313,9 @@ extension TaskViewController {
             }
             
             if let taskImageUrl = (snapshot.value as? NSDictionary)!["imageUrl"] as? String {
-                cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
+                DispatchQueue.main.async {
+                    cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
+                }
             } else {
                 cell.taskImageView.image = UIImage.gifWithName("spinner-duo")
             }
@@ -331,14 +338,11 @@ extension TaskViewController {
     }
     
     
+    
     func openConceptFolder() {
-        if let folderUrlFromCash = UserDefaults.standard.string(forKey: "folder") {
-            let googleDriveViewController = GoogleDriveViewController()
-            googleDriveViewController.folderUrl = folderUrlFromCash
-            navigationController?.pushViewController(googleDriveViewController, animated: true)
-            
-        }
-        
+        let flowLayout = UICollectionViewFlowLayout()
+        let myFilesViewController = MyFilesViewController()
+        navigationController?.pushViewController(myFilesViewController, animated: true)
     }
     
     func openStepInfo(status: String, task: Task) {

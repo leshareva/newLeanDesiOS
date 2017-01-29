@@ -29,6 +29,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     var messages = [Message]()
     var sentMessages = [String]()
     var defaults = UserDefaults.standard
+    let cellId = "cellId"
     
     lazy var inputContainerView: ChatInputView = {
         let chatInputView = ChatInputView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50))
@@ -37,7 +38,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
     }()
     
     
-    let cellId = "cellId"
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
