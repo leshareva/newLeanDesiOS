@@ -45,6 +45,17 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         return iv
     }()
     
+    let commentLabel: UITextView = {
+        let tv = UITextView()
+        tv.text = "Принимаем платежи с карты любого банка без комиссии"
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.textColor = .black
+        tv.font = UIFont.systemFont(ofSize: 16)
+        tv.textAlignment = .left
+        tv.isEditable = false
+        return tv
+    }()
+    
     
     let promoLink = UIControls.SectionCell()
     let billLink = UIControls.SectionCell()
@@ -73,10 +84,11 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         view.addSubview(promoLink)
         view.addSubview(tinkoffLogo)
         view.addSubview(billLink)
+        view.addSubview(commentLabel)
         
-        view.addConstraints("V:|-10-[\(amountLabel)]-5-[\(amountField)]-20-[\(promoLink)]")
-        view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|" , "H:|[\(promoLink)]-6-[\(billLink)]")
-        view.addConstraints(amountLabel.heightAnchor == 50, amountField.heightAnchor == 60, promoLink.heightAnchor == 50, billLink.heightAnchor == 50)
+        view.addConstraints("V:|-10-[\(amountLabel)]-5-[\(amountField)]-20-[\(promoLink)][\(commentLabel)]")
+        view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|" , "H:|[\(promoLink)]-6-[\(billLink)]", "H:|-10-[\(commentLabel)]-10-|")
+        view.addConstraints(amountLabel.heightAnchor == 50, amountField.heightAnchor == 60, promoLink.heightAnchor == 50, billLink.heightAnchor == 50, commentLabel.heightAnchor == 60)
         promoLink.label.text = "Ввести промо-код"
         billLink.label.text = "Выставить счет"
         view.addConstraints(tinkoffLogo.centerYAnchor == amountField.centerYAnchor, tinkoffLogo.rightAnchor == amountField.rightAnchor - 20, tinkoffLogo.heightAnchor == amountField.heightAnchor - 30, tinkoffLogo.widthAnchor == 85,

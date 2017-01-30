@@ -91,7 +91,7 @@ class PayByBillController: UIViewController, UITextViewDelegate, UITextFieldDele
         
         
         let parameters: Parameters = [
-            "query": "544300960537"
+            "query": inn
         ]
         
         

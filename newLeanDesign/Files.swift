@@ -11,7 +11,7 @@ import UIKit
 class File: NSObject {
     var timestamp: NSNumber?
     var `extension`: String?
-    var id: String?
+    var imageUrl: String?
     var thumbnailLink: String?
     var name: String?
     
@@ -19,7 +19,7 @@ class File: NSObject {
         super.init()
         timestamp = dictionary["timestamp"] as? NSNumber
         `extension` = dictionary["extension"] as? String
-        id = dictionary["id"] as? String
+        imageUrl = dictionary["imageUrl"] as? String
         name = dictionary["name"] as? String
         thumbnailLink = dictionary["thumbnailLink"] as? String
     }

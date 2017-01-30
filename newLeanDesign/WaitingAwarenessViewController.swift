@@ -17,6 +17,7 @@ class WaitingAwarenessViewController: UIViewController {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.masksToBounds = true
         iv.layer.cornerRadius = 50
+        iv.contentMode = .scaleAspectFill
         return iv
     }()
     

@@ -39,7 +39,7 @@ class TaskCell: UITableViewCell {
         iv.image = UIImage.gifWithName("spinner-duo")
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFill
-        iv.layer.cornerRadius = 25
+        iv.layer.cornerRadius = 20
         iv.clipsToBounds = true
         return iv
     }()
@@ -77,10 +77,10 @@ class TaskCell: UITableViewCell {
         addSubview(taskImageView)
         
         
-        taskImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
-        taskImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        taskImageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        taskImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        taskImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 14).isActive = true
+        taskImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 12).isActive = true
+        taskImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        taskImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         
         
@@ -95,8 +95,8 @@ class TaskCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        textLabel?.frame = CGRect(x: 66, y: textLabel!.frame.origin.y - 2, width: self.frame.width - 84, height: textLabel!.frame.height)
-        detailTextLabel?.frame = CGRect(x: 66, y: detailTextLabel!.frame.origin.y + 2, width: detailTextLabel!.frame.width, height: detailTextLabel!.frame.height)
+        textLabel?.frame = CGRect(x: 64, y: textLabel!.frame.origin.y - 4, width: self.frame.width - 84, height: textLabel!.frame.height)
+        detailTextLabel?.frame = CGRect(x: 64, y: detailTextLabel!.frame.origin.y, width: detailTextLabel!.frame.width, height: detailTextLabel!.frame.height)
         textLabel?.numberOfLines = 2
         textLabel?.font = UIFont.systemFont(ofSize: 16)
         

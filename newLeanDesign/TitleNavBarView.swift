@@ -17,6 +17,7 @@ class TitleNavBarView: UIView {
         iv.layer.cornerRadius = 18
         iv.layer.masksToBounds = true
         iv.isUserInteractionEnabled = true
+        iv.contentMode = .scaleAspectFill
         return iv
     }()
     

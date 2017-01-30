@@ -72,9 +72,7 @@ extension UIImageView {
                 
                 if let downloadedImage = UIImage(data: data!) {
                     imageCashe.setObject(downloadedImage, forKey: urlString as NSString)
-                   
                     self.image = downloadedImage
-                    
                 }
                 
                 

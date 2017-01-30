@@ -24,21 +24,21 @@ extension ChatViewController {
         let buttonView = ButtonView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 50))
         view.addSubview(buttonView)
         
+        
+        let screenSize = self.view.frame.size.width - 32
+        
         let taskId = task?.taskId
         let ref = FIRDatabase.database().reference().child("tasks").child(taskId!)
         ref.observe(.value, with: { (snapshot) in
             let status = (snapshot.value as? NSDictionary)!["status"] as! String
             
             let tappy = MyTapGesture(target: self, action: #selector(self.openStepInfo(_:)))
-            if status == "none" {
-                buttonView.alertButton.isHidden = false
-                buttonView.alertButton.backgroundColor = StepsView.activeColor
-                buttonView.alertTextView.text = "Мы подбираем дизайнера"
-            } else  if status == "awareness" {
-                containerView.stepOne.backgroundColor = StepsView.activeColor
+            if status == "awareness" {
+                containerView.progressWidthAnchor?.constant = (screenSize / 4) / 2
                 containerView.textOne.textColor = StepsView.activeTextColor
                 buttonView.isHidden = true
             } else if status == "awarenessApprove" {
+                containerView.progressWidthAnchor?.constant = screenSize / 4
                 let awareness = (snapshot.value as? NSDictionary)!["awareness"] as AnyObject
                 
                 if awareness["status"] as! String == "discuss" {
@@ -52,17 +52,16 @@ extension ChatViewController {
                 }
                 
             } else if status == "price"{
+                
                 buttonView.isHidden = true
-                containerView.stepOne.backgroundColor = StepsView.activeColor
                 containerView.textOne.textColor = StepsView.activeTextColor
             } else if status == "concept" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
+                containerView.progressWidthAnchor?.constant = (screenSize / 4) + ((screenSize / 4) / 2)
                 containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.activeColor
                 containerView.textTwo.textColor = StepsView.activeTextColor
                 buttonView.isHidden = true
             } else if status == "conceptApprove" {
-                
+                containerView.progressWidthAnchor?.constant = (screenSize / 4) * 2
                 guard let concept = (snapshot.value as! NSDictionary)["concept"] as? AnyObject else {
                     return
                 }
@@ -82,15 +81,13 @@ extension ChatViewController {
                 }
                 
             } else if status == "design" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
+                containerView.progressWidthAnchor?.constant = ((screenSize / 4) * 2) + ((screenSize / 4) / 2)
                 containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.doneColor
                 containerView.textTwo.textColor = StepsView.doneTextColor
-                containerView.stepThree.backgroundColor = StepsView.activeColor
                 containerView.textThree.textColor = StepsView.activeTextColor
                 buttonView.isHidden = true
             } else if status == "designApprove" {
-                
+                containerView.progressWidthAnchor?.constant = (screenSize / 4) * 3
                 guard let design = (snapshot.value as! NSDictionary)["design"] as? AnyObject else {
                     return
                 }
@@ -110,16 +107,14 @@ extension ChatViewController {
                 }
                 
             } else if status == "sources" {
-                containerView.stepOne.backgroundColor = StepsView.doneColor
+                containerView.progressWidthAnchor?.constant = ((screenSize / 4) * 3) + ((screenSize / 4) / 2)
                 containerView.textOne.textColor = StepsView.doneTextColor
-                containerView.stepTwo.backgroundColor = StepsView.doneColor
                 containerView.textTwo.textColor = StepsView.doneTextColor
-                containerView.stepThree.backgroundColor = StepsView.doneColor
                 containerView.textThree.textColor = StepsView.doneTextColor
-                containerView.stepFour.backgroundColor = StepsView.activeColor
                 containerView.textFour.textColor = StepsView.activeTextColor
                 buttonView.isHidden = true
             } else if status == "done" {
+                containerView.progressWidthAnchor?.constant = screenSize
                 buttonView.isHidden = false
                 buttonView.alertTextView.text = "Задача закрыта. Примите исходники"
                 buttonView.alertButton.isHidden = false

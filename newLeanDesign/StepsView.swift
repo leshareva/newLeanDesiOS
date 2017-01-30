@@ -17,11 +17,19 @@ class StepsView: UIView {
     }
     
     static let activeColor = UIColor(r: 0, g: 127, b: 255)
-    static let activeTextColor = UIColor.white
+    static let activeTextColor = UIColor.black
     static let doneColor = UIColor(r: 192, g: 203, b: 214)
-    static let doneTextColor = UIColor(r: 130, g: 147, b: 164)
+    static let doneTextColor = UIColor.lightGray
     
     static let greenColor = UIColor(r: 109, g: 199, b: 82)
+    
+    let container: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        return view
+    }()
+    
     
     let stepOne: UIView = {
        let view = UIView()
@@ -34,7 +42,8 @@ class StepsView: UIView {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Понимание"
         tv.font = UIFont.systemFont(ofSize: 12.0)
-        tv.textColor = UIColor(r: 170, g: 170, b: 170)
+        tv.textColor = UIColor.lightGray
+        tv.textAlignment = .center
         return tv
     }()
     
@@ -49,7 +58,8 @@ class StepsView: UIView {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Черновик"
         tv.font = UIFont.systemFont(ofSize: 12.0)
-        tv.textColor = UIColor(r: 170, g: 170, b: 170)
+        tv.textColor = UIColor.lightGray
+        tv.textAlignment = .center
         return tv
     }()
     
@@ -64,7 +74,8 @@ class StepsView: UIView {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Чистовик"
         tv.font = UIFont.systemFont(ofSize: 12.0)
-        tv.textColor = UIColor(r: 170, g: 170, b: 170)
+        tv.textColor = UIColor.lightGray
+        tv.textAlignment = .center
         return tv
     }()
     
@@ -79,46 +90,64 @@ class StepsView: UIView {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.text = "Исходник"
         tv.font = UIFont.systemFont(ofSize: 12.0)
-        tv.textColor = UIColor(r: 170, g: 170, b: 170)
+        tv.textColor = UIColor.lightGray
+        tv.textAlignment = .center
         return tv
     }()
     
+    let progressbar: UIView = {
+       let uv = UIView()
+        uv.translatesAutoresizingMaskIntoConstraints = false
+        uv.backgroundColor = UIColor(r: 240, g: 240, b: 240)
+        return uv
+    }()
+    
+    let progressWidth: UIView = {
+        let uv = UIView()
+        uv.translatesAutoresizingMaskIntoConstraints = false
+        uv.backgroundColor = LeanColor.blueColor
+        return uv
+    }()
+    
+    
+    var progressWidthAnchor: NSLayoutConstraint?
+    
     func setupView() {
-        self.backgroundColor = UIColor(r: 238, g: 238, b: 238)
+        backgroundColor = .white
         
-        self.addSubview(stepOne)
-        self.addSubview(stepTwo)
-        self.addSubview(stepThree)
-        self.addSubview(stepFour)
+        addSubview(container)
+        addSubview(progressbar)
+        container.addSubview(textOne)
+        container.addSubview(textTwo)
+        container.addSubview(textThree)
+        container.addSubview(textFour)
         
-       
-        self.addConstraints("H:|[\(stepOne)][\(stepTwo)][\(stepThree)][\(stepFour)]")
-        self.addConstraints("V:|[\(stepOne)]|", "V:|[\(stepTwo)]|", "V:|[\(stepThree)]|", "V:|[\(stepFour)]|")
-        self.addConstraints(stepOne.widthAnchor == self.widthAnchor / 4,
-                       stepTwo.widthAnchor == self.widthAnchor / 4,
-                       stepThree.widthAnchor == self.widthAnchor / 4,
-                       stepFour.widthAnchor == self.widthAnchor / 4
-                       )
+        addConstraints("H:|-16-[\(container)]-16-|")
+        addConstraints("H:|-16-[\(progressbar)]-16-|")
+        addConstraints("V:|[\(container)][\(progressbar)]")
+        addConstraints(container.heightAnchor == 40, progressbar.heightAnchor == 2)
         
+        container.addConstraints("H:|[\(textOne)][\(textTwo)][\(textThree)][\(textFour)]")
         
-        self.addSubview(textOne)
-        self.addSubview(textTwo)
-        self.addSubview(textThree)
-        self.addSubview(textFour)
-        
-        self.addConstraints(
-                            textOne.centerXAnchor == stepOne.centerXAnchor,
-                            textOne.centerYAnchor == self.centerYAnchor,
-                            textTwo.centerXAnchor == stepTwo.centerXAnchor,
-                            textTwo.centerYAnchor == self.centerYAnchor,
-                            textThree.centerXAnchor == stepThree.centerXAnchor,
-                            textThree.centerYAnchor == self.centerYAnchor,
-                            textFour.centerXAnchor == stepFour.centerXAnchor,
-                            textFour.centerYAnchor == self.centerYAnchor
+        container.addConstraints(
+            textOne.centerYAnchor == container.centerYAnchor,
+            textOne.widthAnchor == container.widthAnchor / 4,
+            textTwo.centerYAnchor == container.centerYAnchor,
+            textTwo.widthAnchor == container.widthAnchor / 4,
+            textThree.centerYAnchor == container.centerYAnchor,
+            textThree.widthAnchor == container.widthAnchor / 4,
+            textFour.centerYAnchor == container.centerYAnchor,
+            textFour.widthAnchor == container.widthAnchor / 4
         )
         
         
-                
+        progressbar.addSubview(progressWidth)
+        
+        progressbar.addConstraints("V:|[\(progressWidth)]|")
+        progressbar.addConstraints("H:|[\(progressWidth)]")
+        
+        progressWidthAnchor = progressWidth.widthAnchor.constraint(equalToConstant: 200)
+        progressWidthAnchor?.isActive = true
         
     }
     

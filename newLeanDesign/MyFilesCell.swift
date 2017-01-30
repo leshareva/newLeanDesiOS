@@ -11,6 +11,15 @@ import Swiftstraints
 
 class MyFilesCell: UICollectionViewCell {
     
+    let extesionsImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFill
+        iv.isUserInteractionEnabled = true
+        iv.clipsToBounds = true
+        return iv
+    }()
+    
     let thumbImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -29,14 +38,14 @@ class MyFilesCell: UICollectionViewCell {
         super.init(frame: frame)
         self.backgroundColor = UIColor(r: 245, g: 245, b: 245)
         
-
         self.addSubview(thumbImageView)
-        
-//        self.addConstraints(thumbImageView.heightAnchor == 60,
-//                            thumbImageView.widthAnchor == 60,
-//                            thumbImageView.centerXAnchor == self.centerXAnchor,
-//                            thumbImageView.centerYAnchor == self.centerYAnchor)
-        
+        self.addConstraints("H:|[\(thumbImageView)]|")
+        self.addConstraints("V:|[\(thumbImageView)]|")
+        self.addSubview(extesionsImageView)
+        self.addConstraints(extesionsImageView.heightAnchor == 50,
+                            extesionsImageView.widthAnchor == 50,
+                            extesionsImageView.centerXAnchor == self.centerXAnchor,
+                            extesionsImageView.centerYAnchor == self.centerYAnchor)
 
     }
     

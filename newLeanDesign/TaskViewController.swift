@@ -219,7 +219,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 74
+        return 80
     }
     
     func openNewTaskView() {

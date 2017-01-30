@@ -44,7 +44,7 @@ class ChatViewController: UICollectionViewController, UITextFieldDelegate, UICol
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         
-        collectionView?.contentInset = UIEdgeInsets(top: 48, left: 0, bottom: 8, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: 54, left: 0, bottom: 8, right: 0)
         collectionView?.alwaysBounceVertical = true
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ChatMessageCell.self, forCellWithReuseIdentifier: cellId)
