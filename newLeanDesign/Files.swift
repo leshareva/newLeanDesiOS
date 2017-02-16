@@ -10,18 +10,20 @@ import UIKit
 
 class File: NSObject {
     var timestamp: NSNumber?
-    var `extension`: String?
-    var imageUrl: String?
+    var source: String?
     var thumbnailLink: String?
     var name: String?
+    var width: String?
+    var height: String?
     
     init(dictionary: [String: AnyObject]) {
         super.init()
         timestamp = dictionary["timestamp"] as? NSNumber
-        `extension` = dictionary["extension"] as? String
-        imageUrl = dictionary["imageUrl"] as? String
+        source = dictionary["source"] as? String
         name = dictionary["name"] as? String
         thumbnailLink = dictionary["thumbnailLink"] as? String
+        width = dictionary["width"] as? String
+        height = dictionary["height"] as? String
     }
     
 }

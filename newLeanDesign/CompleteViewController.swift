@@ -9,11 +9,11 @@ import DigitsKit
 class CompleteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
     
     var task: Task?
-    var sources = [Source]()
+    var sources = [File]()
     let cellId = "cellId"
     var tableView: UITableView  =  UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     var timer: Timer?
-    var sourcesDictionary = [String: Source]()
+    var sourcesDictionary = [String: File]()
 
     lazy var archiveButton: UIButton = {
         let btn = UIButton()
@@ -68,12 +68,19 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         
         let ref = FIRDatabase.database().reference()
         ref.child("tasks").child(taskId).child("sources").observe(.childAdded, with: {(snapshot) in
-            if let dictionary = snapshot.value as? [String: AnyObject] {
-                let source = Source(dictionary: dictionary)
-                self.sourcesDictionary[snapshot.key] = source
-            }
             
-            self.attemptReloadTable()
+            let fileKey = snapshot.key
+            
+            ref.child("files").child(fileKey).observe(.value, with: { (snapshot) in
+                if let dictionary = snapshot.value as? [String: AnyObject] {
+                    let source = File(dictionary: dictionary)
+                    self.sourcesDictionary[snapshot.key] = source
+                }
+                
+                self.attemptReloadTable()
+            }, withCancel: nil)
+            
+            
             
 
         }, withCancel: nil)
@@ -121,24 +128,19 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SourceCell
         
-        let source = sources[indexPath.row]
-        cell.textLabel?.text = source.name
-            print(sources)
-        if (source.thumbnailLink != nil) {
-            cell.thumbImageView.loadImageUsingCashWithUrlString(source.thumbnailLink!)
+        let file = sources[indexPath.row]
+        cell.textLabel?.text = file.name
+        if (file.thumbnailLink != nil) {
+            cell.thumbImageView.loadImageUsingCashWithUrlString(file.thumbnailLink!)
         } else {
-            if source.extension == "psd" {
                 cell.extensionImageView.image = UIImage(named: "psd")
                 cell.thumbImageView.isHidden = true
-            } else {
-                
-            }
         }
         
-        if let id = source.id {
+        if let url = file.source {
             let tappy = MyTapGesture(target: self, action: #selector(self.handleShare(_:)))
             cell.linkImageView.addGestureRecognizer(tappy)
-            tappy.string = id
+            tappy.string = url
         }
         
         
@@ -148,10 +150,9 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let source = sources[indexPath.row]
+        let file = sources[indexPath.row]
         
-        let id = source.id
-        let myWebsite = NSURL(string:"https://drive.google.com/file/d/\(id!)")
+        let myWebsite = NSURL(string: file.source!)
         
         guard let url = myWebsite else {
             print("nothing found")
@@ -210,9 +211,8 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     func handleShare(_ sender : MyTapGesture) {
-        
-        let id = sender.string! as String
-        let myWebsite = NSURL(string:"https://drive.google.com/file/d/\(id)")
+
+        let myWebsite = NSURL(string: sender.string! as String)
         
         guard let url = myWebsite else {
             print("nothing found")

@@ -25,7 +25,7 @@ class MyFilesViewController: UIViewController, UICollectionViewDelegateFlowLayou
         self.observeUserFiles()
         
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 80, right: 10)
         let screenWidth  = UIScreen.main.bounds.width - 40
         layout.itemSize = CGSize(width: screenWidth / 2, height: 120)
         
@@ -61,25 +61,6 @@ class MyFilesViewController: UIViewController, UICollectionViewDelegateFlowLayou
         }
     }
     
-    func slideDown() {
-        guard let uid = Digits.sharedInstance().session()?.userID else {
-            print("No Digits")
-            return
-        }
-        
-        let site = Server.desktopWeb
-        let myWebsite = NSURL(string:"\(site)/upload-files/?=\(uid)")
-        
-        guard let url = myWebsite else {
-            print("nothing found")
-            return
-        }
-        
-        UIPasteboard.general.string = String(describing: url)
-        
-       self.view.makeToast("Ссылка для загрузки файлов скопирована в память", duration: 3.0, position: .top)
-    }
-    
     
     
     func slideUp() {
@@ -99,6 +80,7 @@ class MyFilesViewController: UIViewController, UICollectionViewDelegateFlowLayou
             cell.extesionsImageView.image = UIImage(named: "psd")
         }
         
+        cell.nameLabel.text = file.name
         return cell
     }
     
@@ -111,7 +93,7 @@ class MyFilesViewController: UIViewController, UICollectionViewDelegateFlowLayou
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let file = files[indexPath.row]
         
-        let imageUrl = file.imageUrl
+        let imageUrl = file.source
         let myWebsite = NSURL(string: imageUrl!)
         
         guard let url = myWebsite else {

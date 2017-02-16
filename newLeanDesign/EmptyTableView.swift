@@ -49,12 +49,12 @@ class EmptyTableView: UIView {
         
         
         
-        self.addConstraints(emptyImageView.centerYAnchor == self.centerYAnchor + 20,
+        self.addConstraints(emptyImageView.centerYAnchor == self.centerYAnchor - 20,
                             emptyImageView.centerXAnchor == self.centerXAnchor,
-                            emptyImageView.heightAnchor == 150,
-                            emptyImageView.widthAnchor == 150,
+                            emptyImageView.heightAnchor == 120,
+                            emptyImageView.widthAnchor == 120,
                             emptyTextView.centerXAnchor == self.centerXAnchor,
-                            emptyTextView.topAnchor == emptyImageView.bottomAnchor - 10,
+                            emptyTextView.topAnchor == emptyImageView.bottomAnchor + 10,
                             emptyTextView.widthAnchor == self.widthAnchor - 40,
                             emptyTextView.heightAnchor == 50
                             )

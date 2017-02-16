@@ -36,7 +36,7 @@ class WhoViewController: UIViewController {
     }
     
     func attributedText()->NSAttributedString{
-        let string = "Что за дизайнеры?\nВ системе работают дизайнеры команды Мысмаксом. Это не фрилансеры, а отобранные дизайнеры. Уровень наших работ можно посмотреть на нашем сайте.\n\nКому попадет моя задача?\nВаша задача автоматически попадает свободному дизайнеру." as NSString
+        let string = "Что за дизайнеры?\nВ системе работают дизайнеры команды Мысмаксом. Это не фрилансеры, а отобранные дизайнеры.\n\nКому попадет моя задача?\nВаша задача автоматически попадает свободному дизайнеру." as NSString
         
         let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 15.0)])
         

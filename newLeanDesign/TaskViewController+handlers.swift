@@ -44,7 +44,7 @@ extension TaskViewController {
                 
                 UserDefaults.standard.set("https://drive.google.com/drive/folders/\(folderId)", forKey: "folder")
                 
-                companyView.conceptButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
+                companyView.conceptContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
                 
             }, withCancel: nil)
             

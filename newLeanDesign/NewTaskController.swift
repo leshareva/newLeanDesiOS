@@ -138,7 +138,7 @@ class NewTaskController: UIViewController {
             fixOnKeysView.addSubview(attachImageView)
             fixOnKeysView.addSubview(attachButton)
             fixOnKeysView.addConstraints("H:|-10-[\(tipView)]-10-[\(attachImageView)]-10-[\(attachButton)]-10-|")
-            fixOnKeysView.addConstraints("V:[\(tipView)]-26-|", "V:|-10-[\(attachImageView)]-16-|", "V:|-10-[\(attachButton)]-16-|")
+            fixOnKeysView.addConstraints("V:[\(tipView)]-18-|", "V:|-10-[\(attachImageView)]-16-|", "V:|-10-[\(attachButton)]-16-|")
             
             fixOnKeysView.addConstraints(
                 tipView.heightAnchor == 33,
@@ -157,14 +157,13 @@ class NewTaskController: UIViewController {
                 if UserDefaults.standard.bool(forKey: "HowTaskingReaded") {
                    self.tipView.alpha = 0
                 } else {
-                   
                         self.tipView.label.text = "Как ставить задачу?"
                         self.tipView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleAboutTasks)))
                         self.tipView.alpha = 1
                 }
                 
             } else {
-                     self.tipView.label.text = "Сколько стоит?"
+                     self.tipView.label.text = "Сколько стоит дизайн в Лине?"
                      self.tipView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleAboutPrice)))
                      self.tipView.alpha = 1
             }

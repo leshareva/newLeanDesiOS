@@ -19,6 +19,7 @@ extension ChatViewController {
     func setupStepsView() {
         
         let containerView = StepsView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 30))
+        containerView.backgroundColor = .white
         view.addSubview(containerView)
         
         let buttonView = ButtonView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 50))

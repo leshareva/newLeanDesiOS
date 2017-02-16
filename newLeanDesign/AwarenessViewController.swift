@@ -6,12 +6,10 @@ import Firebase
 import Alamofire
 import DigitsKit
 
-class AwarenessViewController: UIViewController {
+class AwarenessViewController: UIViewController, UIWebViewDelegate {
     
     var task: Task?
-    
-    
-    
+    var webV: UIWebView!
     
     lazy var titleView: UITextView = {
         let tv = UITextView()
@@ -26,7 +24,7 @@ class AwarenessViewController: UIViewController {
         return tv
     }()
     
-    let awarenessText: UITextView = {
+    var awarenessText: UITextView = {
         let tv = UITextView()
         
         tv.backgroundColor = .clear
@@ -36,6 +34,8 @@ class AwarenessViewController: UIViewController {
         tv.font = UIFont.systemFont(ofSize: 16.0)
         tv.isEditable = false
         tv.isSelectable = false
+        tv.isScrollEnabled = false
+        tv.sizeToFit()
         return tv
     }()
     
@@ -71,44 +71,75 @@ class AwarenessViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         getAwarenessDetails()
         setReadStatus()
+        setupView()
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Свернуть", style: .plain, target: self, action: #selector(handleDismiss))
     }
     
     
     func setupView() {
         view.backgroundColor = .white
-        view.addSubview(titleView)
-        view.addSubview(awarenessText)
         view.addSubview(acceptButton)
         view.addSubview(discussButton)
-        view.addSubview(textlabel)
         
-        view.addConstraints("V:|-40-[\(titleView)]-20-[\(awarenessText)]|", "V:[\(textlabel)]-10-[\(acceptButton)]-10-[\(discussButton)]-16-|")
-        view.addConstraints("H:|-16-[\(titleView)]-16-|","H:|-16-[\(awarenessText)]-16-|", "H:|-16-[\(acceptButton)]-16-|", "H:|-16-[\(discussButton)]-16-|", "H:|-16-[\(textlabel)]-16-|")
         
-        view.addConstraints(titleView.heightAnchor == 150,
-                            acceptButton.heightAnchor == 50,
-                            discussButton.heightAnchor == 50,
-                            textlabel.heightAnchor == 20)
-
+        webV = UIWebView(frame: CGRect(x: 0, y: 60, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 160))
+        
+        if let taskId = self.task?.taskId {
+            webV.loadRequest(NSURLRequest(url: NSURL(string: "\(Server.serverUrl)/awareness?taskId=\(taskId)") as! URL) as URLRequest)
+            webV.delegate = self
+            self.view.addSubview(webV)
+        }
+        view.addConstraints("H:|[\(acceptButton)]|", "H:|[\(discussButton)]|")
+        view.addConstraints(acceptButton.heightAnchor == 50, discussButton.topAnchor == webV.bottomAnchor,
+                            discussButton.heightAnchor == 50, acceptButton.topAnchor == discussButton.bottomAnchor)
     }
+    
+
+    
     
     func getAwarenessDetails() {
         if let taskId = self.task?.taskId {
             let ref = FIRDatabase.database().reference()
-            ref.child("tasks").child(taskId).child("awareness").observeSingleEvent(of: .value, with: {(snapshot) in
+            
+            ref.child("tasks").child(taskId).child("awareness").observeSingleEvent(of: .value, with: { (snapshot) in
                 guard let awareness = (snapshot.value as! NSDictionary)["text"] as? String else {
                     return
                 }
                 
-                self.awarenessText.text = awareness
+                var height: CGFloat = 80
+                let font = UIFont.systemFont(ofSize: 16)
+                do {
+                    let attrStr = try NSMutableAttributedString(HTMLString: awareness, font: nil)
+                    var attrs = attrStr?.attributes(at: 0, effectiveRange: nil)
+                    attrs?[NSFontAttributeName] as? UIFont
+                    
+                    height = (attrStr?.boundingRect(with: CGSize(width: 200, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin), context: nil).height)!
+                    
+                    self.awarenessText.attributedText = attrStr
+                    
+                    self.awarenessText.frame = CGRect(x: 0, y: 60, width: self.view.window!.frame.size.width, height: height)
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
                 
+
             }, withCancel: nil)
+                
+            
+                
+            
+           
         }
     }
     
+    
+    func setupTextView(text: String) {
+        
+        
+    }
     
     func setReadStatus() {
         if let taskId = self.task?.taskId {
@@ -201,4 +232,12 @@ class AwarenessViewController: UIViewController {
         
         
     }
+    
+    
+    func handleDismiss() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+   
+    
 }

@@ -18,7 +18,6 @@
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* ChatInputView.swift */; };
 		CB353C771E15A16200E74E92 /* SourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB353C761E15A16200E74E92 /* SourceCell.swift */; };
-		CB353C791E15A2BC00E74E92 /* Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB353C781E15A2BC00E74E92 /* Source.swift */; };
 		CB353C7B1E163BA600E74E92 /* SourceTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB353C7A1E163BA600E74E92 /* SourceTitle.swift */; };
 		CB353C7D1E16621B00E74E92 /* SourceFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB353C7C1E16621B00E74E92 /* SourceFooter.swift */; };
 		CB39FAD41D942944007E9365 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB39FAD31D942944007E9365 /* TaskViewController.swift */; };
@@ -104,7 +103,6 @@
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
 		CB353C761E15A16200E74E92 /* SourceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceCell.swift; sourceTree = "<group>"; };
-		CB353C781E15A2BC00E74E92 /* Source.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Source.swift; sourceTree = "<group>"; };
 		CB353C7A1E163BA600E74E92 /* SourceTitle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceTitle.swift; sourceTree = "<group>"; };
 		CB353C7C1E16621B00E74E92 /* SourceFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceFooter.swift; sourceTree = "<group>"; };
 		CB39FAD31D942944007E9365 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -246,7 +244,6 @@
 				CB353C761E15A16200E74E92 /* SourceCell.swift */,
 				CB353C7A1E163BA600E74E92 /* SourceTitle.swift */,
 				CB353C7C1E16621B00E74E92 /* SourceFooter.swift */,
-				CB353C781E15A2BC00E74E92 /* Source.swift */,
 				CB6E31411E0FC6DA00A7AF6E /* CompleteViewController.swift */,
 			);
 			name = SourcesViewController;
@@ -616,7 +613,6 @@
 				CBF50ADB1E1532980025B950 /* TipView.swift in Sources */,
 				CBD5C1021E1BE4EA0050AA04 /* UserMethods.swift in Sources */,
 				CB4F7E601E014DDD0057E249 /* GetRateView.swift in Sources */,
-				CB353C791E15A2BC00E74E92 /* Source.swift in Sources */,
 				CBC6823F1E1D18E200CCE93E /* SupportIconView.swift in Sources */,
 				CB353C771E15A16200E74E92 /* SourceCell.swift in Sources */,
 				CBB75F261DE9EEF00079C7EC /* AmountViewController.swift in Sources */,

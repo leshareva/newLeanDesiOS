@@ -141,8 +141,8 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         logoutButton.isHidden = true
         
         
-        view.addConstraints("V:|-20-[\(closeButton)]", "V:|-20-[\(saveButton)]")
-        view.addConstraints("H:|-8-[\(closeButton)]", "H:[\(saveButton)]-8-|")
+        view.addConstraints("V:|-25-[\(closeButton)]", "V:|-25-[\(saveButton)]")
+        view.addConstraints("H:|-16-[\(closeButton)]", "H:[\(saveButton)]-16-|")
         
 
         view.addConstraints("V:[\(logoutButton)]|", "V:|-240-[\(inputForPhone)]-1-[\(inputForCompany)]-1-[\(inputForEmail)]")
@@ -150,11 +150,11 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         view.addConstraints(inputForPhone.heightAnchor == 50,
                             inputForCompany.heightAnchor == 50,
                             inputForEmail.heightAnchor == 50,
-                            closeButton.widthAnchor == 30,
-                            closeButton.heightAnchor == 30,
+                            closeButton.widthAnchor == 45,
+                            closeButton.heightAnchor == 45,
                             logoutButton.heightAnchor == 60,
-                            saveButton.widthAnchor == 30,
-                            saveButton.heightAnchor == 30
+                            saveButton.widthAnchor == 45,
+                            saveButton.heightAnchor == 45
                             )
         
     }

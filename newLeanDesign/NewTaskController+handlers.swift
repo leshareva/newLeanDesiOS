@@ -57,7 +57,11 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
 
                 if let result = response.result.value as? [String: Any] {
                     let taskId = result["taskId"]
-                    self.sendTaskImageToChat(fromId, taskId: taskId! as! String)
+                    
+                    if( self.attachImageView.image != nil) {
+                        self.sendTaskImageToChat(fromId, taskId: taskId! as! String)
+                    }
+                    
                 }
         }
         

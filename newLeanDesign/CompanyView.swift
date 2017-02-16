@@ -11,8 +11,7 @@ import Swiftstraints
 import EFCountingLabel
 
 class CompanyView: UIView {
-    
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -106,9 +105,18 @@ class CompanyView: UIView {
         return view
     }()
     
+    lazy var conceptContainer: UIButton = {
+       let uv = UIButton()
+        uv.translatesAutoresizingMaskIntoConstraints = false
+        uv.isUserInteractionEnabled = true
+        uv.isHighlighted = true
+        uv.isSelected = true
+        return uv
+    }()
+    
     lazy var conceptButton: UILabel = {
         let label = UILabel()
-        label.text = "Мои макеты"
+        label.text = "Мои файлы"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = true
         return label
@@ -144,17 +152,15 @@ class CompanyView: UIView {
         self.addSubview(aboutPriceLabel)
         self.addSubview(priceLabel)
         self.addSubview(separatorOne)
-        self.addSubview(iconConceptView)
         self.addSubview(conceptButton)
         self.addSubview(separatorTwo)
         self.addSubview(titleTableLabel)
         self.addSubview(payButton)
+        self.addSubview(conceptContainer)
         
-//        self.addConstraints("H:|-16-[\(logoView)]-16-[\(companyNameLabel)]|")
-//        self.addConstraints("V:|-16-[\(logoView)]", "V:|-16-[\(companyNameLabel)]-12-[\(aboutPriceLabel)]-4-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
-        
+
         self.addConstraints("H:|-16-[\(companyNameLabel)]|")
-        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-2-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(iconConceptView)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
+        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-2-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(conceptContainer)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
         self.addConstraints(
                             aboutPriceLabel.leftAnchor == companyNameLabel.leftAnchor,
                             priceLabel.leftAnchor == companyNameLabel.leftAnchor,
@@ -163,11 +169,9 @@ class CompanyView: UIView {
                             separatorOne.leftAnchor == companyNameLabel.leftAnchor,
                             separatorOne.rightAnchor == self.rightAnchor - 16,
                             
-                            iconConceptView.heightAnchor == 28,
-                            iconConceptView.widthAnchor == 28,
-                            iconConceptView.leftAnchor == companyNameLabel.leftAnchor,
-                            conceptButton.leftAnchor == iconConceptView.rightAnchor + 8,
-                            conceptButton.centerYAnchor == iconConceptView.centerYAnchor,
+                            conceptContainer.heightAnchor == 28,
+                            conceptContainer.widthAnchor == separatorOne.widthAnchor,
+                            conceptContainer.leftAnchor == companyNameLabel.leftAnchor,
                             
                             separatorTwo.heightAnchor == 1,
                             separatorTwo.leftAnchor == companyNameLabel.leftAnchor,
@@ -180,6 +184,13 @@ class CompanyView: UIView {
                             payButton.heightAnchor == 25
             
         )
+        
+        conceptContainer.addSubview(conceptButton)
+        conceptContainer.addConstraints("H:|[\(conceptButton)]|")
+        conceptContainer.addConstraints(conceptButton.centerYAnchor == conceptContainer.centerYAnchor)
+        
+        
+        
         
     }
     

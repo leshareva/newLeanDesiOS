@@ -267,8 +267,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.allowsMultipleSelectionDuringEditing = true
         activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         tableView.backgroundView = activityIndicatorView
-        
-  
     }
     
     
@@ -304,7 +302,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.tableView.reloadData()
         })
        
-        observeUserTasks()
+         observeUserTasks()
         
     }
     

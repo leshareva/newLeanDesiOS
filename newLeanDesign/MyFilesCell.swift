@@ -14,7 +14,6 @@ class MyFilesCell: UICollectionViewCell {
     let extesionsImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFill
         iv.isUserInteractionEnabled = true
         iv.clipsToBounds = true
         return iv
@@ -29,6 +28,14 @@ class MyFilesCell: UICollectionViewCell {
         return iv
     }()
     
+    let nameLabel: UILabel = {
+       let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.textAlignment = .center
+        return label
+    }()
+    
     
     
     var myFilesViewController: MyFilesViewController?
@@ -36,16 +43,18 @@ class MyFilesCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor(r: 245, g: 245, b: 245)
+        self.backgroundColor = .white
         
         self.addSubview(thumbImageView)
-        self.addConstraints("H:|[\(thumbImageView)]|")
-        self.addConstraints("V:|[\(thumbImageView)]|")
+        self.addSubview(nameLabel)
+        self.addConstraints("H:|[\(thumbImageView)]|", "H:|[\(nameLabel)]|")
+        self.addConstraints("V:|[\(thumbImageView)][\(nameLabel)]|")
         self.addSubview(extesionsImageView)
-        self.addConstraints(extesionsImageView.heightAnchor == 50,
+        self.addConstraints(extesionsImageView.heightAnchor == 45,
                             extesionsImageView.widthAnchor == 50,
                             extesionsImageView.centerXAnchor == self.centerXAnchor,
-                            extesionsImageView.centerYAnchor == self.centerYAnchor)
+                            extesionsImageView.centerYAnchor == self.centerYAnchor,
+                            nameLabel.heightAnchor == 20)
 
     }
     
