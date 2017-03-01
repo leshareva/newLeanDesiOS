@@ -4,6 +4,7 @@ import DigitsKit
 import DKImagePickerController
 import Alamofire
 import Cosmos
+import Swiftstraints
 
 
 extension TaskViewController {
@@ -25,13 +26,20 @@ extension TaskViewController {
             let clientsRef = FIRDatabase.database().reference().child("clients")
             clientsRef.child(uid).observe(.value, with: { (snapshot) in
                 
-                companyView.companyNameLabel.text =  (snapshot.value as? NSDictionary)!["company"] as? String
+                guard let company = (snapshot.value as? NSDictionary)!["company"] as? String else {
+                    print("no company name")
+                    return
+                }
+                
+                
+                if company.characters.count <= 1 {
+                    companyView.companyNameLabel.text = (snapshot.value as? NSDictionary)!["firstName"] as? String
+                } else {
+                   companyView.companyNameLabel.text = company
+                }
+
                 
                 if let sum =  (snapshot.value as? NSDictionary)!["sum"] as? Int {
-                    
-                        print("oldSum ", oldSum)
-                        print(sum)
-    
                         companyView.priceLabel.countFrom(CGFloat(oldSum), to: CGFloat(sum), withDuration: 0.6)
                     
                         var timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.updateSum), userInfo: nil, repeats: false);
@@ -93,32 +101,34 @@ extension TaskViewController {
                     self.waitingAlertView.cancelButton.addGestureRecognizer(tappy)
                 }
             } else if status == "awareness" {
-
-                let unreadRef = FIRDatabase.database().reference().child("task-messages")
-                unreadRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                    if snapshot.hasChild(taskId) {
-                        self.showChatControllerForUser(task)
-                    } else {
-                        let waitingAwarenessViewController = WaitingAwarenessViewController()
-                        waitingAwarenessViewController.task = task
-                        self.navigationController?.pushViewController(waitingAwarenessViewController, animated: true)
-                    }
-                }, withCancel: nil)
+                
+                
+                
+//                let unreadRef = FIRDatabase.database().reference().child("task-messages")
+//                unreadRef.observeSingleEvent(of: .value, with: { (snapshot) in
+//                    if snapshot.hasChild(taskId) {
+//                        self.showChatControllerForUser(task)
+//                    } else {
+//                        let waitingAwarenessViewController = WaitingAwarenessViewController()
+//                        waitingAwarenessViewController.task = task
+//                        self.navigationController?.pushViewController(waitingAwarenessViewController, animated: true)
+//                    }
+//                }, withCancel: nil)
   
             } else if status == "awarenessApprove"{
                 
-                ref.child("awareness").observeSingleEvent(of: .value, with: { (snapshot) in
-                    if let awarenessStatus = (snapshot.value as! NSDictionary)["status"] as? String {
-                        if awarenessStatus == "discuss" {
-                            self.showChatControllerForUser(task)
-                        } else {
-                            let awarenessViewController = AwarenessViewController()
-                            awarenessViewController.task = task
-                            let navController = UINavigationController(rootViewController: awarenessViewController)
-                            self.present(navController, animated: true, completion: nil)
-                        }
-                    }
-                }, withCancel: nil)
+//                ref.child("awareness").observeSingleEvent(of: .value, with: { (snapshot) in
+//                    if let awarenessStatus = (snapshot.value as! NSDictionary)["status"] as? String {
+//                        if awarenessStatus == "discuss" {
+//                            self.showChatControllerForUser(task)
+//                        } else {
+//                            let awarenessViewController = AwarenessViewController()
+//                            awarenessViewController.task = task
+//                            let navController = UINavigationController(rootViewController: awarenessViewController)
+//                            self.present(navController, animated: true, completion: nil)
+//                        }
+//                    }
+//                }, withCancel: nil)
                 
             } else if status == "price" {
                 let priceWaitingViewController = PriceWaitingViewController()
@@ -376,6 +386,91 @@ extension TaskViewController {
     func openTip() {
         let whoViewController = WhoViewController()
         navigationController?.pushViewController(whoViewController, animated: true)
+    }
+    
+    
+    func handlePromo() {
+        
+        if let keyWindow = UIApplication.shared.keyWindow {
+            blackBackgroundView = UIView(frame: keyWindow.frame)
+            blackBackgroundView?.backgroundColor = UIColor.black
+            blackBackgroundView?.alpha = 0
+            
+            keyWindow.addSubview(blackBackgroundView!)
+            
+            self.myPromoView = MyPromoView(frame: CGRect(x: 10, y: -210, width: self.view.frame.size.width - 20, height: 210))
+            
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.blackBackgroundView?.alpha = 0.7
+                
+                self.myPromoView?.frame = CGRect(x: 10, y: 120, width: self.view.frame.size.width - 20, height: 210)
+                
+                keyWindow.addSubview(self.myPromoView!)
+                
+                if let uid = Digits.sharedInstance().session()?.userID {
+                    let clientsRef = FIRDatabase.database().reference().child("clients")
+                    clientsRef.child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                        
+                        if let code = (snapshot.value as! NSDictionary)["code"] as? String {
+                            print("this is my promo \(code)" )
+                            self.myPromoView!.buttonLabel.text = code
+                            
+                            let tappy = MyTapGesture(target: self, action: #selector(self.sharePromo(_:)))
+                            tappy.string = code
+                            self.myPromoView?.button.addGestureRecognizer(tappy)
+                        }
+                    }, withCancel: nil)
+                }
+
+                self.blackBackgroundView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handlePromoDissmiss)))
+                
+            }, completion: nil)
+        }
+    }
+    
+    
+    func handlePromoDissmiss() {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.blackBackgroundView?.alpha = 0
+            self.myPromoView?.frame = CGRect(x: 10, y: -260, width: self.view.frame.size.width - 20, height: 210)
+        }, completion: nil)
+    }
+    
+    func setupPromoView() {
+//        self.promoButton.frame = CGRect(x: 20, y: -10, width: self.view.frame.size.width - 40, height: 40)
+        
+        self.view.addSubview(self.promoButton)
+        
+        self.view.addConstraints("H:|-10-[\(self.promoButton)]-10-|")
+        self.view.addConstraints(self.promoButton.heightAnchor == 47, self.promoButton.topAnchor == self.view.topAnchor - 5)
+        self.promoButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handlePromo)))
+        
+        
+        self.promoButton.addSubview(self.promoLabel)
+        self.promoButton.addConstraints("H:|[\(self.promoLabel)]|")
+        self.promoButton.addConstraints("V:|-3-[\(self.promoLabel)]|")
+        
+    }
+    
+    
+    
+    
+    
+    
+    func sharePromo(_ sender : MyTapGesture) {
+        
+        handlePromoDissmiss()
+        
+        let code = sender.string
+
+        let message = "Зарегистрируйся в Лин Дизайне с моим промо кодом: \(code!) и получи 500руб на первый заказ. http://leandesign.pro"
+        
+        let shareItems:Array = [message]
+        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
+        activityViewController.excludedActivityTypes = [UIActivityType.print, UIActivityType.postToWeibo, UIActivityType.copyToPasteboard, UIActivityType.addToReadingList, UIActivityType.postToVimeo]
+        self.present(activityViewController, animated: true, completion: nil)
+
     }
     
 }

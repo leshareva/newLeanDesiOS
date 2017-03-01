@@ -21,6 +21,7 @@ class Setting: NSObject {
 enum SettingName: String {
     case Cancel = "Отмена"
     case Settings = "Настройки"
+    case Prices = "Цены"
     case License = "Правовая информация"
     case Archive = "Архив"
 }
@@ -43,9 +44,10 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     let settings: [Setting] = {
         let settingsSetting = Setting(name: .Settings, imageName: "settings")
         let licenseSetting = Setting(name: .License, imageName: "info")
+        let pricesSetting = Setting(name: .Prices, imageName: "prices")
         let exitSetting = Setting(name: .Archive, imageName: "archive")
         let cancelSetting = Setting(name: .Cancel, imageName: "close")
-        return [settingsSetting, exitSetting, licenseSetting, cancelSetting]
+        return [settingsSetting, exitSetting, pricesSetting, licenseSetting, cancelSetting]
     }()
     
     func showSettings() {

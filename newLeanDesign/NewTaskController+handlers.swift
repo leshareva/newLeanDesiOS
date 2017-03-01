@@ -74,7 +74,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
 //        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
         let image = attachImageView.image
         let imageName = UUID().uuidString
-        let imageref = FIRStorage.storage().reference().child("task_image").child(imageName)
+        let imageref = FIRStorage.storage().reference().child("tasks").child(taskId).child(imageName)
         
         if image != UIImage(named: "attach") {
             if let uploadData = UIImageJPEGRepresentation(image!, 0.8) {
@@ -84,54 +84,35 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
                         return
                     }
                     if let imageUrl = metadata?.downloadURL()?.absoluteString {
-                        self.sendMessageWithImageUrl(imageUrl, image: image!, taskId: taskId)
+                        self.saveDataToFirebase(imageUrl: imageUrl, taskId: taskId)
                     }
                 })
             }
             
         }
-        
-        
     }
     
-    fileprivate func sendMessageWithImageUrl(_ imageUrl: String, image: UIImage, taskId: String) {
-        let properties: [String: AnyObject] = ["imageUrl": imageUrl as AnyObject, "imageWidth": image.size.width as AnyObject, "imageHeight": image.size.height as AnyObject]
-        
-        sendMessageWithProperties(properties, taskId: taskId)
-    }
+
     
-    
-    fileprivate func sendMessageWithProperties(_ properties: [String: AnyObject], taskId: String) {
-//        let taskId = task?.taskId as String!
-        let ref = FIRDatabase.database().reference().child("messages")
-        let fromId = Digits.sharedInstance().session()?.userID as String!
-        let childRef = ref.childByAutoId()
-        let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
+    fileprivate func saveDataToFirebase(imageUrl: String, taskId: String) {
         
+        let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId).child("attach")
+        let childRef = taskRef.childByAutoId().key
         
-        var values: [String: AnyObject] = ["taskId": taskId as AnyObject, "timestamp": timestamp, "fromId": fromId as AnyObject, "status": "toDesigner" as AnyObject]
-        
-        properties.forEach({values[$0] = $1})
-        
-        childRef.updateChildValues(values) { (error, ref) in
+        taskRef.updateChildValues([childRef:imageUrl]) { (error, ref) in
             if error != nil {
                 print(error!)
                 return
             }
             
         }
-        
-        let userMessagesRef = FIRDatabase.database().reference().child("task-messages").child(taskId)
-        let messageID = childRef.key
-        userMessagesRef.updateChildValues([messageID: 1])
-        
+
     }
-    
     
    
     func handleAboutPrice() {
-        let howMuchController = HowMuchViewController()
-        navigationController?.pushViewController(howMuchController, animated: true)
+        let pricesViewController = PricesViewController()
+        navigationController?.pushViewController(pricesViewController, animated: true)
     }
     
     func handleAboutTasks() {

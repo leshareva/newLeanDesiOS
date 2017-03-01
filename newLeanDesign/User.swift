@@ -30,5 +30,7 @@ class User: NSObject {
     var fullCompany: String?
     var age: String?
     var city: String?
+    var code: String?
+    var topMan: String?
 }
 

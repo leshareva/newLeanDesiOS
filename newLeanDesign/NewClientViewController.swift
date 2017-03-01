@@ -144,6 +144,35 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     }()
     
     
+    let inputForPromo: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(r: 245, g: 245, b: 245)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 2
+        view.layer.masksToBounds = true
+        
+        let tf = UILabel()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.text = "Промо-код"
+        tf.font = UIFont.systemFont(ofSize: 16)
+        tf.textColor = .black
+        view.addSubview(tf)
+        view.addConstraints("H:|-16-[\(tf)]")
+        view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
+        return view
+    }()
+    
+    let promoField: UITextView = {
+        let tf = UITextView()
+        tf.backgroundColor = .clear
+        tf.textColor = .black
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
+        tf.isSelectable = true
+        return tf
+    }()
+    
+    
     
     let alertView: UIView = {
         let view = UIView()
@@ -171,6 +200,9 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         tf.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightThin)
         return tf
     }()
+    
+    
+    
     
     var myString:NSString = "Продолжая, вы подтверждаете, что прочитали и принимаете Условия предоставления услуг и Политику конфиденциальности"
     var myMutableString = NSMutableAttributedString()
@@ -239,9 +271,11 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
             return
         }
         
-        guard let company = companyField.text, !company.isEmpty else {
-            alertView.isHidden = false
-            alertLabel.text = "Укажите компанию"
+        guard let company = companyField.text else {
+            return
+        }
+        
+        guard let promocode = promoField.text else {
             return
         }
         
@@ -253,14 +287,14 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
             "mailKind": "welcome",
             "name": name,
             "clientId": userId,
-            "company": company
+            "company": company,
+            "promoCode": promocode
         ]
         
         Alamofire.request("\(Server.serverUrl)/newclient",
                           method: .post,
                           parameters: parameters)
         
-
         
         let values: [String: AnyObject] = ["phone": phone as AnyObject, "lastName": sename as AnyObject, "id": userId as AnyObject, "email": email as AnyObject, "company": company as AnyObject, "firstName": name as AnyObject, "rate": 0.6 as AnyObject, "sum": 0 as AnyObject]
         
@@ -275,6 +309,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         inputForName.isHidden = true
         inputForEmail.isHidden = true
         inputForSecondName.isHidden = true
+        inputForPromo.isHidden = true
         alertView.isHidden = true
 
         view.endEditing(true)
@@ -294,39 +329,49 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         view.addSubview(inputForEmail)
         view.addSubview(inputForCompany)
         view.addSubview(inputForSecondName)
+        view.addSubview(inputForPromo)
         view.addSubview(alertView)
         view.addSubview(licenseText)
         
-        view.addConstraints("V:|-10-[\(discriptionLabel)]-10-[\(inputForName)]-1-[\(inputForSecondName)]-1-[\(inputForEmail)]-1-[\(inputForCompany)]-1-[\(licenseText)]")
-        view.addConstraints("H:|-10-[\(discriptionLabel)]-10-|","H:|[\(inputForName)]|","H:|-10-[\(licenseText)]-10-|","H:|[\(inputForCompany)]|","H:|[\(inputForEmail)]|",
+        
+        view.addConstraints("V:|-10-[\(discriptionLabel)]-10-[\(inputForName)]-1-[\(inputForSecondName)]-1-[\(inputForEmail)]-1-[\(inputForCompany)]-1-[\(inputForPromo)]-1-[\(licenseText)]")
+        view.addConstraints("H:|-10-[\(discriptionLabel)]-10-|","H:|[\(inputForName)]|","H:|-10-[\(licenseText)]-10-|","H:|[\(inputForCompany)]|","H:|[\(inputForEmail)]|", "H:|[\(inputForPromo)]|",
                             "H:|[\(alertView)]|", "H:|[\(inputForSecondName)]|")
-        view.addConstraints(inputForName.heightAnchor == 40, inputForEmail.heightAnchor == 40, inputForCompany.heightAnchor == 40, alertView.heightAnchor == 40, inputForSecondName.heightAnchor == 40, licenseText.heightAnchor == 80)
+        view.addConstraints(inputForName.heightAnchor == 40, inputForEmail.heightAnchor == 40, inputForCompany.heightAnchor == 40, alertView.heightAnchor == 40, inputForSecondName.heightAnchor == 40, inputForPromo.heightAnchor == 40, licenseText.heightAnchor == 80)
        
         inputForName.addSubview(nameField)
         inputForEmail.addSubview(emailField)
         inputForCompany.addSubview(companyField)
         inputForSecondName.addSubview(secondNameField)
+        inputForPromo.addSubview(promoField)
+        
         
         inputForName.addConstraints(nameField.centerYAnchor == inputForName.centerYAnchor,
                                     nameField.heightAnchor == inputForName.heightAnchor,
-                                    nameField.leftAnchor == inputForName.leftAnchor + 100,
+                                    nameField.leftAnchor == inputForName.leftAnchor + 110,
                                     nameField.rightAnchor == inputForName.rightAnchor
                                     )
         
         inputForSecondName.addConstraints(secondNameField.centerYAnchor == inputForSecondName.centerYAnchor,
                                        secondNameField.heightAnchor == inputForSecondName.heightAnchor,
-                                       secondNameField.leftAnchor == inputForSecondName.leftAnchor + 100,
+                                       secondNameField.leftAnchor == inputForSecondName.leftAnchor + 110,
                                        secondNameField.rightAnchor == inputForSecondName.rightAnchor)
         
         inputForEmail.addConstraints(emailField.centerYAnchor == inputForEmail.centerYAnchor,
                                      emailField.heightAnchor == inputForEmail.heightAnchor,
-                                     emailField.leftAnchor == inputForEmail.leftAnchor + 100,
+                                     emailField.leftAnchor == inputForEmail.leftAnchor + 110,
                                      emailField.rightAnchor == inputForEmail.rightAnchor)
         
         inputForCompany.addConstraints(companyField.centerYAnchor == inputForCompany.centerYAnchor,
                                      companyField.heightAnchor == inputForCompany.heightAnchor,
-                                     companyField.leftAnchor == inputForCompany.leftAnchor + 100,
+                                     companyField.leftAnchor == inputForCompany.leftAnchor + 110,
                                      companyField.rightAnchor == inputForCompany.rightAnchor)
+        
+        inputForPromo.addConstraints(promoField.centerYAnchor == inputForPromo.centerYAnchor,
+                                       promoField.heightAnchor == inputForPromo.heightAnchor,
+                                       promoField.leftAnchor == inputForPromo.leftAnchor + 110,
+                                       promoField.rightAnchor == inputForPromo.rightAnchor)
+        
         
         alertView.addSubview(alertLabel)
         alertView.addConstraints(alertLabel.centerYAnchor == alertView.centerYAnchor,

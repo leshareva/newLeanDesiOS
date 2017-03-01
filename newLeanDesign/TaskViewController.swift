@@ -38,6 +38,29 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     let inboxView = UIView()
     var userName: String?
     
+    lazy var promoButton: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(r: 245, g: 245, b: 245)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = true
+        view.layer.cornerRadius = 6
+        view.layer.masksToBounds = true
+        return view
+    }()
+    
+    
+    var promoLabel: UILabel = {
+        let label = UILabel()
+            label.text = "Зарабатывай с Лином"
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.systemFont(ofSize: 16.0)
+            label.textAlignment = .center
+        label.isUserInteractionEnabled = true
+        return label
+    }()
+    
+    var myPromoView: MyPromoView?
+    var blackBackgroundView: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +77,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         setupbuttonView()
         setupLogoView()
         setupTableView()
+        setupPromoView()
+        
+        
         
         
         let refreshedToken = FIRInstanceID.instanceID().token()
@@ -88,9 +114,6 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
 
-    
-    
-    
     func setupLogoView() {
         
         let supportIconView = SupportIconView()
@@ -259,7 +282,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
      func setupTableView() {
         let screenSize: CGRect = UIScreen.main.bounds
-        tableView.frame         =   CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height - 70);
+        tableView.frame         =   CGRect(x: 0, y: 40, width: screenSize.width, height: screenSize.height - 70);
         tableView.delegate      =   self
         tableView.dataSource    =   self
         
@@ -387,6 +410,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             myProfileViewController.view.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             myProfileViewController.navigationItem.title = setting.name.rawValue
             present(myProfileViewController, animated: true, completion: nil)
+        } else if setting.name == .Prices {
+            let pricesViewController = PricesViewController()
+            present(pricesViewController, animated: true, completion: nil)
         } else {
             let dummySettingsViewController = UIViewController()
             dummySettingsViewController.view.backgroundColor = UIColor.white
