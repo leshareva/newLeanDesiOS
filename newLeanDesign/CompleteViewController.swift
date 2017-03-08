@@ -19,18 +19,19 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         let btn = UIButton()
         btn.backgroundColor = .white
         btn.setTitleColor( .black, for: .normal)
-        btn.setTitle("В архив", for: .normal)
+        btn.setTitle("Принимаю задачу", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.layer.borderWidth = 1
-        btn.layer.borderColor = UIColor.lightGray.cgColor
+//        btn.layer.borderWidth = 1
+//        btn.layer.borderColor = UIColor.lightGray.cgColor
         btn.addTarget(self, action: #selector(handleComplete), for: .touchUpInside)
         return btn
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
         
+        setupView()
     }
     
     
@@ -38,6 +39,7 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         
         view.addSubview(tableView)
         view.addSubview(archiveButton)
+        
         
         view.addConstraints("H:|-16-[\(archiveButton)]-16-|")
         view.addConstraints("V:[\(archiveButton)]-16-|")
@@ -142,9 +144,6 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
             cell.linkImageView.addGestureRecognizer(tappy)
             tappy.string = url
         }
-        
-        
-
         return cell
     }
     
@@ -191,6 +190,13 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
                     sourceTitle.userImageView.loadImageUsingCashWithUrlString(photoUrl)
                 }
                 
+                guard let name = (snapshot.value as! NSDictionary)["firstName"] as? String else {
+                    return
+                }
+                
+                sourceTitle.userNameLabel.text = name
+                
+                
             }, withCancel: nil)
         }
         
@@ -201,8 +207,12 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         return sourceTitle
     }
     
+    
+    
+    
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 230
+        return 260
     }
     
     func handleDone() {

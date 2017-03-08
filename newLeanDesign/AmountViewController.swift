@@ -95,6 +95,7 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
                             billLink.topAnchor == promoLink.topAnchor,
                             billLink.widthAnchor == (view.widthAnchor / 2) - 2,
                             promoLink.widthAnchor == (view.widthAnchor / 2) - 4)
+        tinkoffLogo.isHidden = true
     }
     
     func handlePromoLink() {

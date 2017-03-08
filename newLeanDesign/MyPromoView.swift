@@ -33,6 +33,17 @@ class MyPromoView: UIView {
         return tv
     }()
     
+    lazy var shareIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "share")?.maskWithColor(color: .black)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
+    
+    
+    
     let button: UIView = {
         let btn = UIView()
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -58,20 +69,23 @@ class MyPromoView: UIView {
         layer.cornerRadius = 6.0
         layer.masksToBounds = true
         
-        
-        
         addSubview(textView)
         addSubview(button)
-    
+        
         addConstraints("H:|-15-[\(textView)]-15-|", "H:|-15-[\(button)]-15-|")
-        addConstraints("V:|-20-[\(textView)]-40-[\(button)]-20-|")
+        addConstraints("V:|-20-[\(textView)]", "V:[\(button)]-20-|")
         addConstraints(button.heightAnchor == 50, textView.heightAnchor == 160)
         textView.attributedText = attributedText()
 
         addSubview(buttonLabel)
+        addSubview(shareIcon)
         addConstraints(buttonLabel.centerYAnchor == button.centerYAnchor,
                        buttonLabel.leftAnchor == button.leftAnchor + 10,
-                       buttonLabel.widthAnchor == button.widthAnchor)
+                       buttonLabel.widthAnchor == button.widthAnchor,
+                       shareIcon.rightAnchor == button.rightAnchor - 15,
+                       shareIcon.centerYAnchor == button.centerYAnchor,
+                       shareIcon.heightAnchor == 20,
+                       shareIcon.widthAnchor == 20)
         
     }
     

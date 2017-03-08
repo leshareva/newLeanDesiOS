@@ -46,13 +46,13 @@ extension TaskViewController {
                     
                 }
                 
-                guard let folderId =  (snapshot.value as? NSDictionary)!["conceptUrl"] as? String else {
-                    return
-                }
+//                guard let folderId =  (snapshot.value as? NSDictionary)!["conceptUrl"] as? String else {
+//                    return
+//                }
+//                
+//                UserDefaults.standard.set("https://drive.google.com/drive/folders/\(folderId)", forKey: "folder")
                 
-                UserDefaults.standard.set("https://drive.google.com/drive/folders/\(folderId)", forKey: "folder")
-                
-                companyView.conceptContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
+//                companyView.conceptContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
                 
             }, withCancel: nil)
             
@@ -87,8 +87,7 @@ extension TaskViewController {
             }
             
             let status = dictionary["status"] as! String
-            
-            
+
             if status == "none" {
                 if let keyWindow = UIApplication.shared.keyWindow {
                     self.waitingAlertView.alpha = 1
@@ -101,73 +100,47 @@ extension TaskViewController {
                     self.waitingAlertView.cancelButton.addGestureRecognizer(tappy)
                 }
             } else if status == "awareness" {
-                
-                
-                
-//                let unreadRef = FIRDatabase.database().reference().child("task-messages")
-//                unreadRef.observeSingleEvent(of: .value, with: { (snapshot) in
-//                    if snapshot.hasChild(taskId) {
-//                        self.showChatControllerForUser(task)
-//                    } else {
-//                        let waitingAwarenessViewController = WaitingAwarenessViewController()
-//                        waitingAwarenessViewController.task = task
-//                        self.navigationController?.pushViewController(waitingAwarenessViewController, animated: true)
-//                    }
-//                }, withCancel: nil)
-  
+                let waitingAwarenessViewController = WaitingAwarenessViewController()
+                waitingAwarenessViewController.task = task
+                self.navigationController?.pushViewController(waitingAwarenessViewController, animated: true)
             } else if status == "awarenessApprove"{
-                
-//                ref.child("awareness").observeSingleEvent(of: .value, with: { (snapshot) in
-//                    if let awarenessStatus = (snapshot.value as! NSDictionary)["status"] as? String {
-//                        if awarenessStatus == "discuss" {
-//                            self.showChatControllerForUser(task)
-//                        } else {
-//                            let awarenessViewController = AwarenessViewController()
-//                            awarenessViewController.task = task
-//                            let navController = UINavigationController(rootViewController: awarenessViewController)
-//                            self.present(navController, animated: true, completion: nil)
-//                        }
-//                    }
-//                }, withCancel: nil)
-                
+                let awarenessViewController = AwarenessViewController()
+                awarenessViewController.task = task
+                let navController = UINavigationController(rootViewController: awarenessViewController)
+                self.present(navController, animated: true, completion: nil)
             } else if status == "price" {
                 let priceWaitingViewController = PriceWaitingViewController()
+                priceWaitingViewController.task = task
                 self.navigationController?.pushViewController(priceWaitingViewController, animated: true)
             } else if status == "priceApprove"{
                 let acceptPriceViewController = AcceptPriceViewController()
                 acceptPriceViewController.task = task
                 let navController = UINavigationController(rootViewController: acceptPriceViewController)
                 self.present(navController, animated: true, completion: nil)
+            } else if status == "concept" {
+                let priceWaitingViewController = PriceWaitingViewController()
+                priceWaitingViewController.task = task
+                priceWaitingViewController.titleView.text = "Дизайнер работает над черновиком"
+                priceWaitingViewController.descriptionText.text = ""
+                self.navigationController?.pushViewController(priceWaitingViewController, animated: true)
             } else if status == "conceptApprove" {
-                ref.child("concept").observeSingleEvent(of: .value, with: { (snapshot) in
-                    if let conceptStatus = (snapshot.value as! NSDictionary)["status"] as? String {
-                        if conceptStatus == "discuss" {
-                            self.showChatControllerForUser(task)
-                        } else {
-                            self.openStepInfo(status: "concept", task: task)
-                        }
-                    }
-                }, withCancel: nil)
-                
-               
+                self.openStepInfo(status: "concept", task: task)
+            } else if status == "design" {
+                let priceWaitingViewController = PriceWaitingViewController()
+                priceWaitingViewController.titleView.text = "Дизайнер работает над чистовиком"
+                priceWaitingViewController.task = task
+                priceWaitingViewController.descriptionText.text = ""
+                self.navigationController?.pushViewController(priceWaitingViewController, animated: true)
             } else if status == "designApprove"{
-                ref.child("design").observeSingleEvent(of: .value, with: { (snapshot) in
-                    if let designStatus = (snapshot.value as! NSDictionary)["status"] as? String {
-                        if designStatus == "discuss" {
-                            self.showChatControllerForUser(task)
-                        } else {
-                            self.openStepInfo(status: "design", task: task)
-                        }
-                    }
-                }, withCancel: nil)
+                self.openStepInfo(status: "design", task: task)
             } else if status == "sources"{
-                self.showChatControllerForUser(task)
+              
             } else if status == "sourcesApprove"{
                 let completeViewController = CompleteViewController()
                 completeViewController.task = task
                 self.present(completeViewController, animated: true, completion: nil)
             } else {
-               self.showChatControllerForUser(task)
+//               self.showChatControllerForUser(task)
             }
         }, withCancel: nil)
     }

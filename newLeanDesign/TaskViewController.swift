@@ -40,7 +40,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     lazy var promoButton: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(r: 245, g: 245, b: 245)
+        view.backgroundColor = UIColor(r: 0, g: 112, b: 224)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isUserInteractionEnabled = true
         view.layer.cornerRadius = 6
@@ -54,6 +54,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             label.text = "Зарабатывай с Лином"
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.systemFont(ofSize: 16.0)
+            label.textColor = .white
             label.textAlignment = .center
         label.isUserInteractionEnabled = true
         return label
@@ -75,7 +76,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         setupLoadingView()
         setupbuttonView()
-        setupLogoView()
+//        setupLogoView()
         setupTableView()
         setupPromoView()
         
@@ -105,7 +106,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                     self.view.makeToast("Со счета списано \(String(describing: bill)) ₽ за \(stage)" )
                     ref.child("clients").child(uid).child("inbox").child(snapshot.key).removeValue()
                 }
-                
+    
                 
             }
             
@@ -193,7 +194,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
  
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let companyView = CompanyView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
+        let companyView = CompanyView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 140))
         companyView.backgroundColor = UIColor.white
         setupCompanyView(companyView: companyView)
         
@@ -202,7 +203,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 200
+        return 170
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -282,7 +283,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
      func setupTableView() {
         let screenSize: CGRect = UIScreen.main.bounds
-        tableView.frame         =   CGRect(x: 0, y: 40, width: screenSize.width, height: screenSize.height - 70);
+        tableView.frame         =   CGRect(x: 0, y: 40, width: screenSize.width, height: screenSize.height - 110);
         tableView.delegate      =   self
         tableView.dataSource    =   self
         

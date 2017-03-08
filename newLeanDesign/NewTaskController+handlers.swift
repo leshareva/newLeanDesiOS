@@ -112,7 +112,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
    
     func handleAboutPrice() {
         let pricesViewController = PricesViewController()
-        navigationController?.pushViewController(pricesViewController, animated: true)
+        navigationController?.present(pricesViewController, animated: true, completion: nil)
     }
     
     func handleAboutTasks() {

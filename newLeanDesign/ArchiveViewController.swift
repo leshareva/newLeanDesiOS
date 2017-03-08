@@ -49,7 +49,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         
         let screenSize: CGRect = UIScreen.main.bounds
-        tableView.frame         =   CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height);
+        tableView.frame         =   CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height - 70);
         tableView.delegate      =   self
         tableView.dataSource    =   self
         
@@ -98,8 +98,11 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.detailTextLabel?.tintColor = .red
         }
         
-        let taskPrice = Int(task.price!)
-        cell.timeLabel.text = "\(String(describing: taskPrice)) ₽"
+        if let taskPrice = task.price {
+             cell.timeLabel.text = "\(String(describing: taskPrice)) ₽"
+        }
+       
+        cell.timeLabel.isHidden = true
         cell.notificationsLabel.isHidden = true
 
         if let taskImageUrl = task.imageUrl {

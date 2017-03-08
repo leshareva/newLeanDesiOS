@@ -27,10 +27,6 @@ class TinkoffViewController: UIViewController, UIWebViewDelegate {
      
             let orderId = NSNumber(value: Int(Date().timeIntervalSince1970)) 
             let orderRef = FIRDatabase.database().reference().child("orders").child(String(describing: orderId))
-        
-
-            print(orderId)
-            
             let values: [String: AnyObject] = ["clientId": clientId as AnyObject, "amount": self.amount as AnyObject]
             
             orderRef.updateChildValues(values)

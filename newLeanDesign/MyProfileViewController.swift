@@ -13,7 +13,7 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
     
     lazy var closeButton: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "close")
+        imageView.image = UIImage(named: "close")?.maskWithColor(color: .black)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handelCancel)))
@@ -23,7 +23,7 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
     
     lazy var saveButton: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "done")
+        imageView.image = UIImage(named: "done")?.maskWithColor(color: .black)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(saveUserData)))
@@ -141,8 +141,8 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         logoutButton.isHidden = true
         
         
-        view.addConstraints("V:|-25-[\(closeButton)]", "V:|-25-[\(saveButton)]")
-        view.addConstraints("H:|-16-[\(closeButton)]", "H:[\(saveButton)]-16-|")
+        view.addConstraints("V:|-35-[\(closeButton)]", "V:|-25-[\(saveButton)]")
+        view.addConstraints("H:|-26-[\(closeButton)]", "H:[\(saveButton)]-16-|")
         
 
         view.addConstraints("V:[\(logoutButton)]|", "V:|-240-[\(inputForPhone)]-1-[\(inputForCompany)]-1-[\(inputForEmail)]")
@@ -150,8 +150,8 @@ class MyProfileViewController: UIViewController, UIImagePickerControllerDelegate
         view.addConstraints(inputForPhone.heightAnchor == 50,
                             inputForCompany.heightAnchor == 50,
                             inputForEmail.heightAnchor == 50,
-                            closeButton.widthAnchor == 45,
-                            closeButton.heightAnchor == 45,
+                            closeButton.widthAnchor == 30,
+                            closeButton.heightAnchor == 30,
                             logoutButton.heightAnchor == 60,
                             saveButton.widthAnchor == 45,
                             saveButton.heightAnchor == 45

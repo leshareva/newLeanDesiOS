@@ -14,7 +14,7 @@ class SourceTitle: UIView {
     
     lazy var closeButton: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "close")
+        imageView.image = UIImage(named: "close")?.maskWithColor(color: .black)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
@@ -24,7 +24,7 @@ class SourceTitle: UIView {
   
     let awarenessText: UITextView = {
         let tv = UITextView()
-        tv.text = "Исходники всегда хранятся в карточке задачи в архивe"
+        tv.text = "Исходники всегда хранятся\nв карточке задачи в архивe"
         tv.backgroundColor = .clear
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
@@ -63,7 +63,7 @@ class SourceTitle: UIView {
     
     let userImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage.gifWithName("spinner-duo")
+        iv.image = UIImage(named: "ava")
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = 25
@@ -71,16 +71,13 @@ class SourceTitle: UIView {
         return iv
     }()
     
-    var userNameLabel: UITextView = {
-        let tv = UITextView()
-        tv.text = "Алексей"
+    var userNameLabel: UILabel = {
+        let tv = UILabel()
         tv.backgroundColor = .clear
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
         tv.textAlignment = .left
-        tv.font = UIFont.boldSystemFont(ofSize: 18.0)
-        tv.isEditable = false
-        tv.isSelectable = false
+        tv.font = UIFont.systemFont(ofSize: 18.0)
         return tv
     }()
     
@@ -95,7 +92,7 @@ class SourceTitle: UIView {
         self.addSubview(userImageView)
         self.addSubview(userNameLabel)
         
-        self.addConstraints("V:|-45-[\(title)][\(awarenessText)]-30-[\(priceLabel)]")
+        self.addConstraints("V:|-60-[\(title)][\(awarenessText)]-30-[\(priceLabel)]")
         self.addConstraints("H:|-16-[\(title)]-16-|","H:|-16-[\(awarenessText)]-16-|", "H:|-16-[\(userImageView)][\(priceLabel)]-16-|",
         "H:|-74-[\(userNameLabel)]|")
         self.addConstraints(title.heightAnchor == 40,
@@ -105,12 +102,11 @@ class SourceTitle: UIView {
                             userImageView.topAnchor == priceLabel.topAnchor,
                             userImageView.heightAnchor == 50,
                             userImageView.widthAnchor == 50,
-                            userNameLabel.heightAnchor == 50,
-                            userNameLabel.topAnchor == priceLabel.topAnchor
+                            userNameLabel.centerYAnchor == userImageView.centerYAnchor
                             )
         
         
-        self.addConstraints("V:|-20-[\(closeButton)]")
+        self.addConstraints("V:|-30-[\(closeButton)]")
         self.addConstraints("H:|-20-[\(closeButton)]")
         self.addConstraints(closeButton.heightAnchor == 30,
                             closeButton.widthAnchor == 30

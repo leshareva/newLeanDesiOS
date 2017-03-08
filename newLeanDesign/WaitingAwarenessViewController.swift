@@ -14,6 +14,7 @@ class WaitingAwarenessViewController: UIViewController {
     
     let userPic: UIImageView = {
         let iv = UIImageView()
+        iv.image = UIImage(named: "ava")
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.masksToBounds = true
         iv.layer.cornerRadius = 50
@@ -28,7 +29,7 @@ class WaitingAwarenessViewController: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.textColor = .black
         tv.textAlignment = .center
-        tv.font = UIFont.systemFont(ofSize: 28.0)
+        tv.font = UIFont.systemFont(ofSize: 24.0)
         tv.isEditable = false
         tv.isSelectable = false
         return tv
@@ -63,10 +64,10 @@ class WaitingAwarenessViewController: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .white
         btn.setTitleColor( .black, for: .normal)
-        btn.setTitle("Написать дизайнеру", for: .normal)
+        btn.setTitle("Позвонить", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.layer.borderWidth = 1
-        btn.layer.borderColor = UIColor.lightGray.cgColor
+//        btn.layer.borderWidth = 1
+//        btn.layer.borderColor = UIColor.lightGray.cgColor
         btn.addTarget(self, action: #selector(handleCall), for: .touchUpInside)
         return btn
     }()
@@ -74,15 +75,22 @@ class WaitingAwarenessViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
+        
+        getUserInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        getUserInfo(taskId: (task?.taskId)!)
+        
     }
     
     
-    func getUserInfo(taskId: String) {
+    func getUserInfo() {
  
+        
+        guard let taskId = task?.taskId else {
+            return
+        }
+        
         let ref = FIRDatabase.database().reference()
         
         ref.child("tasks").child(taskId).observeSingleEvent(of: .value, with: {(snapshot) in
@@ -90,18 +98,27 @@ class WaitingAwarenessViewController: UIViewController {
                 return
             }
             
-            ref.child("designers").child(designerId ).observeSingleEvent(of: .value, with: { (snapshot)  in
-                guard let name = (snapshot.value as? NSDictionary)!["firstName"] as? String,
-                    let phone = (snapshot.value as? NSDictionary)!["phone"] as? String,
-                    let photoUrl = (snapshot.value as! NSDictionary)["photoUrl"] as? String else {
+            ref.child("designers").child(designerId).observeSingleEvent(of: .value, with: { (snapshot)  in
+               
+                
+                guard let name = (snapshot.value as! NSDictionary)["firstName"] as? String else {
                         return
                 }
-                
-                self.userPhone = phone
-              
                 self.nameText.text = name
+               
+                
+                guard let photoUrl = (snapshot.value as! NSDictionary)["photoUrl"] as? String else {
+                    return
+                }
                 self.userPic.loadImageUsingCashWithUrlString(photoUrl)
 
+                
+                guard let phone = (snapshot.value as! NSDictionary)["phone"] else {
+                    return
+                }
+                
+                self.userPhone = String(describing: phone)
+                
             }, withCancel: nil)
             
         }, withCancel: nil)
@@ -133,9 +150,17 @@ class WaitingAwarenessViewController: UIViewController {
     
     
     func handleCall() {
-        let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        chatController.task = task
-        navigationController?.pushViewController(chatController, animated: true)
+        guard let phone = userPhone else {
+            return
+        }
+        guard let number = URL(string: "telprompt://" + phone) else { return }
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(number, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(number)
+        }
+
+        
     }
     
     

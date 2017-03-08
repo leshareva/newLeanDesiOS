@@ -12,30 +12,30 @@ extension ConceptViewController {
             return
         }
         dismiss(animated: true, completion: nil)
-        let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
-        
-        ref.observeSingleEvent(of: .value, with: {(snapshot) in
-            if let status = (snapshot.value as! NSDictionary)["status"] as? String {
-                var stage = ""
-                if status == "conceptApprove" {
-                    stage = "concept"
-                } else if status == "designApprove" {
-                    stage = "design"
-                }
-                
-                let values : [String: AnyObject] = ["status" : "discuss" as AnyObject]
-                ref.child(stage).updateChildValues(values, withCompletionBlock: { (err, ref) in
-                    if err != nil {
-                        print(err!)
-                        return
-                    }
-                })
-
-                
-                
-            }
-            
-        }, withCancel: nil)
+//        let ref = FIRDatabase.database().reference().child("tasks").child(taskId)
+//        
+//        ref.observeSingleEvent(of: .value, with: {(snapshot) in
+//            if let status = (snapshot.value as! NSDictionary)["status"] as? String {
+//                var stage = ""
+//                if status == "conceptApprove" {
+//                    stage = "concept"
+//                } else if status == "designApprove" {
+//                    stage = "design"
+//                }
+//                
+//                let values : [String: AnyObject] = ["status" : "discuss" as AnyObject]
+//                ref.child(stage).updateChildValues(values, withCompletionBlock: { (err, ref) in
+//                    if err != nil {
+//                        print(err!)
+//                        return
+//                    }
+//                })
+//
+//                
+//                
+//            }
+//            
+//        }, withCancel: nil)
     }
 
     

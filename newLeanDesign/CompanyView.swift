@@ -152,31 +152,32 @@ class CompanyView: UIView {
         self.addSubview(aboutPriceLabel)
         self.addSubview(priceLabel)
         self.addSubview(separatorOne)
-        self.addSubview(conceptButton)
-        self.addSubview(separatorTwo)
+//        self.addSubview(conceptButton)
+//        self.addSubview(separatorTwo)
         self.addSubview(titleTableLabel)
         self.addSubview(payButton)
-        self.addSubview(conceptContainer)
+//        self.addSubview(conceptContainer)
         
 
         self.addConstraints("H:|-16-[\(companyNameLabel)]|")
-        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-2-[\(priceLabel)]-16-[\(separatorOne)]-8-[\(conceptContainer)]-8-[\(separatorTwo)]-24-[\(titleTableLabel)]-8-|")
-        self.addConstraints(
+        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-2-[\(priceLabel)]-16-[\(separatorOne)]-32-[\(titleTableLabel)]")
+        self.addConstraints( companyNameLabel.heightAnchor == 25,
                             aboutPriceLabel.leftAnchor == companyNameLabel.leftAnchor,
                             priceLabel.leftAnchor == companyNameLabel.leftAnchor,
-                            
+                            aboutPriceLabel.heightAnchor == 20,
+                            priceLabel.heightAnchor == 20,
                             separatorOne.heightAnchor == 1,
                             separatorOne.leftAnchor == companyNameLabel.leftAnchor,
                             separatorOne.rightAnchor == self.rightAnchor - 16,
                             
-                            conceptContainer.heightAnchor == 28,
-                            conceptContainer.widthAnchor == separatorOne.widthAnchor,
-                            conceptContainer.leftAnchor == companyNameLabel.leftAnchor,
-                            
-                            separatorTwo.heightAnchor == 1,
-                            separatorTwo.leftAnchor == companyNameLabel.leftAnchor,
-                            separatorTwo.rightAnchor == separatorOne.rightAnchor,
-                            
+//                            conceptContainer.heightAnchor == 28,
+//                            conceptContainer.widthAnchor == separatorOne.widthAnchor,
+//                            conceptContainer.leftAnchor == companyNameLabel.leftAnchor,
+            
+//                            separatorTwo.heightAnchor == 1,
+//                            separatorTwo.leftAnchor == companyNameLabel.leftAnchor,
+//                            separatorTwo.rightAnchor == separatorOne.rightAnchor,
+            
                             titleTableLabel.leftAnchor == self.leftAnchor + 16,
                             payButton.leftAnchor == priceLabel.rightAnchor + 16,
                             payButton.centerYAnchor == priceLabel.centerYAnchor,
@@ -185,9 +186,9 @@ class CompanyView: UIView {
             
         )
         
-        conceptContainer.addSubview(conceptButton)
-        conceptContainer.addConstraints("H:|[\(conceptButton)]|")
-        conceptContainer.addConstraints(conceptButton.centerYAnchor == conceptContainer.centerYAnchor)
+//        conceptContainer.addSubview(conceptButton)
+//        conceptContainer.addConstraints("H:|[\(conceptButton)]|")
+//        conceptContainer.addConstraints(conceptButton.centerYAnchor == conceptContainer.centerYAnchor)
         
         
         

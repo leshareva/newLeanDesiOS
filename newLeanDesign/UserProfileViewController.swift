@@ -70,11 +70,13 @@ class UserProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .lightGray
         view.addSubview(taskImageView)
         view.addSubview(nameLabel)
         view.addSubview(phoneLabel)
         view.addSubview(emailLabel)
+        
+        
         
         view.addConstraints("V:|-20-[\(taskImageView)]-8-[\(nameLabel)]-20-[\(phoneLabel)]-8-[\(emailLabel)]")
         view.addConstraints(taskImageView.heightAnchor == 80, taskImageView.widthAnchor == 80, taskImageView.centerXAnchor == view.centerXAnchor,

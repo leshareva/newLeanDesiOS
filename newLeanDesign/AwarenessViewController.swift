@@ -72,7 +72,7 @@ class AwarenessViewController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         getAwarenessDetails()
-        setReadStatus()
+//        setReadStatus()
         setupView()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Свернуть", style: .plain, target: self, action: #selector(handleDismiss))
@@ -196,39 +196,49 @@ class AwarenessViewController: UIViewController, UIWebViewDelegate {
     
     func handleDiscuss() {
         
-        guard let taskId = self.task?.taskId, let designerId = task?.toId else {
-            return
-        }
+        let priceWaitingViewController = PriceWaitingViewController()
         
-        let ref = FIRDatabase.database().reference()
-        let values: [String: AnyObject] = ["status": "discuss" as AnyObject]
-        ref.child("tasks").child(taskId).child("awareness").updateChildValues(values, withCompletionBlock: { (err, ref) in
-            if err != nil {
-                print(err!)
-                return
-            }
-        })
-
-        
-        //send push notification
-        let parameters: Parameters = [
-            "userId": designerId,
-            "message": "Клиент хочет обсудить понимание задачи",
-            "taskId": taskId
-        ]
-        
-        Alamofire.request("\(Server.serverUrl)/push",
-            method: .post,
-            parameters: parameters).responseJSON { response in
-                if (response.result.value as? [String: Any]) != nil {}
-        }
-
+        priceWaitingViewController.task = task
+        priceWaitingViewController.titleView.text = "Ждем согласования понимания задачи"
+        priceWaitingViewController.descriptionText.text = " "
+//        dismiss(animated: true, completion: nil)
+        navigationController?.pushViewController(priceWaitingViewController, animated: true)
         
         
-            let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
-            chatController.task = task
-            dismiss(animated: true, completion: nil)
-            navigationController?.pushViewController(chatController, animated: true)
+        
+//        guard let taskId = self.task?.taskId, let designerId = task?.toId else {
+//            return
+//        }
+//        
+//        let ref = FIRDatabase.database().reference()
+//        let values: [String: AnyObject] = ["status": "discuss" as AnyObject]
+//        ref.child("tasks").child(taskId).child("awareness").updateChildValues(values, withCompletionBlock: { (err, ref) in
+//            if err != nil {
+//                print(err!)
+//                return
+//            }
+//        })
+//
+//        
+//        //send push notification
+//        let parameters: Parameters = [
+//            "userId": designerId,
+//            "message": "Клиент хочет обсудить понимание задачи",
+//            "taskId": taskId
+//        ]
+//        
+//        Alamofire.request("\(Server.serverUrl)/push",
+//            method: .post,
+//            parameters: parameters).responseJSON { response in
+//                if (response.result.value as? [String: Any]) != nil {}
+//        }
+//
+//        
+//        
+//            let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
+//            chatController.task = task
+//            dismiss(animated: true, completion: nil)
+//            navigationController?.pushViewController(chatController, animated: true)
         
         
     }
