@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>AlamofireImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Cosmos.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -29,6 +34,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Flurry-iOS-SDK.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>GTMSessionFetcher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -39,12 +49,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LeanDesign.xcscheme</key>
+		<key>Pods-LinDesign.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>SWXMLHash.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Socket.IO-Client-Swift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -62,6 +77,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>2001FF4D5B0385DCE0A2BA21A9F57564</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>2F0FE1E2A5B1EF15139E10A40F05CE94</key>
 		<dict>
 			<key>primary</key>
@@ -72,12 +92,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>566280D50113CADBEE66938C3F5B9273</key>
+		<key>557D3443F126FDEE2D9785B728A1B1D6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>589961C99F8E0BA18EBD16A6D741380A</key>
+		<key>66A9ADFCA7889717C46664DC6BC24C2C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -97,7 +117,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>935A5D36ADA93ADF899E615221678C37</key>
+		<key>9EFE4C70245EE2857D336B8B9FA4E825</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AAF003D32856BED314088269286B4D1C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B60742998EEB08D41262197A7B027940</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -107,12 +137,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DD43FD7054C494A7C03EBA4DF5A0BB3F</key>
+		<key>F29AF9441B3107A70E8BF723A47C1546</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F29AF9441B3107A70E8BF723A47C1546</key>
+		<key>FBEABB21B5710621826C573270435E74</key>
 		<dict>
 			<key>primary</key>
 			<true/>

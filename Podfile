@@ -5,19 +5,18 @@ target 'LinDesign' do
   # Comment this line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-pod 'Fabric'
+pod 'Flurry-iOS-SDK'
 pod 'Firebase'
+pod 'Crashlytics'
 pod 'Firebase/Messaging’
 pod 'Digits'
 pod 'TwitterCore'
-pod 'Flurry-iOS-SDK/FlurrySDK'
 pod 'Firebase/Database'
 pod 'Firebase/Auth'
 pod 'Firebase/Storage'
 pod 'Firebase/Messaging'
 pod 'DKImagePickerController'
 pod 'Swiftstraints'
-pod 'Crashlytics'
 pod 'Alamofire', '~> 4.0'
 pod 'AlamofireImage', '~> 3.1'
 pod 'SWXMLHash', '~> 3.0.0'
@@ -25,6 +24,8 @@ pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :bran
 pod 'Cosmos', '~> 7.0'
 pod 'Toast-Swift', '~> 2.0.0'
 pod 'EFCountingLabel', '~> 1.0.0'
+pod 'Socket.IO-Client-Swift', '~> 8.2.0' # Or latest version
+
 
 
 post_install do |installer|

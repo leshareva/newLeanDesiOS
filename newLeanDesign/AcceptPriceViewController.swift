@@ -152,17 +152,16 @@ class AcceptPriceViewController: UIViewController {
     }
     
     func sendRejectTask() {
-        guard let taskId = task?.taskId, let userId = Digits.sharedInstance().session()?.userID, let designerId = task?.toId else {
+        guard let taskId = task?.taskId, let designerId = task?.toId else {
             return
         }
         
         let parameters: Parameters = [
-            "userId": userId,
             "taskId": taskId,
-            "subject": "reject"
+            "status": "reject"
         ]
         
-        Alamofire.request("\(Server.serverUrl)/tasks",
+        Alamofire.request("\(Server.serverUrl)/tasks/update",
             method: .post,
             parameters: parameters)
         
@@ -237,8 +236,6 @@ class AcceptPriceViewController: UIViewController {
             }
             
             self.priceLabel.text = "\(String(describing: lroundf(Float(price)))) ₽"
-            
-            
             let awarenessPrice = Double(price) * 0.10
             let conceptPrice = Double(price) * 0.50
             let designPrice = Double(price) * 0.40

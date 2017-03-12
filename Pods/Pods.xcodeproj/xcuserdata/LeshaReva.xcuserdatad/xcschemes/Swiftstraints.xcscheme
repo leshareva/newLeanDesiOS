@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '566280D50113CADBEE66938C3F5B9273'
+               BlueprintIdentifier = '66A9ADFCA7889717C46664DC6BC24C2C'
                BlueprintName = 'Swiftstraints'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Swiftstraints.framework'>

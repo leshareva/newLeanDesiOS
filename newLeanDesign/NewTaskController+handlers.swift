@@ -36,7 +36,7 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
     
     
     func addNewTask() {
-        guard let fromId = Digits.sharedInstance().session()?.userID else {
+        guard let userId = Digits.sharedInstance().session()?.userID else {
             return
         }
         
@@ -48,10 +48,11 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
         let phone = Digits.sharedInstance().session()?.phoneNumber
         
         let parameters: Parameters = [
-            "fromId": fromId as AnyObject, "text": taskText as AnyObject, "status": "none" as AnyObject, "toId": "designStudio" as AnyObject, "price": 0 as AnyObject, "phone": phone! as AnyObject, "rate": 0.5 as AnyObject, "timestamp": timestamp
+            "userId": userId,
+            "text": taskText
         ]
         
-        Alamofire.request("\(Server.serverUrl)/newTask",
+        Alamofire.request("\(Server.serverUrl)/tasks/create",
             method: .post,
             parameters: parameters).responseJSON { response in
 
@@ -59,18 +60,20 @@ extension NewTaskController: UIImagePickerControllerDelegate, UINavigationContro
                     let taskId = result["taskId"]
                     
                     if( self.attachImageView.image != nil) {
-                        self.sendTaskImageToChat(fromId, taskId: taskId! as! String)
+                        self.sendImagesToStorage(userId, taskId: taskId! as! String)
                     }
+                    
+                    self.view.endEditing(true)
+                    self.dismiss(animated: true, completion: nil)
                     
                 }
         }
         
-        view.endEditing(true)
-        dismiss(animated: true, completion: nil)
+        
     }
     
 
-    func sendTaskImageToChat(_ fromId: String, taskId: String) {
+    func sendImagesToStorage(_ fromId: String, taskId: String) {
 //        let timestamp: NSNumber = Int(NSDate().timeIntervalSince1970)
         let image = attachImageView.image
         let imageName = UUID().uuidString

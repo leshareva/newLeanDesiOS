@@ -11,7 +11,7 @@ import Firebase
 import FirebaseMessaging
 import Fabric
 import DigitsKit
-import Crashlytics
+
 
 
 
@@ -24,12 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        Fabric.with([Digits.self, Crashlytics.self])
         FIRApp.configure()
         Fabric.with([Digits.self])
 
-        
-        
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.tokenRefreshNotification(_:)), name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
         
         
@@ -39,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         application.registerForRemoteNotifications()
         application.registerUserNotificationSettings(notificationSettings)
+        
+        
         
         
         if !UserDefaults.standard.bool(forKey: "HowMuchReaded") {
@@ -180,6 +179,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("App opened from Notification")
             window?.rootViewController = UINavigationController(rootViewController: StartViewController())
         }
+        
+        
+        
         
         
     }

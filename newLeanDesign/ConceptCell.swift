@@ -74,21 +74,46 @@ class ConceptCell: UICollectionViewCell, UIScrollViewDelegate {
     }()
     
     
+    lazy var shareIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "share")?.maskWithColor(color: .white)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
+    
+    lazy var closeButton: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = .white
+        imageView.image = UIImage(named: "close")?.maskWithColor(color: .white)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
+    
     func setupView() {
-        backgroundColor = UIColor.white
+        backgroundColor = UIColor.black
         addSubview(imageView)
+        addSubview(shareIcon)
+        
+        
+        
         addSubview(textView)
         addSubview(descriptView)
         
-        addConstraints("H:|[\(descriptView)]|", "H:|-16-[\(textView)]-16-|")
-        addConstraints("V:|[\(descriptView)]-8-[\(textView)]")
+        addConstraints("H:|[\(descriptView)]|", "H:|-16-[\(textView)]-16-|","H:[\(shareIcon)]-16-|")
+        addConstraints("V:|[\(descriptView)]-8-[\(textView)]", "V:|-10-[\(shareIcon)]")
         
         addConstraints(imageView.leftAnchor == self.leftAnchor,
                        imageView.topAnchor == self.topAnchor,
                        imageView.widthAnchor == self.widthAnchor,
                        imageView.heightAnchor == self.heightAnchor,
                        textView.heightAnchor == self.heightAnchor - 160,
-                       descriptView.heightAnchor == 110
+                       descriptView.heightAnchor == 110,
+                       shareIcon.widthAnchor == 25,
+                       shareIcon.heightAnchor == 25
         )
         
         descriptView.addSubview(descriptLabel)
@@ -115,7 +140,6 @@ class ConceptCell: UICollectionViewCell, UIScrollViewDelegate {
     var blackBackgroundView: UIView?
     var startingImageView: UIImageView?
     
-    
     func performZoomInForImageView(_ startingImageView: UIImageView) {
         
         self.startingImageView = startingImageView
@@ -128,7 +152,7 @@ class ConceptCell: UICollectionViewCell, UIScrollViewDelegate {
         
         zoomingImageView.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         zoomingImageView.isUserInteractionEnabled = true
-        zoomingImageView.backgroundColor = .white
+        zoomingImageView.backgroundColor = .black
         zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
         
         if let keyWindow = UIApplication.shared.keyWindow {
@@ -139,20 +163,18 @@ class ConceptCell: UICollectionViewCell, UIScrollViewDelegate {
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
             
+            
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.blackBackgroundView?.alpha = 1
-                
                 let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
-                
                 zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: keyWindow.frame.height)
-                
                 zoomingImageView.imageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-                
                 zoomingImageView.imageView.center = keyWindow.center
                 
             }, completion: nil)
         }
     }
+    
     
     
     

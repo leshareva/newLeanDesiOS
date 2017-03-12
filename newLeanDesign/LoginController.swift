@@ -10,10 +10,12 @@ import UIKit
 import DigitsKit
 import Firebase
 import Swiftstraints
+import Alamofire
 
-class LoginController: UIViewController {
+
+class LoginController: UIViewController, UITextFieldDelegate {
     
-        var startViewController: StartViewController?
+    var startViewController: StartViewController?
     
     var taskViewController: TaskViewController?
     var newClientViewController: NewClientViewController?
@@ -22,23 +24,72 @@ class LoginController: UIViewController {
        let iv = UIImageView()
         iv.image = UIImage(named: "logo")
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.isUserInteractionEnabled = true
         return iv
     }()
+    
+    
     
     // Set up your own button to call Digits
     let loginButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
-       
         setupView()
+        
+        
     }
     
     
     
+    
+//    func didTapLoginButton(_ sender: UIButton) {
+//        let parameters: Parameters = [
+//            "login": "asd",
+//            "password": "login"
+//        ]
+//        
+//        
+//        Alamofire.request("http://leandesign.pro:8100/auth",
+//            method: .post,
+//            parameters: parameters).responseJSON { response in
+//                
+//                
+//                print("Success: \(response.result.isSuccess)")
+//                print("Response String: \(response.result.value)")
+//                
+//                var statusCode = (response.response?.statusCode)! as Int
+//
+//                
+//                if let result = response.result.value as? [String: Any] {
+//                    print(result)
+//                    
+//                    switch statusCode {
+//                    case 404:
+//                        print("404 error")
+//                    case 200:
+//                        print("200 answer")
+//                        if let token = result["token"] {
+//                            print("user token is \(token)")
+//                            UserDefaults.standard.set(token, forKey: "Auth")
+//                        }
+//                    case 403:
+//                        print("wrong password")
+//                    default:
+//                        print("default")
+//                    }
+//                    
+//                   
+//                }
+//        }
+//        
+//    }
+    
+    
+    
+    
     func didTapLoginButton(_ sender: UIButton) {
+        
         //        let configuration = DGTAuthenticationConfiguration(accountFields: .Email)
         let configuration = DGTAuthenticationConfiguration(accountFields: .defaultOptionMask)
         configuration?.appearance = DGTAppearance()
@@ -74,6 +125,7 @@ class LoginController: UIViewController {
     func setupView() {
         view.addSubview(loginButton)
         view.addSubview(logoView)
+       
         
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -86,7 +138,7 @@ class LoginController: UIViewController {
  
         loginButton.setTitleColor(UIColor(r: 255, g: 255, b: 255), for: UIControlState())
         loginButton.setTitle("Войти", for: UIControlState())
-        loginButton.addTarget(self, action: #selector(self.didTapLoginButton(_:)), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(self.didTapLoginButton(_ :)), for: .touchUpInside)
         loginButton.sizeToFit()
         loginButton.center = view.center
         
@@ -95,9 +147,10 @@ class LoginController: UIViewController {
         view.addConstraints(logoView.centerXAnchor == view.centerXAnchor,
                             logoView.centerYAnchor == view.centerYAnchor - 60,
                             loginButton.heightAnchor == 60)
-        
-        
+          
     }
+    
+  
     
     
 }

@@ -10,6 +10,7 @@ import UIKit
 import Swiftstraints
 import SafariServices
 import Alamofire
+import DigitsKit
 
 class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewControllerDelegate, UITextFieldDelegate {
 
@@ -86,7 +87,7 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         view.addSubview(billLink)
         view.addSubview(commentLabel)
         
-        view.addConstraints("V:|-10-[\(amountLabel)]-5-[\(amountField)]-20-[\(promoLink)][\(commentLabel)]")
+        view.addConstraints("V:|-10-[\(amountLabel)]-5-[\(amountField)]-20-[\(commentLabel)]")
         view.addConstraints("H:|-10-[\(amountLabel)]-10-|", "H:|[\(amountField)]|" , "H:|[\(promoLink)]-6-[\(billLink)]", "H:|-10-[\(commentLabel)]-10-|")
         view.addConstraints(amountLabel.heightAnchor == 50, amountField.heightAnchor == 60, promoLink.heightAnchor == 50, billLink.heightAnchor == 50, commentLabel.heightAnchor == 60)
         promoLink.label.text = "Ввести промо-код"
@@ -96,6 +97,8 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
                             billLink.widthAnchor == (view.widthAnchor / 2) - 2,
                             promoLink.widthAnchor == (view.widthAnchor / 2) - 4)
         tinkoffLogo.isHidden = true
+        promoLink.isHidden = true
+        billLink.isHidden = true
     }
     
     func handlePromoLink() {
@@ -109,7 +112,7 @@ class AmountViewController: UIViewController, UITextViewDelegate, SFSafariViewCo
         }
         
         let tinkoffViewController = TinkoffViewController()
-        tinkoffViewController.amount = Int(amountField.text!)
+        tinkoffViewController.amount = Int(self.amountField.text!)
         self.navigationController?.pushViewController(tinkoffViewController, animated: true)
     }
 

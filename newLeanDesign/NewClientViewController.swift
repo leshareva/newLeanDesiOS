@@ -4,6 +4,7 @@ import DigitsKit
 import Swiftstraints
 import DKImagePickerController
 import Alamofire
+import Toast_Swift
 
 class NewClientViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -244,6 +245,12 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func handleSend() {
+        
+        var style = ToastStyle()
+        style.messageColor = .white
+        style.backgroundColor = UIColor.red
+        
+        
         let digits = Digits.sharedInstance()
         
         guard let userId = digits.session()?.userID else {
@@ -254,72 +261,101 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         }
         
         guard let name = nameField.text, !name.isEmpty else {
-            alertView.isHidden = false
-            alertLabel.text = "Укажите имя"
+            self.view.makeToast("Укажите имя", duration: 3.0, position: .top, style: style)
             return
         }
         
         guard let sename = secondNameField.text, !sename.isEmpty else {
-            alertView.isHidden = false
-            alertLabel.text = "Укажите Фамилию"
+           self.view.makeToast("Укажите фамилию", duration: 3.0, position: .top, style: style)
             return
         }
         
-        guard let email = emailField.text, !email.isEmpty else {
-            alertView.isHidden = false
-            alertLabel.text = "Укажите почту"
+        
+        guard let email = emailField.text, isValidEmail(testStr: email) else {
+            self.view.makeToast("Что-то не так с почтой", duration: 3.0, position: .top, style: style)
             return
         }
         
-        guard let company = companyField.text else {
+        
+        
+        guard let company = companyField.text, !company.isEmpty else {
             return
         }
         
-        guard let promocode = promoField.text else {
+        guard var promofield = promoField.text else {
             return
+        }
+        
+        var code = "none"
+        
+        if !promofield.isEmpty {
+            code = promofield
         }
         
         let ref = FIRDatabase.database().reference()
         let clientReference = ref.child("clients")
         
-        let parameters: Parameters = [
-            "toEmail": email,
-            "mailKind": "welcome",
-            "name": name,
-            "clientId": userId,
+        var parameters: Parameters = [
+            "firstName": name,
+            "id": userId,
+            "code": code,
             "company": company,
-            "promoCode": promocode
+            "phone": phone,
+            "lastName": sename,
+            "email": email,
+            "rate": 0.6,
+            "sum": 0
         ]
         
-        Alamofire.request("\(Server.serverUrl)/newclient",
-                          method: .post,
-                          parameters: parameters)
         
         
-        let values: [String: AnyObject] = ["phone": phone as AnyObject, "lastName": sename as AnyObject, "id": userId as AnyObject, "email": email as AnyObject, "company": company as AnyObject, "firstName": name as AnyObject, "rate": 0.6 as AnyObject, "sum": 0 as AnyObject]
         
-        clientReference.child(userId).updateChildValues(values) { (error, ref) in
-            if error != nil {
-                print(error as! NSError)
-                return
-            }
+        Alamofire.request("\(Server.serverUrl)/users/create",
+            method: .post,
+            parameters: parameters).responseJSON { response in
+                
+                
+                guard let statusCode = (response.response?.statusCode)! as? Int else{
+                    return
+                }
+                if let result = response.result.value as? [String: Any] {
+                    print(result)
+                    
+                    switch statusCode {
+                    case 404:
+                        print("404 error")
+                        self.view.makeToast("Что-то пошло не так", duration: 3.0, position: .top)
+                    case 200:
+                        print("200 answer")
+                        self.goToNexStep()
+                    case 403:
+                        print("wrong code")
+                        self.view.makeToast("Промокод не действителен", duration: 3.0, position: .top)
+                    default:
+                        print("default")
+                    }
+                    
+                    
+                }
         }
         
-        inputForCompany.isHidden = true
-        inputForName.isHidden = true
-        inputForEmail.isHidden = true
-        inputForSecondName.isHidden = true
-        inputForPromo.isHidden = true
-        alertView.isHidden = true
-
+    }
+    
+    
+    func goToNexStep() {
+                inputForCompany.isHidden = true
+                inputForName.isHidden = true
+                inputForEmail.isHidden = true
+                inputForSecondName.isHidden = true
+                inputForPromo.isHidden = true
+                alertView.isHidden = true
+        
         view.endEditing(true)
         let taskViewController = TaskViewController()
         navigationController?.pushViewController(taskViewController, animated: true)
 
     }
     
-    
-   
     
     func setupInputsForLogin() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Отправить", style: .plain, target: self, action: #selector(self.handleSend));
@@ -378,6 +414,14 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
                                  alertLabel.heightAnchor == alertView.heightAnchor,
                                  alertLabel.centerXAnchor == alertView.centerXAnchor)
         alertView.isHidden = true
+    }
+    
+    func isValidEmail(testStr:String) -> Bool {
+        print("validate emilId: \(testStr)")
+        let emailRegEx = "^(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?(?:(?:(?:[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+(?:\\.[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+)*)|(?:\"(?:(?:(?:(?: )*(?:(?:[!#-Z^-~]|\\[|\\])|(?:\\\\(?:\\t|[ -~]))))+(?: )*)|(?: )+)\"))(?:@)(?:(?:(?:[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)(?:\\.[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)*)|(?:\\[(?:(?:(?:(?:(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))\\.){3}(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))))|(?:(?:(?: )*[!-Z^-~])*(?: )*)|(?:[Vv][0-9A-Fa-f]+\\.[-A-Za-z0-9._~!$&'()*+,;=:]+))\\])))(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?$"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        let result = emailTest.evaluate(with: testStr)
+        return result
     }
     
     

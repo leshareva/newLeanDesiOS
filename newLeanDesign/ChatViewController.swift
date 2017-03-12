@@ -467,4 +467,5 @@ class MyTapGesture: UITapGestureRecognizer {
     var indexPath: IndexPath?
     var taskIndex: Int?
     var string: String?
+    var anyobj: NSDictionary?
 }

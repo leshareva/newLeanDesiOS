@@ -5,31 +5,31 @@ PODS:
   - Cosmos (7.0.0)
   - Crashlytics (3.8.3):
     - Fabric (~> 1.6.3)
-  - CryptoSwift (0.6.6)
-  - Digits (2.3.0):
-    - TwitterCore (= 2.3.0)
+  - CryptoSwift (0.6.7)
+  - Digits (2.7.0):
+    - TwitterCore (= 2.7.0)
   - DKImagePickerController (3.4.2):
     - DKImagePickerController/Camera (= 3.4.2)
     - DKImagePickerController/ImageManager (= 3.4.2)
   - DKImagePickerController/Camera (3.4.2)
   - DKImagePickerController/ImageManager (3.4.2)
   - EFCountingLabel (1.0.0)
-  - Fabric (1.6.7)
-  - Firebase (3.10.0):
-    - Firebase/Core (= 3.10.0)
-  - Firebase/Auth (3.10.0):
+  - Fabric (1.6.11)
+  - Firebase (3.11.0):
+    - Firebase/Core (= 3.11.0)
+  - Firebase/Auth (3.11.0):
     - Firebase/Core
-    - FirebaseAuth (= 3.0.6)
-  - Firebase/Core (3.10.0):
+    - FirebaseAuth (= 3.1.0)
+  - Firebase/Core (3.11.0):
     - FirebaseAnalytics (= 3.6.0)
-    - FirebaseCore (= 3.4.5)
-  - Firebase/Database (3.10.0):
+    - FirebaseCore (= 3.4.6)
+  - Firebase/Database (3.11.0):
     - Firebase/Core
     - FirebaseDatabase (= 3.1.1)
-  - Firebase/Messaging (3.10.0):
+  - Firebase/Messaging (3.11.0):
     - Firebase/Core
     - FirebaseMessaging (= 1.2.1)
-  - Firebase/Storage (3.10.0):
+  - Firebase/Storage (3.11.0):
     - Firebase/Core
     - FirebaseStorage (= 1.0.5)
   - FirebaseAnalytics (3.6.0):
@@ -38,11 +38,11 @@ PODS:
     - GoogleInterchangeUtilities (~> 1.2)
     - GoogleSymbolUtilities (~> 1.1)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseAuth (3.0.6):
-    - FirebaseAnalytics (~> 3.4)
+  - FirebaseAuth (3.1.0):
+    - FirebaseAnalytics (~> 3.6)
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (3.4.5):
+  - FirebaseCore (3.4.6):
     - GoogleInterchangeUtilities (~> 1.2)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseDatabase (3.1.1):
@@ -57,6 +57,8 @@ PODS:
   - FirebaseStorage (1.0.5):
     - FirebaseAnalytics (~> 3.5)
     - GTMSessionFetcher/Core (~> 1.1)
+  - Flurry-iOS-SDK (7.8.2):
+    - Flurry-iOS-SDK/FlurrySDK (= 7.8.2)
   - Flurry-iOS-SDK/FlurrySDK (7.8.2)
   - GoogleInterchangeUtilities (1.2.2):
     - GoogleSymbolUtilities (~> 1.1)
@@ -74,10 +76,11 @@ PODS:
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.0)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.0)
   - GTMSessionFetcher/Core (1.1.7)
+  - Socket.IO-Client-Swift (8.2.0)
   - Swiftstraints (3.0.0)
   - SWXMLHash (3.0.3)
   - Toast-Swift (2.0.0)
-  - TwitterCore (2.3.0):
+  - TwitterCore (2.7.0):
     - Fabric
 
 DEPENDENCIES:
@@ -89,13 +92,13 @@ DEPENDENCIES:
   - Digits
   - DKImagePickerController
   - EFCountingLabel (~> 1.0.0)
-  - Fabric
   - Firebase
   - Firebase/Auth
   - Firebase/Database
   - Firebase/Messaging
   - Firebase/Storage
-  - Flurry-iOS-SDK/FlurrySDK
+  - Flurry-iOS-SDK
+  - Socket.IO-Client-Swift (~> 8.2.0)
   - Swiftstraints
   - SWXMLHash (~> 3.0.0)
   - Toast-Swift (~> 2.0.0)
@@ -108,7 +111,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   CryptoSwift:
-    :commit: 8007a4fb4d8988bdb8839480ddc7801a089f4b72
+    :commit: d02bbd374cdf4b3c2b424f02464432e779167120
     :git: https://github.com/krzyzanowskim/CryptoSwift
 
 SPEC CHECKSUMS:
@@ -116,15 +119,15 @@ SPEC CHECKSUMS:
   AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
   Cosmos: 2c8299147138758f6ebbb247cf1aeed77998bdf9
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
-  CryptoSwift: 5e857f6d8a91c41c92c7c6a6950a52434d8d35c2
-  Digits: af82d24ec38035cc555b60f55cca5abc68a76bed
+  CryptoSwift: 8f7b936cfd910257631f30d26e7188fa64e91e97
+  Digits: 67a14dea7cd470b2438380a09371bcdadc50d94e
   DKImagePickerController: 8fc8a42120cb0c9b7982af04d47e0e5b25b5186f
   EFCountingLabel: c5dda3b11442402a6d356ea2d255777a1c107c08
-  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
-  Firebase: 387f37c7dca894a02708da9ff35ba147040eae9e
+  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
+  Firebase: b8134e285eb33201115bc688bc5d7f112923bc1f
   FirebaseAnalytics: 9c67af0ebeb8d2146c9b4ea2616439affa947b58
-  FirebaseAuth: 96e9674ff31d6e1f826d53e26aa003a57cab0295
-  FirebaseCore: 1e383fdfe37b6b5d6ff88e84204bdee30276af0f
+  FirebaseAuth: b436e4ecebe068bf8e8c6e4e29de5756ffe7ee24
+  FirebaseCore: 03da1cb32615569bbc2830a22f9ad753d9a02ef5
   FirebaseDatabase: 6de92187481ff0e8e124064f21742e95ee883b02
   FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
   FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
@@ -134,11 +137,12 @@ SPEC CHECKSUMS:
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
   GoogleToolboxForMac: 2b2596cbb7186865e98cadf2b1e262d851c2b168
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
+  Socket.IO-Client-Swift: 900cf511777045c80d1ce1f11f71261e87765dd1
   Swiftstraints: d06a91d1cb80046814a90e934df1c19058ea02a8
   SWXMLHash: 80d2529d74891bb2f15305a0b9e08f2a4f229ee7
   Toast-Swift: 5b2f8f720f7e78e48511f693df1f9c9a6e38a25a
-  TwitterCore: 817eae3e291fa4125b47789e26a4f6f024115c1f
+  TwitterCore: fbdbeaf6d2d20cf7c7aa4136fe5173c1c85df2e2
 
-PODFILE CHECKSUM: f508dcf32cc63197c18a5ed6837c2ca4d2be45c0
+PODFILE CHECKSUM: c36484d6decd7bc14951b6b3ee2580d6163c06f0
 
 COCOAPODS: 1.2.0.beta.1

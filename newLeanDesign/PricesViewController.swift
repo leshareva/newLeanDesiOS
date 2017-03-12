@@ -16,7 +16,7 @@ class PricesViewController: UIViewController {
     
     var image: UIImageView = {
         let iv = UIImageView()
-        iv.loadImageUsingCashWithUrlString("http://leandesign.pro/assets/images/all-works.png")
+        iv.loadImageUsingCashWithUrlString("http://leandesign.pro/images/all-works.png")
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv

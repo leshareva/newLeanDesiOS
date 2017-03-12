@@ -143,6 +143,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
             let taskId = snapshot.key
             let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
             taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                         let task = Task(dictionary: dictionary)
                         self.tasksDictionary[taskId] = task
@@ -152,10 +153,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 }, withCancel: nil)
             }, withCancel: nil)
-        
     }
-    
-
     
     
     func showChatControllerForUser(_ task: Task) {

@@ -158,7 +158,7 @@ class CompanyView: UIView {
         self.addSubview(payButton)
 //        self.addSubview(conceptContainer)
         
-
+        titleTableLabel.isHidden = true
         self.addConstraints("H:|-16-[\(companyNameLabel)]|")
         self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-2-[\(priceLabel)]-16-[\(separatorOne)]-32-[\(titleTableLabel)]")
         self.addConstraints( companyNameLabel.heightAnchor == 25,
@@ -166,10 +166,10 @@ class CompanyView: UIView {
                             priceLabel.leftAnchor == companyNameLabel.leftAnchor,
                             aboutPriceLabel.heightAnchor == 20,
                             priceLabel.heightAnchor == 20,
-                            separatorOne.heightAnchor == 1,
-                            separatorOne.leftAnchor == companyNameLabel.leftAnchor,
-                            separatorOne.rightAnchor == self.rightAnchor - 16,
-                            
+//                            separatorOne.heightAnchor == 1,
+//                            separatorOne.leftAnchor == companyNameLabel.leftAnchor,
+//                            separatorOne.rightAnchor == self.rightAnchor - 16,
+            
 //                            conceptContainer.heightAnchor == 28,
 //                            conceptContainer.widthAnchor == separatorOne.widthAnchor,
 //                            conceptContainer.leftAnchor == companyNameLabel.leftAnchor,

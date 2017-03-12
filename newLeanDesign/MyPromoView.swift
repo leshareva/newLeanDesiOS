@@ -12,6 +12,8 @@ import Swiftstraints
 class MyPromoView: UIView {
     
     
+    var percent: String?
+    
     let titleView: UILabel = {
         let tv = UILabel()
         tv.text = "Зарабатывай с Лином"
@@ -91,7 +93,7 @@ class MyPromoView: UIView {
     
     
     func attributedText()->NSAttributedString{
-        let string = "Зарабатывай с Лином\n\nПоделись промокодом с друзьями, и получай 10% с каждого заказа, сделанного ими\n\n" as NSString
+        let string = "Зарабатывай с Лином\n\nПоделись промокодом с друзьями, и получай процент с каждого заказа, сделанного ими\n\n" as NSString
         
         let style = NSMutableParagraphStyle()
         style.alignment = .left

@@ -162,14 +162,17 @@ class AwarenessViewController: UIViewController, UIWebViewDelegate {
                 return
             }
             
-            let ref = FIRDatabase.database().reference()
-            let values: [String: AnyObject] = ["status": "price" as AnyObject]
-            ref.child("tasks").child(taskId).updateChildValues(values, withCompletionBlock: { (err, ref) in
-                if err != nil {
-                    print(err!)
-                    return
-                }
-            })
+            let parameters2: Parameters = [
+                "taskId": taskId,
+                "status": "price"
+            ]
+            
+            Alamofire.request("\(Server.serverUrl)/tasks/update",
+                method: .post,
+                parameters: parameters2).responseJSON { response in
+                    
+                    if (response.result.value as? [String: Any]) != nil {}
+            }
             
             
             //send push to server

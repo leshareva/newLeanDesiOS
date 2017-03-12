@@ -13,8 +13,8 @@ class File: NSObject {
     var source: String?
     var thumbnailLink: String?
     var name: String?
-    var width: String?
-    var height: String?
+    var width: NSNumber?
+    var height: NSNumber?
     
     init(dictionary: [String: AnyObject]) {
         super.init()
@@ -22,8 +22,8 @@ class File: NSObject {
         source = dictionary["source"] as? String
         name = dictionary["name"] as? String
         thumbnailLink = dictionary["thumbnailLink"] as? String
-        width = dictionary["width"] as? String
-        height = dictionary["height"] as? String
+        width = dictionary["width"] as? NSNumber
+        height = dictionary["height"] as? NSNumber
     }
     
 }

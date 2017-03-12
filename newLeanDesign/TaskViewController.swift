@@ -40,11 +40,13 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     lazy var promoButton: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(r: 0, g: 112, b: 224)
+        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isUserInteractionEnabled = true
         view.layer.cornerRadius = 6
         view.layer.masksToBounds = true
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor(r: 240, g: 240, b: 240).cgColor
         return view
     }()
     
@@ -54,10 +56,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             label.text = "Зарабатывай с Лином"
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.systemFont(ofSize: 16.0)
-            label.textColor = .white
+            label.textColor = .black
             label.textAlignment = .center
-        label.isUserInteractionEnabled = true
-        return label
+            label.isUserInteractionEnabled = true
+        return label    
     }()
     
     var myPromoView: MyPromoView?
@@ -66,6 +68,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "point")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMore))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Выйти", style: .plain, target: self, action: #selector(handleLogout))
         navigationController?.navigationBar.isTranslucent = false
         self.view.backgroundColor = UIColor.white
 
@@ -155,11 +158,10 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
                 Thread.sleep(forTimeInterval: 3)
                 
                 OperationQueue.main.addOperation() {
-                    
+                    self.activityIndicatorView.stopAnimating()
                     if (self.tasks.count == 0) {
                         self.tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
                         self.tableView.backgroundView = self.emptyTableView
-                        self.activityIndicatorView.stopAnimating()
                     }
                     
                 }
@@ -203,7 +205,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 170
+        return 130
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -286,7 +288,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.frame         =   CGRect(x: 0, y: 40, width: screenSize.width, height: screenSize.height - 110);
         tableView.delegate      =   self
         tableView.dataSource    =   self
-        
+        tableView.backgroundColor = .white
         tableView.register(TaskCell.self, forCellReuseIdentifier: cellId)
         tableView.allowsMultipleSelectionDuringEditing = true
         activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
@@ -300,8 +302,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         buttonView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints(buttonView.widthAnchor == self.view.widthAnchor,
                                  buttonView.bottomAnchor == self.view.bottomAnchor,
-                                 buttonView.heightAnchor == 70)
+                                 buttonView.heightAnchor == 90)
         buttonView.buttonLabel.text = "Добавить задачу"
+       
     }
     
 
@@ -333,7 +336,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     
     func observeUserTasks() {
-        self.loaderView.isHidden = false
+        
         
         guard let uid = Digits.sharedInstance().session()!.userID else {
             return
@@ -341,28 +344,29 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let ref = FIRDatabase.database().reference().child("clients").child(uid).child("activeTasks")
         ref.observe(.childAdded, with: { (snapshot) in
-            
-                let taskId = snapshot.key
-                let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-                taskRef.queryOrdered(byChild: "time").observe(.value, with: { (snapshot) in
+                    let taskId = snapshot.key
+                
+                    let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
+                    taskRef.queryOrdered(byChild: "time").observe(.value, with: { (snapshot) in
                     
-                    if let dictionary = snapshot.value as? [String: AnyObject] {
-                        let task = Task(dictionary: dictionary)
-                        self.tasksDictionary[taskId] = task
-                    }
+                        if let dictionary = snapshot.value as? [String: AnyObject] {
+                            let task = Task(dictionary: dictionary)
+                            self.tasksDictionary[taskId] = task
+                        }
                     
-                    self.attemptReloadTable()
-                    self.loaderView.isHidden = true
-                }, withCancel: nil)
+                        self.attemptReloadTable()
+                        
+                    }, withCancel: nil)
+
             
- 
+            
             }, withCancel: nil)
         
         ref.observe(.childRemoved, with: { (snap) in
             self.tasksDictionary.removeValue(forKey: snap.key)
             self.attemptReloadTable()
-            self.loaderView.isHidden = true
         }, withCancel: nil)
+        
         
         
         
@@ -371,7 +375,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     
-    private func attemptReloadTable() {
+    func attemptReloadTable() {
         self.timer?.invalidate()
         
         self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)

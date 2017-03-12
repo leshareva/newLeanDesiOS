@@ -13,12 +13,7 @@ extension TaskViewController {
     
     func setupCompanyView(companyView: CompanyView) {
         
-        if tasks.count == 0 {
-            companyView.titleTableLabel.isHidden = true
-        } else {
-            companyView.titleTableLabel.isHidden = false
-        }
-        
+      
         
         let oldSum = UserDefaults.standard.integer(forKey: "sum")
         
@@ -108,7 +103,7 @@ extension TaskViewController {
                 awarenessViewController.task = task
                 let navController = UINavigationController(rootViewController: awarenessViewController)
                 self.present(navController, animated: true, completion: nil)
-            } else if status == "price" {
+            } else if status == "price" || status == "admin"{
                 let priceWaitingViewController = PriceWaitingViewController()
                 priceWaitingViewController.task = task
                 self.navigationController?.pushViewController(priceWaitingViewController, animated: true)
@@ -134,11 +129,13 @@ extension TaskViewController {
             } else if status == "designApprove"{
                 self.openStepInfo(status: "design", task: task)
             } else if status == "sources"{
-              
+                let priceWaitingViewController = PriceWaitingViewController()
+                priceWaitingViewController.task = task
+                priceWaitingViewController.titleView.text = "Готовим исходники"
+                priceWaitingViewController.descriptionText.text = ""
+                self.navigationController?.pushViewController(priceWaitingViewController, animated: true)
             } else if status == "sourcesApprove"{
-                let completeViewController = CompleteViewController()
-                completeViewController.task = task
-                self.present(completeViewController, animated: true, completion: nil)
+                self.openSourcesView(task: task)
             } else {
 //               self.showChatControllerForUser(task)
             }
@@ -147,22 +144,31 @@ extension TaskViewController {
     
     
     func cancelTask(_ sender: MyTapGesture) {
-        guard let uid = Digits.sharedInstance().session()?.userID, let taskId = sender.task?.taskId else {
+        guard let taskId = sender.task?.taskId else {
             return
         }
         
-        
         var parameters: Parameters = [
-            "subject": "reject",
-            "taskId": taskId,
-            "userId": uid
+            "taskId": taskId
         ]
         
-        Alamofire.request("\(Server.serverUrl)/tasks",
-            method: .post,
-            parameters: parameters)
         
-        waitingAlertView.alpha = 0
+        Alamofire.request("\(Server.serverUrl)/tasks/remove",
+            method: .post,
+            parameters: parameters).responseJSON { response in
+                
+                if let result = response.result.value as? [String: Any] {
+                    let success = result["success"] as! Bool
+                    if success == true {
+                        self.waitingAlertView.alpha = 0
+                        self.tasksDictionary.removeValue(forKey: taskId)
+                        self.attemptReloadTable()
+                    }
+   
+                }
+        }
+        
+        
     }
     
     
@@ -174,144 +180,112 @@ extension TaskViewController {
         
         let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
         taskRef.observe(.value, with: { (snapshot) in
-            guard let status = (snapshot.value as? NSDictionary)!["status"] as? String else {
-                return
-            }
- 
-            cell.detailTextLabel?.backgroundColor = .clear
-            cell.textLabel?.backgroundColor = .clear
- 
-            if status == "none" {
-                cell.detailTextLabel?.text = "Подбираем дизайнера"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "awareness" {
+             if let status = (snapshot.value as! NSDictionary)["status"] as? String {
                 
                 
-                cell.detailTextLabel?.text = "Дизайнер принял задачу"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-                
-                
-                
-//                guard let designerId = (snapshot.value as? NSDictionary)!["toId"] as? String else {
-//                    return
-//                }
-//                let userRef = FIRDatabase.database().reference().child("designers").child(designerId)
-//                userRef.observeSingleEvent(of: .value, with: { (snapshot) in
-//                    if let name = (snapshot.value as? NSDictionary)!["firstName"] as? String {
-//                    
-//                   
-//
-//                    }
-//                })
-                
-            } else if status == "awarenessApprove" {
-                
-                if let awareness: [String: String] = (snapshot.value as? NSDictionary)!["awareness"] as? NSDictionary as! [String : String]? {
-                    if awareness["status"] == "discuss" {
-                        cell.detailTextLabel?.text = "Дизайнер разбирается в задаче"
-                        cell.backgroundColor = .white
-                        cell.textLabel?.textColor = .black
-                        cell.detailTextLabel?.textColor = .black
-                    } else if awareness["status"] == "unread" {
-                        cell.detailTextLabel?.text = "Изучите как дизайнер понял задачу"
-                        cell.backgroundColor = LeanColor.acceptColor
-                        cell.textLabel?.textColor = .white
-                        cell.detailTextLabel?.textColor = .white
-                    } else if awareness["status"] == "read" {
-                        cell.detailTextLabel?.text = "Согласуйте понимание задачи"
-                        cell.backgroundColor = LeanColor.acceptColor
-                        cell.textLabel?.textColor = .white
-                        cell.detailTextLabel?.textColor = .white
-                    }
-                }
-                
-            } else if status == "price" {
-                cell.detailTextLabel?.text = "Готовим оценку"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "priceApprove" {
-                cell.detailTextLabel?.text = "Согласуйте оцеку"
-                cell.backgroundColor = LeanColor.acceptColor
+                cell.detailTextLabel?.backgroundColor = .clear
                 cell.textLabel?.backgroundColor = .clear
-                cell.textLabel?.textColor = .white
-                cell.detailTextLabel?.textColor = .white
-            } else if status == "concept" {
-                cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "conceptApprove" {
-                  
-                if let concept: [String: AnyObject] = (snapshot.value as? NSDictionary)!["concept"] as? NSDictionary as! [String : AnyObject]? {
-                    if concept["status"] as! String == "discuss" {
-                        cell.detailTextLabel?.text = "Согласуйте черновик"
-                        cell.backgroundColor = .white
-                        cell.textLabel?.textColor = .black
-                        cell.detailTextLabel?.textColor = .black
-                    } else {
-                        cell.detailTextLabel?.text = "Согласование черновика"
-                        cell.backgroundColor = LeanColor.acceptColor
-                        cell.textLabel?.textColor = .white
-                        cell.detailTextLabel?.textColor = .white
+                
+                if status == "none" {
+                    cell.detailTextLabel?.text = "Подбираем дизайнера"
+                    cell.backgroundColor = .white
+                    cell.textLabel?.textColor = .black
+                    cell.detailTextLabel?.textColor = .black
+                } else if status == "awareness" {
+                    cell.detailTextLabel?.text = "Дизайнер принял задачу"
+                    cell.backgroundColor = .white
+                    cell.textLabel?.textColor = .black
+                    cell.detailTextLabel?.textColor = .black
+                } else if status == "awarenessApprove" {
+                    cell.detailTextLabel?.text = "Согласуйте понимание задачи"
+                    cell.backgroundColor = LeanColor.acceptColor
+                    cell.textLabel?.textColor = .white
+                    cell.detailTextLabel?.textColor = .white
+                } else if status == "price" || status == "admin"{
+                    cell.detailTextLabel?.text = "Готовим оценку"
+                    cell.backgroundColor = .white
+                    cell.textLabel?.textColor = .black
+                    cell.detailTextLabel?.textColor = .black
+                } else if status == "priceApprove" {
+                    cell.detailTextLabel?.text = "Согласуйте оцеку"
+                    cell.backgroundColor = LeanColor.acceptColor
+                    cell.textLabel?.backgroundColor = .clear
+                    cell.textLabel?.textColor = .white
+                    cell.detailTextLabel?.textColor = .white
+                } else if status == "concept" {
+                    cell.detailTextLabel?.text = "Дизайнер работает над черновиком"
+                    cell.backgroundColor = .white
+                    cell.textLabel?.textColor = .black
+                    cell.detailTextLabel?.textColor = .black
+                } else if status == "conceptApprove" {
+                    
+                    if let concept: [String: AnyObject] = (snapshot.value as? NSDictionary)!["concept"] as? NSDictionary as! [String : AnyObject]? {
+                        if concept["status"] as! String == "discuss" {
+                            cell.detailTextLabel?.text = "Согласуйте черновик"
+                            cell.backgroundColor = .white
+                            cell.textLabel?.textColor = .black
+                            cell.detailTextLabel?.textColor = .black
+                        } else {
+                            cell.detailTextLabel?.text = "Согласование черновика"
+                            cell.backgroundColor = LeanColor.acceptColor
+                            cell.textLabel?.textColor = .white
+                            cell.detailTextLabel?.textColor = .white
+                        }
                     }
+                    
+                } else if status == "design" {
+                    cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
+                    cell.backgroundColor = .white
+                    cell.textLabel?.textColor = .black
+                    cell.detailTextLabel?.textColor = .black
+                } else if status == "designApprove" {
+                    
+                    if let design: [String: AnyObject] = (snapshot.value as? NSDictionary)!["design"] as? NSDictionary as! [String : AnyObject]? {
+                        if design["status"] as! String == "discuss" {
+                            cell.detailTextLabel?.text = "Согласуйте черновик"
+                            cell.backgroundColor = .white
+                            cell.textLabel?.textColor = .black
+                            cell.detailTextLabel?.textColor = .black
+                        } else {
+                            cell.detailTextLabel?.text = "Согласование чистовика"
+                            cell.backgroundColor = LeanColor.acceptColor
+                            cell.textLabel?.textColor = .white
+                            cell.detailTextLabel?.textColor = .white
+                        }
+                    }
+                } else if status == "sources" {
+                    cell.detailTextLabel?.text = "Дизайнер готовит исходники"
+                    cell.backgroundColor = .white
+                    cell.textLabel?.textColor = .black
+                    cell.detailTextLabel?.textColor = .black
+                } else if status == "sourcesApprove" {
+                    cell.detailTextLabel?.text = "Задача закрыта. Исходники в вашей папке"
+                    cell.backgroundColor = LeanColor.acceptColor
+                    cell.textLabel?.textColor = .white
+                    cell.detailTextLabel?.textColor = .white
+                } else if status == "done" {
+                    cell.detailTextLabel?.text = "Закройте задачу"
                 }
                 
-            } else if status == "design" {
-                cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "designApprove" {
-                
-                if let design: [String: AnyObject] = (snapshot.value as? NSDictionary)!["design"] as? NSDictionary as! [String : AnyObject]? {
-                    if design["status"] as! String == "discuss" {
-                        cell.detailTextLabel?.text = "Согласуйте черновик"
-                        cell.backgroundColor = .white
-                        cell.textLabel?.textColor = .black
-                        cell.detailTextLabel?.textColor = .black
-                    } else {
-                        cell.detailTextLabel?.text = "Согласование чистовика"
-                        cell.backgroundColor = LeanColor.acceptColor
-                        cell.textLabel?.textColor = .white
-                        cell.detailTextLabel?.textColor = .white
+                if let taskImageUrl = (snapshot.value as? NSDictionary)!["imageUrl"] as? String {
+                    DispatchQueue.main.async {
+                        cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
                     }
-                }
-            } else if status == "sources" {
-                cell.detailTextLabel?.text = "Дизайнер готовит исходники"
-                cell.backgroundColor = .white
-                cell.textLabel?.textColor = .black
-                cell.detailTextLabel?.textColor = .black
-            } else if status == "sourcesApprove" {
-                cell.detailTextLabel?.text = "Задача закрыта. Исходники в вашей папке"
-                cell.backgroundColor = LeanColor.acceptColor
-                cell.textLabel?.textColor = .white
-                cell.detailTextLabel?.textColor = .white
-            } else if status == "done" {
-                cell.detailTextLabel?.text = "Закройте задачу"
-            }
-            
-            if let taskImageUrl = (snapshot.value as? NSDictionary)!["imageUrl"] as? String {
-                DispatchQueue.main.async {
-                    cell.taskImageView.loadImageUsingCashWithUrlString(taskImageUrl)
-                }
-            } else {
-                cell.taskImageView.image = UIImage.gifWithName("spinner-duo")
-            }
-            
-            let unreadRef = FIRDatabase.database().reference().child("clients").child(uid).child("unread").child(taskId)
-            unreadRef.observe(.childAdded, with: { (snapshot) in
-                if ((snapshot.value) != nil) {
-                    cell.notificationsLabel.isHidden = false
-                    cell.notificationsLabel.backgroundColor = LeanColor.acceptColor
                 } else {
-                    cell.notificationsLabel.isHidden = true
+                    cell.taskImageView.image = UIImage.gifWithName("spinner-duo")
                 }
-            }, withCancel: nil)
+                
+                let unreadRef = FIRDatabase.database().reference().child("clients").child(uid).child("unread").child(taskId)
+                unreadRef.observe(.childAdded, with: { (snapshot) in
+                    if ((snapshot.value) != nil) {
+                        cell.notificationsLabel.isHidden = false
+                        cell.notificationsLabel.backgroundColor = LeanColor.acceptColor
+                    } else {
+                        cell.notificationsLabel.isHidden = true
+                    }
+                }, withCancel: nil)
+                
+            }
             
             
         }, withCancel: nil)
@@ -356,6 +330,43 @@ extension TaskViewController {
     }
     
     
+    func openSourcesView(task: Task) {
+        let flowLayout = UICollectionViewFlowLayout()
+        let completeViewController = CompleteViewController(collectionViewLayout: flowLayout)
+        completeViewController.view.backgroundColor = UIColor.white
+        completeViewController.task = task
+        
+        if let taskId = task.taskId {
+            let ref = FIRDatabase.database().reference()
+            ref.child("tasks").child(taskId).child("sources").observe(.childAdded, with: {(snapshot) in
+                
+                let fileKey = snapshot.key
+                
+                
+                ref.child("files").child(fileKey).observe(.value, with: { (snapshot) in
+                    
+                    guard let dictionary = snapshot.value as? [String : AnyObject] else {
+                        return
+                    }
+                    
+                    completeViewController.sources.append(File(dictionary: dictionary))
+                    DispatchQueue.main.async(execute: {
+                        completeViewController.collectionView?.reloadData()
+                    })
+                    
+                    
+                }, withCancel: nil)
+            }, withCancel: nil)
+            
+        }
+        
+        let navController = UINavigationController(rootViewController: completeViewController)
+        present(navController, animated: true, completion: nil)
+        
+    }
+    
+    
+    
     func openTip() {
         let whoViewController = WhoViewController()
         navigationController?.pushViewController(whoViewController, animated: true)
@@ -388,7 +399,7 @@ extension TaskViewController {
                         if let code = (snapshot.value as! NSDictionary)["code"] as? String {
                             print("this is my promo \(code)" )
                             self.myPromoView!.buttonLabel.text = code
-                            
+                            self.myPromoView!.percent = "4"
                             let tappy = MyTapGesture(target: self, action: #selector(self.sharePromo(_:)))
                             tappy.string = code
                             self.myPromoView?.button.addGestureRecognizer(tappy)
@@ -419,17 +430,13 @@ extension TaskViewController {
         self.view.addConstraints(self.promoButton.heightAnchor == 47, self.promoButton.topAnchor == self.view.topAnchor - 5)
         self.promoButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handlePromo)))
         
-        
         self.promoButton.addSubview(self.promoLabel)
         self.promoButton.addConstraints("H:|[\(self.promoLabel)]|")
         self.promoButton.addConstraints("V:|-3-[\(self.promoLabel)]|")
         
     }
     
-    
-    
-    
-    
+
     
     func sharePromo(_ sender : MyTapGesture) {
         

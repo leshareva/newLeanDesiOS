@@ -2,6 +2,7 @@ import UIKit
 import Swiftstraints
 import Firebase
 import DigitsKit
+import Alamofire
 
 class PromoCodeViewController: UIViewController {
 
@@ -20,41 +21,51 @@ class PromoCodeViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Отправить", style: .plain, target: self, action: #selector(handleSend))
     }
- 
+    
+    
     func handleSend() {
-        let ref = FIRDatabase.database().reference()
         
         guard let code = textField.field.text, !code.isEmpty, let uid = Digits.sharedInstance().session()?.userID else {
             return
         }
-
-        ref.child("promocodes").observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.hasChild(code) {
-                let codeAmount = (snapshot.value as! NSDictionary)[code] as! Int
+        
+        let parameters: Parameters = [
+            "userId": uid,
+            "code": code
+        ]
+        
+        
+        Alamofire.request("\(Server.serverUrl)/users/promo/check",
+            method: .post,
+            parameters: parameters).responseJSON { response in
                 
-                let userRef = ref.child("clients").child(uid)
+                let statusCode = (response.response?.statusCode)! as Int
+                
+                if let result = response.result.value as? [String: Any] {
+                    print(result)
                     
-                userRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                    let oldAmount = (snapshot.value as! NSDictionary)["sum"] as! Int
-                    let newAmount = oldAmount + codeAmount
-                    let values : [String: AnyObject] = ["sum": newAmount as AnyObject]
-                    userRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
-                        if error != nil {
-                            print(error!)
-                            return
-                        }
-                    })
+                    switch statusCode {
+                    case 404:
+                        print("404 error")
+                        self.view.makeToast("Промокод не действителен", duration: 3.0, position: .top)
+                    case 200:
+                        print("200 answer")
+                        let tasksViewController = TaskViewController()
+                        self.navigationController?.pushViewController(tasksViewController, animated: true)
+                    case 403:
+                        print("wrong code")
+                        self.view.makeToast("Промокод не действителен", duration: 3.0, position: .top)
+                    default:
+                        print("default")
+                    }
                     
-                    ref.child("promocodes").child(code).removeValue()
-                    self.dismiss(animated: true, completion: nil)
                     
-                }, withCancel: nil)
-  
-            } else {
-                print("wrong code")
-            }
-        }, withCancel: nil)
+                }
+        }
+        
+        
     }
+    
     
     
 }

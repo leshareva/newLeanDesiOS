@@ -6,12 +6,12 @@ import Firebase
 import Alamofire
 import DigitsKit
 
-class CompleteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
+class CompleteViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate  {
     
     var task: Task?
     var sources = [File]()
-    let cellId = "cellId"
-    var tableView: UITableView  =  UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+    let customCellIdentifier = "cellId"
+    
     var timer: Timer?
     var sourcesDictionary = [String: File]()
 
@@ -30,14 +30,17 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
-        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(handleDone))
         setupView()
     }
     
     
     func setupView() {
         
-        view.addSubview(tableView)
+        collectionView?.backgroundColor = UIColor.white
+        collectionView?.register(ConceptCell.self, forCellWithReuseIdentifier: customCellIdentifier)
+        
+        
         view.addSubview(archiveButton)
         
         
@@ -45,24 +48,17 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         view.addConstraints("V:[\(archiveButton)]-16-|")
         view.addConstraints(archiveButton.heightAnchor == 40)
         
-        let screenSize: CGRect = UIScreen.main.bounds
-        tableView.frame         =   CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height - 70);
-        tableView.delegate      =   self
-        tableView.dataSource    =   self
-        
-        tableView.register(SourceCell.self, forCellReuseIdentifier: cellId)
-        tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.backgroundColor = .white
-
+    
         view.backgroundColor = .white
         
-        observeSources()
+        
         
     }
     
  
     
     func observeSources() {
+        
         guard let taskId = task?.taskId else {
             return
         }
@@ -73,37 +69,25 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
             
             let fileKey = snapshot.key
             
+            
             ref.child("files").child(fileKey).observe(.value, with: { (snapshot) in
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                     let source = File(dictionary: dictionary)
                     self.sourcesDictionary[snapshot.key] = source
-                }
-                
-                self.attemptReloadTable()
-            }, withCancel: nil)
-            
-            
-            
 
+                    DispatchQueue.main.async(execute: {
+                        self.collectionView?.reloadData()
+                    })
+                }
+            }, withCancel: nil)
         }, withCancel: nil)
     }
     
     
     
-    private func attemptReloadTable() {
-        self.timer?.invalidate()
-        
-        self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
-    }
     
     
-    func handleReloadTable() {
-        self.sources = Array(self.sourcesDictionary.values)
-        //this will crash because of background thread, so lets call this on dispatch_async main thread
-        DispatchQueue.main.async(execute: {
-            self.tableView.reloadData()
-        })
-    }
+   
     
     func handleComplete() {
         guard let taskId = self.task?.taskId else {
@@ -111,10 +95,11 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         let parameters: Parameters = [
-            "taskId": taskId
+            "taskId": taskId,
+            "status": "archive"
         ]
         
-        Alamofire.request("\(Server.serverUrl)/closeTask",
+        Alamofire.request("\(Server.serverUrl)/tasks/update",
             method: .post,
             parameters: parameters)
         
@@ -122,107 +107,77 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sources.count
-    }
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SourceCell
-        
-        let file = sources[indexPath.row]
-        cell.textLabel?.text = file.name
-        if (file.thumbnailLink != nil) {
-            cell.thumbImageView.loadImageUsingCashWithUrlString(file.thumbnailLink!)
-        } else {
-                cell.extensionImageView.image = UIImage(named: "psd")
-                cell.thumbImageView.isHidden = true
-        }
-        
-        if let url = file.source {
-            let tappy = MyTapGesture(target: self, action: #selector(self.handleShare(_:)))
-            cell.linkImageView.addGestureRecognizer(tappy)
-            tappy.string = url
-        }
-        return cell
-    }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let file = sources[indexPath.row]
-        
-        let myWebsite = NSURL(string: file.source!)
-        
-        guard let url = myWebsite else {
-            print("nothing found")
-            return
-        }
-        
-        let shareItems:Array = [url]
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
-        activityViewController.excludedActivityTypes = [UIActivityType.print, UIActivityType.postToWeibo, UIActivityType.copyToPasteboard, UIActivityType.addToReadingList, UIActivityType.postToVimeo]
-        self.present(activityViewController, animated: true, completion: nil)
-        
-    }
+
     
     
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 74
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let file = sources[indexPath.row]
+//        
+//        let myWebsite = NSURL(string: file.source!)
+//        
+//        guard let url = myWebsite else {
+//            print("nothing found")
+//            return
+//        }
+//        
+//        let shareItems:Array = [url]
+//        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
+//        activityViewController.excludedActivityTypes = [UIActivityType.print, UIActivityType.postToWeibo, UIActivityType.copyToPasteboard, UIActivityType.addToReadingList, UIActivityType.postToVimeo]
+//        self.present(activityViewController, animated: true, completion: nil)
+//        
+//    }
     
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sourceTitle = SourceTitle(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
-        sourceTitle.backgroundColor = .white
-        
-        if let price = task?.price  {
-            sourceTitle.priceLabel.attributedText = attributedText(string: "Оплачено\n\(Int(price)) рубля" as NSString, range: String(describing: Int(price)))
-            
-            
-        }
-        
-        if let designerId = task?.toId {
-            let ref = FIRDatabase.database().reference()
-            ref.child("designers").child(designerId).observeSingleEvent(of: .value, with: { (snapshot) in
-                
-                if let photoUrl = (snapshot.value as! NSDictionary)["photoUrl"] as? String {
-                    sourceTitle.userImageView.loadImageUsingCashWithUrlString(photoUrl)
-                }
-                
-                guard let name = (snapshot.value as! NSDictionary)["firstName"] as? String else {
-                    return
-                }
-                
-                sourceTitle.userNameLabel.text = name
-                
-                
-            }, withCancel: nil)
-        }
-        
-        
-        
-        sourceTitle.closeButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDone)))
-        
-        return sourceTitle
-    }
+
+    
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let sourceTitle = SourceTitle(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 60))
+//        sourceTitle.backgroundColor = .white
+//        
+//        if let price = task?.price  {
+//            sourceTitle.priceLabel.attributedText = attributedText(string: "Оплачено\n\(Int(price)) рубля" as NSString, range: String(describing: Int(price)))
+//            
+//            
+//        }
+//        
+//        if let designerId = task?.toId {
+//            let ref = FIRDatabase.database().reference()
+//            ref.child("designers").child(designerId).observeSingleEvent(of: .value, with: { (snapshot) in
+//                
+//                if let photoUrl = (snapshot.value as! NSDictionary)["photoUrl"] as? String {
+//                    sourceTitle.userImageView.loadImageUsingCashWithUrlString(photoUrl)
+//                }
+//                
+//                guard let name = (snapshot.value as! NSDictionary)["firstName"] as? String else {
+//                    return
+//                }
+//                
+//                sourceTitle.userNameLabel.text = name
+//                
+//                
+//            }, withCancel: nil)
+//        }
+//        
+//        
+//        
+//        sourceTitle.closeButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDone)))
+//        
+//        return sourceTitle
+//    }
+//    
     
     
     
-    
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 260
-    }
     
     func handleDone() {
         self.dismiss(animated: true, completion: nil)
     }
     
     
-    func handleShare(_ sender : MyTapGesture) {
+    func handleShare(link: String) {
 
-        let myWebsite = NSURL(string: sender.string! as String)
+        let myWebsite = NSURL(string: link as String)
         
         guard let url = myWebsite else {
             print("nothing found")
@@ -236,18 +191,109 @@ class CompleteViewController: UIViewController, UITableViewDelegate, UITableView
         
         
     }
+
     
     
     
-    func attributedText(string: NSString, range: String)->NSAttributedString{
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var height: CGFloat = 280
         
-        let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 14.0)])
+        let source = sources[indexPath.item]
+        let width = UIScreen.main.bounds.width
+        let screenWidth: CGFloat = view.frame.width
         
-        let boldFontAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 24.0)]
+        if source.thumbnailLink != nil {
+            
+            if let imageWidth = source.width?.floatValue, let imageHeight = source.height?.floatValue {
+                //h1 / w1 = h2 / w2
+                //solve for h1
+                //h1 = h2 / w2 * w1
+                height = CGFloat(imageHeight / imageWidth * Float(screenWidth))
+            }
+        }
         
-        attributedString.addAttributes(boldFontAttribute, range: string.range(of: range))
-        
-        return attributedString
+        return CGSize(width: width, height: height)
     }
     
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return sources.count
+    }
+    
+    
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: customCellIdentifier, for: indexPath) as! ConceptCell
+        
+        let source = sources[indexPath.item]
+        
+        
+        if let imageUrl = source.thumbnailLink {
+            print(imageUrl)
+            cell.imageView.loadImageUsingCashWithUrlString(imageUrl)
+            cell.textView.isHidden = true
+            cell.priceLabel.isHidden = true
+            cell.timeLabel.isHidden = true
+            cell.descriptView.isHidden = true
+            
+            
+            if let sourceUrl = source.source {
+                let tappy = MyTapGesture(target: self, action: #selector(self.showShareButtons(_:)))
+                tappy.anyobj = ["jpgLink": imageUrl, "sourceLink": sourceUrl]
+                cell.shareIcon.addGestureRecognizer(tappy)
+            }
+            
+            
+            
+        }
+        return cell
+    }
+    
+    
+    func showShareButtons(_ tapGesture: MyTapGesture) {
+        guard let jpgLink = tapGesture.anyobj?["jpgLink"], let sourceLink = tapGesture.anyobj?["sourceLink"] else {
+            return
+        }
+        
+        let alertController = UIAlertController(title: "Поделиться файлом", message: "Отправьте ссылку на исходник или на джепег друзьям", preferredStyle: .actionSheet)
+        
+        let sendButton = UIAlertAction(title: "Поделиться JPG", style: .default, handler: { (action) -> Void in
+            print("Ok button tapped")
+            
+            self.handleShare(link: jpgLink as! String)
+            
+        })
+        
+        let deleteButton = UIAlertAction(title: "Поделиться исходником", style: .destructive, handler: { (action) -> Void in
+            self.handleShare(link: sourceLink as! String)
+        })
+        
+        let cancelButton = UIAlertAction(title: "Отмена", style: .cancel, handler: { (action) -> Void in
+            print("Cancel button tapped")
+        })
+        
+        
+        alertController.addAction(sendButton)
+        alertController.addAction(deleteButton)
+        alertController.addAction(cancelButton)
+        
+        self.navigationController!.present(alertController, animated: true, completion: nil)
+        
+    }
+    
+
+    
+//    func attributedText(string: NSString, range: String)->NSAttributedString{
+//        
+//        let attributedString = NSMutableAttributedString(string: string as String, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 14.0)])
+//        
+//        let boldFontAttribute = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 24.0)]
+//        
+//        attributedString.addAttributes(boldFontAttribute, range: string.range(of: range))
+//        
+//        return attributedString
+//    }
+//    
 }

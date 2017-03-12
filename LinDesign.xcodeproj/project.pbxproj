@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1F7F7A7CE47801465BE73C22 /* Pods_LinDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA5BF5E225A54E8C267C46C /* Pods_LinDesign.framework */; };
+		4E40FF8DDA12ED3EE799F62D /* Pods_LinDesign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE25CB84AF7F52C82D7ABF21 /* Pods_LinDesign.framework */; };
 		CB0490361E6682C700AE9306 /* PricesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0490351E6682C700AE9306 /* PricesViewController.swift */; };
 		CB06803F1DEEC36100D78572 /* AcceptPriceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */; };
 		CB0680411DEF16A300D78572 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0680401DEF16A300D78572 /* Constant.swift */; };
@@ -93,9 +93,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		93E81D66986D99E02A34D9E3 /* Pods-LinDesign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinDesign.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinDesign/Pods-LinDesign.debug.xcconfig"; sourceTree = "<group>"; };
-		B6ABB9832E581785DA7AE50A /* Pods-LinDesign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinDesign.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinDesign/Pods-LinDesign.release.xcconfig"; sourceTree = "<group>"; };
-		BBA5BF5E225A54E8C267C46C /* Pods_LinDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B8E81D8167ECE7043A4DD97 /* Pods-LinDesign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinDesign.release.xcconfig"; path = "Pods/Target Support Files/Pods-LinDesign/Pods-LinDesign.release.xcconfig"; sourceTree = "<group>"; };
+		A6E41900B0FEC8E3C8500BEC /* Pods-LinDesign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinDesign.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LinDesign/Pods-LinDesign.debug.xcconfig"; sourceTree = "<group>"; };
 		CB0490351E6682C700AE9306 /* PricesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PricesViewController.swift; sourceTree = "<group>"; };
 		CB06803E1DEEC36100D78572 /* AcceptPriceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptPriceViewController.swift; sourceTree = "<group>"; };
 		CB0680401DEF16A300D78572 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
@@ -184,6 +183,7 @@
 		CBFD98551E06FADF0047D0D6 /* AwarenessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AwarenessViewController.swift; sourceTree = "<group>"; };
 		CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-test.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-test.plist"; sourceTree = "<group>"; };
 		CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DE25CB84AF7F52C82D7ABF21 /* Pods_LinDesign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LinDesign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,7 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F7F7A7CE47801465BE73C22 /* Pods_LinDesign.framework in Frameworks */,
+				4E40FF8DDA12ED3EE799F62D /* Pods_LinDesign.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,7 +201,7 @@
 		4C6FF513CCE9EBB253D6BD35 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BBA5BF5E225A54E8C267C46C /* Pods_LinDesign.framework */,
+				DE25CB84AF7F52C82D7ABF21 /* Pods_LinDesign.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -438,8 +438,8 @@
 		FAE6F8CEE853257B5119A9F0 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				93E81D66986D99E02A34D9E3 /* Pods-LinDesign.debug.xcconfig */,
-				B6ABB9832E581785DA7AE50A /* Pods-LinDesign.release.xcconfig */,
+				A6E41900B0FEC8E3C8500BEC /* Pods-LinDesign.debug.xcconfig */,
+				2B8E81D8167ECE7043A4DD97 /* Pods-LinDesign.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -806,7 +806,7 @@
 		};
 		CBE682CB1D93EBD400CB3679 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 93E81D66986D99E02A34D9E3 /* Pods-LinDesign.debug.xcconfig */;
+			baseConfigurationReference = A6E41900B0FEC8E3C8500BEC /* Pods-LinDesign.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LeanDesign.entitlements;
@@ -907,7 +907,7 @@
 		};
 		CBE682CC1D93EBD400CB3679 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B6ABB9832E581785DA7AE50A /* Pods-LinDesign.release.xcconfig */;
+			baseConfigurationReference = 2B8E81D8167ECE7043A4DD97 /* Pods-LinDesign.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = LeanDesign.entitlements;
