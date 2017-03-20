@@ -74,6 +74,17 @@ class ConceptCell: UICollectionViewCell, UIScrollViewDelegate {
     }()
     
     
+    lazy var shareButton: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 25
+        view.isUserInteractionEnabled = true
+        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        return view
+    }()
+    
+    
     lazy var shareIcon: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "share")?.maskWithColor(color: .white)
@@ -82,6 +93,8 @@ class ConceptCell: UICollectionViewCell, UIScrollViewDelegate {
         imageView.isUserInteractionEnabled = true
         return imageView
     }()
+    
+    
     
     lazy var closeButton: UIImageView = {
         let imageView = UIImageView()
@@ -96,15 +109,12 @@ class ConceptCell: UICollectionViewCell, UIScrollViewDelegate {
     func setupView() {
         backgroundColor = UIColor.black
         addSubview(imageView)
-        addSubview(shareIcon)
-        
-        
-        
+        addSubview(shareButton)
         addSubview(textView)
         addSubview(descriptView)
         
-        addConstraints("H:|[\(descriptView)]|", "H:|-16-[\(textView)]-16-|","H:[\(shareIcon)]-16-|")
-        addConstraints("V:|[\(descriptView)]-8-[\(textView)]", "V:|-10-[\(shareIcon)]")
+        addConstraints("H:|[\(descriptView)]|", "H:|-16-[\(textView)]-16-|","H:[\(shareButton)]-16-|")
+        addConstraints("V:|[\(descriptView)]-8-[\(textView)]", "V:|-10-[\(shareButton)]")
         
         addConstraints(imageView.leftAnchor == self.leftAnchor,
                        imageView.topAnchor == self.topAnchor,
@@ -112,9 +122,18 @@ class ConceptCell: UICollectionViewCell, UIScrollViewDelegate {
                        imageView.heightAnchor == self.heightAnchor,
                        textView.heightAnchor == self.heightAnchor - 160,
                        descriptView.heightAnchor == 110,
-                       shareIcon.widthAnchor == 25,
-                       shareIcon.heightAnchor == 25
+                       shareButton.widthAnchor == 50,
+                       shareButton.heightAnchor == 50
         )
+        
+        
+        shareButton.addSubview(shareIcon)
+        shareButton.addConstraints(shareIcon.heightAnchor == 25,
+                                   shareIcon.widthAnchor == 25,
+                                   shareIcon.centerXAnchor == shareButton.centerXAnchor,
+                                   shareIcon.centerYAnchor == shareButton.centerYAnchor
+        )
+        
         
         descriptView.addSubview(descriptLabel)
         descriptView.addConstraints("H:|-16-[\(descriptLabel)]-16-|")

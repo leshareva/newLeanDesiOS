@@ -100,4 +100,47 @@ extension ConceptViewController {
         self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
+    
+    
+    
+    func showShareButtons(_ tapGesture: MyTapGesture) {        
+        guard let image = tapGesture.anyobj?["image"] as? UIImage else {
+            return
+        }
+        
+        let alertController = UIAlertController(title: "Поделиться файлом", message: "Сохраните изображение в альбом", preferredStyle: .actionSheet)
+        
+        let sendButton = UIAlertAction(title: "Сохранить в альбом", style: .default, handler: { (action) -> Void in
+            UIImageWriteToSavedPhotosAlbum(image, self,  #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
+        })
+        
+        
+        let cancelButton = UIAlertAction(title: "Отмена", style: .cancel, handler: { (action) -> Void in
+            print("Cancel button tapped")
+        })
+        
+        
+        alertController.addAction(sendButton)
+        alertController.addAction(cancelButton)
+        
+        self.navigationController!.present(alertController, animated: true, completion: nil)
+        
+    }
+    
+    
+    
+    func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        } else {
+            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        }
+    }
+
+    
 }

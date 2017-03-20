@@ -65,6 +65,15 @@ class ConceptViewController: UICollectionViewController, UICollectionViewDelegat
             cell.timeLabel.isHidden = true
             cell.descriptView.isHidden = true
             
+           
+                let tappy = MyTapGesture(target: self, action: #selector(self.showShareButtons(_:)))
+                let im = cell.imageView.image
+                tappy.anyobj = ["image": im]
+                cell.shareButton.addGestureRecognizer(tappy)
+          
+            
+            
+            
             buttonView.acceptTaskButtonView.backgroundColor = LeanColor.acceptColor
         }
         return cell

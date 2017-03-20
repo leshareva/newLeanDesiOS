@@ -47,14 +47,16 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         view.addConstraints(tf.centerYAnchor == view.centerYAnchor)
         return view
     }()
-
-    let nameField: UITextView = {
-        let tf = UITextView()
-        tf.backgroundColor = .clear
-        tf.textColor = .black
+ 
+    lazy var nameField:  UITextField = {
+        let tf = UITextField()
+        tf.font = UIFont.systemFont(ofSize: 15)
+        tf.autocorrectionType = UITextAutocorrectionType.no
+        tf.keyboardType = UIKeyboardType.default
+        tf.returnKeyType = UIReturnKeyType.done
+        tf.clearButtonMode = UITextFieldViewMode.whileEditing;
+        tf.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
-        tf.isSelectable = true
         tf.becomeFirstResponder()
         return tf
     }()
@@ -77,13 +79,16 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         return view
     }()
     
-    let secondNameField: UITextView = {
-        let tf = UITextView()
-        tf.backgroundColor = .clear
-        tf.textColor = .black
+    let secondNameField: UITextField = {
+        let tf = UITextField()
+        tf.font = UIFont.systemFont(ofSize: 15)
+        tf.autocorrectionType = UITextAutocorrectionType.no
+        tf.keyboardType = UIKeyboardType.default
+        tf.returnKeyType = UIReturnKeyType.done
+        tf.clearButtonMode = UITextFieldViewMode.whileEditing;
+        tf.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
-        tf.isSelectable = true
+        tf.becomeFirstResponder()
         return tf
     }()
     
@@ -106,13 +111,16 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         return view
     }()
     
-    let emailField: UITextView = {
-        let tf = UITextView()
-        tf.backgroundColor = .clear
-        tf.textColor = .black
+    let emailField: UITextField = {
+        let tf = UITextField()
+        tf.font = UIFont.systemFont(ofSize: 15)
+        tf.autocorrectionType = UITextAutocorrectionType.no
+        tf.keyboardType = UIKeyboardType.emailAddress
+        tf.returnKeyType = UIReturnKeyType.done
+        tf.clearButtonMode = UITextFieldViewMode.whileEditing;
+        tf.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
-        tf.isSelectable = true
+        tf.becomeFirstResponder()
         return tf
     }()
     
@@ -134,13 +142,16 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         return view
     }()
     
-    let companyField: UITextView = {
-        let tf = UITextView()
-        tf.backgroundColor = .clear
-        tf.textColor = .black
+    let companyField: UITextField = {
+        let tf = UITextField()
+        tf.font = UIFont.systemFont(ofSize: 15)
+        tf.autocorrectionType = UITextAutocorrectionType.no
+        tf.keyboardType = UIKeyboardType.default
+        tf.returnKeyType = UIReturnKeyType.done
+        tf.clearButtonMode = UITextFieldViewMode.whileEditing;
+        tf.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
-        tf.isSelectable = true
+        tf.becomeFirstResponder()
         return tf
     }()
     
@@ -163,18 +174,21 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         return view
     }()
     
-    let promoField: UITextView = {
-        let tf = UITextView()
-        tf.backgroundColor = .clear
-        tf.textColor = .black
+    let promoField: UITextField = {
+        let tf = UITextField()
+        tf.placeholder = "Необязательно"
+        tf.font = UIFont.systemFont(ofSize: 15)
+        tf.autocorrectionType = UITextAutocorrectionType.no
+        tf.keyboardType = UIKeyboardType.default
+        tf.returnKeyType = UIReturnKeyType.done
+        tf.clearButtonMode = UITextFieldViewMode.whileEditing;
+        tf.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
-        tf.isSelectable = true
+        tf.becomeFirstResponder()
         return tf
     }()
     
-    
-    
+  
     let alertView: UIView = {
         let view = UIView()
         view.backgroundColor = .red
@@ -185,12 +199,12 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     }()
     
     let alertLabel: UILabel = {
-        let tf = UILabel()
-        tf.backgroundColor = .clear
-        tf.textColor = .white
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
-        return tf
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightThin)
+        return label
     }()
     
     let licenseText: UITextView = {
@@ -199,11 +213,9 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         tf.textColor = .white
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightThin)
+        tf.isEditable = false
         return tf
     }()
-    
-    
-    
     
     var myString:NSString = "Продолжая, вы подтверждаете, что прочитали и принимаете Условия предоставления услуг и Политику конфиденциальности"
     var myMutableString = NSMutableAttributedString()
@@ -223,12 +235,9 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         
         
         myMutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor(r: 0, g: 127, b: 255), range: NSRange(location:56,length:28))
-        
-        
+    
         // set label Attribute
-        
         licenseText.attributedText = myMutableString
-  
         setupInputsForLogin()
       
     }
@@ -358,6 +367,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
     
     
     func setupInputsForLogin() {
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Отправить", style: .plain, target: self, action: #selector(self.handleSend));
         view.addSubview(discriptionLabel)
         discriptionLabel.text = "Расскажите о себе"
@@ -368,6 +378,7 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         view.addSubview(inputForPromo)
         view.addSubview(alertView)
         view.addSubview(licenseText)
+        
         
         
         view.addConstraints("V:|-10-[\(discriptionLabel)]-10-[\(inputForName)]-1-[\(inputForSecondName)]-1-[\(inputForEmail)]-1-[\(inputForCompany)]-1-[\(inputForPromo)]-1-[\(licenseText)]")
@@ -423,6 +434,8 @@ class NewClientViewController: UIViewController, UIImagePickerControllerDelegate
         let result = emailTest.evaluate(with: testStr)
         return result
     }
+    
+    
     
     
 }

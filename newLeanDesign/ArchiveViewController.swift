@@ -90,7 +90,7 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.textLabel?.text = task.text
         
         let status = task.status
-        if status == "done" {
+        if status == "archive" {
            cell.detailTextLabel?.text = "Задача сдана и оплачена"
             
         } else if status == "archiveRejected" {
@@ -137,29 +137,45 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
             return
         }
         
-        let ref = FIRDatabase.database().reference().child("user-tasks").child(uid)
-        ref.observe(.childAdded, with: { (snapshot) in
-            
-            let taskId = snapshot.key
-            let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-            taskRef.observeSingleEvent(of: .value, with: { (snapshot) in
+        let ref = FIRDatabase.database().reference().child("tasks").queryOrdered(byChild: "fromId").queryEqual(toValue: uid)
+            ref.observe(.childAdded, with: { (snapshot) in
                 
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                         let task = Task(dictionary: dictionary)
-                        self.tasksDictionary[taskId] = task
+                        self.tasksDictionary[snapshot.key] = task
                 }
                 
                 self.attemptReloadTable()
                 
                 }, withCancel: nil)
-            }, withCancel: nil)
+        
     }
     
     
     func showChatControllerForUser(_ task: Task) {
-        let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        chatController.task = task
-        navigationController?.pushViewController(chatController, animated: true)
+        let flowLayout = UICollectionViewFlowLayout()
+        let completeViewController = CompleteViewController(collectionViewLayout: flowLayout)
+        completeViewController.view.backgroundColor = UIColor.white
+        completeViewController.task = task
+        
+        if let taskId = task.taskId {
+            let ref = FIRDatabase.database().reference()
+            ref.child("tasks").child(taskId).child("sources").observe(.childAdded, with: {(snapshot) in
+                let fileKey = snapshot.key
+                ref.child("files").child(fileKey).observe(.value, with: { (snapshot) in
+                    guard let dictionary = snapshot.value as? [String : AnyObject] else {
+                        return
+                    }
+                    completeViewController.sources.append(File(dictionary: dictionary))
+                    DispatchQueue.main.async(execute: {
+                        completeViewController.collectionView?.reloadData()
+                    })
+                }, withCancel: nil)
+            }, withCancel: nil)
+        }
+        
+        let navController = UINavigationController(rootViewController: completeViewController)
+        present(navController, animated: true, completion: nil)
     }
     
     func showControllerForSetting(_ setting: Setting) {

@@ -55,8 +55,8 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
         let label = UILabel()
             label.text = "Зарабатывай с Лином"
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = UIFont.systemFont(ofSize: 16.0)
-            label.textColor = .black
+            label.font = UIFont.systemFont(ofSize: 14.0)
+            label.textColor = UIColor(r: 180, g: 180, b: 180)
             label.textAlignment = .center
             label.isUserInteractionEnabled = true
         return label    

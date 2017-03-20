@@ -218,41 +218,22 @@ extension TaskViewController {
                     cell.textLabel?.textColor = .black
                     cell.detailTextLabel?.textColor = .black
                 } else if status == "conceptApprove" {
-                    
-                    if let concept: [String: AnyObject] = (snapshot.value as? NSDictionary)!["concept"] as? NSDictionary as! [String : AnyObject]? {
-                        if concept["status"] as! String == "discuss" {
-                            cell.detailTextLabel?.text = "Согласуйте черновик"
-                            cell.backgroundColor = .white
-                            cell.textLabel?.textColor = .black
-                            cell.detailTextLabel?.textColor = .black
-                        } else {
-                            cell.detailTextLabel?.text = "Согласование черновика"
-                            cell.backgroundColor = LeanColor.acceptColor
-                            cell.textLabel?.textColor = .white
-                            cell.detailTextLabel?.textColor = .white
-                        }
-                    }
-                    
+                    cell.detailTextLabel?.text = "Согласуйте черновик"
+                    cell.backgroundColor = LeanColor.acceptColor
+                    cell.textLabel?.backgroundColor = .clear
+                    cell.textLabel?.textColor = .white
+                    cell.detailTextLabel?.textColor = .white
                 } else if status == "design" {
                     cell.detailTextLabel?.text = "Дизайнер работает над чистовиком"
                     cell.backgroundColor = .white
                     cell.textLabel?.textColor = .black
                     cell.detailTextLabel?.textColor = .black
                 } else if status == "designApprove" {
-                    
-                    if let design: [String: AnyObject] = (snapshot.value as? NSDictionary)!["design"] as? NSDictionary as! [String : AnyObject]? {
-                        if design["status"] as! String == "discuss" {
-                            cell.detailTextLabel?.text = "Согласуйте черновик"
-                            cell.backgroundColor = .white
-                            cell.textLabel?.textColor = .black
-                            cell.detailTextLabel?.textColor = .black
-                        } else {
-                            cell.detailTextLabel?.text = "Согласование чистовика"
-                            cell.backgroundColor = LeanColor.acceptColor
-                            cell.textLabel?.textColor = .white
-                            cell.detailTextLabel?.textColor = .white
-                        }
-                    }
+                    cell.detailTextLabel?.text = "Согласуйте черновик"
+                    cell.backgroundColor = LeanColor.acceptColor
+                    cell.textLabel?.backgroundColor = .clear
+                    cell.textLabel?.textColor = .white
+                    cell.detailTextLabel?.textColor = .white
                 } else if status == "sources" {
                     cell.detailTextLabel?.text = "Дизайнер готовит исходники"
                     cell.backgroundColor = .white
@@ -275,15 +256,32 @@ extension TaskViewController {
                     cell.taskImageView.image = UIImage.gifWithName("spinner-duo")
                 }
                 
-                let unreadRef = FIRDatabase.database().reference().child("clients").child(uid).child("unread").child(taskId)
-                unreadRef.observe(.childAdded, with: { (snapshot) in
-                    if ((snapshot.value) != nil) {
-                        cell.notificationsLabel.isHidden = false
-                        cell.notificationsLabel.backgroundColor = LeanColor.acceptColor
-                    } else {
-                        cell.notificationsLabel.isHidden = true
+                if status != "none" {
+                    
+                    guard let designersId = task.toId else {
+                        return
                     }
-                }, withCancel: nil)
+                    
+                    let parameters: Parameters = [
+                        "type": "designer",
+                        "userId": designersId
+                    ]
+                    
+                    Alamofire.request("\(Server.serverUrl)/users/get",
+                        method: .post,
+                        parameters: parameters).responseJSON { response in
+                            
+                            if let user = response.result.value as? [String: Any] {
+                                if let userPhoto = user["photoUrl"] as? String {
+                                    cell.taskImageView.loadImageUsingCashWithUrlString(String(userPhoto))
+                                }
+                            }
+                    }
+                    
+                    
+                   
+                }
+               
                 
             }
             
@@ -339,25 +337,17 @@ extension TaskViewController {
         if let taskId = task.taskId {
             let ref = FIRDatabase.database().reference()
             ref.child("tasks").child(taskId).child("sources").observe(.childAdded, with: {(snapshot) in
-                
                 let fileKey = snapshot.key
-                
-                
                 ref.child("files").child(fileKey).observe(.value, with: { (snapshot) in
-                    
                     guard let dictionary = snapshot.value as? [String : AnyObject] else {
                         return
                     }
-                    
                     completeViewController.sources.append(File(dictionary: dictionary))
                     DispatchQueue.main.async(execute: {
                         completeViewController.collectionView?.reloadData()
                     })
-                    
-                    
                 }, withCancel: nil)
             }, withCancel: nil)
-            
         }
         
         let navController = UINavigationController(rootViewController: completeViewController)
@@ -403,6 +393,7 @@ extension TaskViewController {
                             let tappy = MyTapGesture(target: self, action: #selector(self.sharePromo(_:)))
                             tappy.string = code
                             self.myPromoView?.button.addGestureRecognizer(tappy)
+                            self.myPromoView?.shareIcon.addGestureRecognizer(tappy)
                         }
                     }, withCancel: nil)
                 }

@@ -10,6 +10,7 @@ class AwarenessViewController: UIViewController, UIWebViewDelegate {
     
     var task: Task?
     var webV: UIWebView!
+    var activity: UIActivityIndicatorView!
     
     lazy var titleView: UITextView = {
         let tv = UITextView()
@@ -86,6 +87,7 @@ class AwarenessViewController: UIViewController, UIWebViewDelegate {
         
         
         webV = UIWebView(frame: CGRect(x: 0, y: 60, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 160))
+        
         
         if let taskId = self.task?.taskId {
             webV.loadRequest(NSURLRequest(url: NSURL(string: "\(Server.serverUrl)/awareness?taskId=\(taskId)") as! URL) as URLRequest)
@@ -204,46 +206,9 @@ class AwarenessViewController: UIViewController, UIWebViewDelegate {
         priceWaitingViewController.task = task
         priceWaitingViewController.titleView.text = "Ждем согласования понимания задачи"
         priceWaitingViewController.descriptionText.text = " "
-//        dismiss(animated: true, completion: nil)
         navigationController?.pushViewController(priceWaitingViewController, animated: true)
         
-        
-        
-//        guard let taskId = self.task?.taskId, let designerId = task?.toId else {
-//            return
-//        }
-//        
-//        let ref = FIRDatabase.database().reference()
-//        let values: [String: AnyObject] = ["status": "discuss" as AnyObject]
-//        ref.child("tasks").child(taskId).child("awareness").updateChildValues(values, withCompletionBlock: { (err, ref) in
-//            if err != nil {
-//                print(err!)
-//                return
-//            }
-//        })
-//
-//        
-//        //send push notification
-//        let parameters: Parameters = [
-//            "userId": designerId,
-//            "message": "Клиент хочет обсудить понимание задачи",
-//            "taskId": taskId
-//        ]
-//        
-//        Alamofire.request("\(Server.serverUrl)/push",
-//            method: .post,
-//            parameters: parameters).responseJSON { response in
-//                if (response.result.value as? [String: Any]) != nil {}
-//        }
-//
-//        
-//        
-//            let chatController = ChatViewController(collectionViewLayout: UICollectionViewFlowLayout())
-//            chatController.task = task
-//            dismiss(animated: true, completion: nil)
-//            navigationController?.pushViewController(chatController, animated: true)
-        
-        
+
     }
     
     
@@ -251,6 +216,24 @@ class AwarenessViewController: UIViewController, UIWebViewDelegate {
         dismiss(animated: true, completion: nil)
     }
     
+    
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        activity = UIActivityIndicatorView(frame: view.frame)
+        activity.color = .gray
+        activity.center = view.center
+        activity.startAnimating()
+        view.addSubview(activity)
+        return true
+    }
+    
+    
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        activity.stopAnimating()
+    }
+    
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        activity.stopAnimating()
+    }
    
     
 }

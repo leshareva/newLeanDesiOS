@@ -95,7 +95,6 @@ class LoginController: UIViewController, UITextFieldDelegate {
         configuration?.appearance = DGTAppearance()
         
         configuration?.appearance.logoImage = UIImage(named: "logo")
-        
         configuration?.appearance.labelFont = UIFont(name: "HelveticaNeue-Bold", size: 16)
         configuration?.appearance.bodyFont = UIFont(name: "HelveticaNeue-Italic", size: 16)
         
@@ -133,9 +132,9 @@ class LoginController: UIViewController, UITextFieldDelegate {
         
         loginButton.setTitleColor(UIColor.white, for: UIControlState())
         loginButton.layer.cornerRadius = 5
-        loginButton.layer.borderWidth = 1
-        loginButton.layer.borderColor = UIColor.white.cgColor
- 
+//        loginButton.layer.borderWidth = 1
+//        loginButton.layer.borderColor = UIColor.white.cgColor
+// 
         loginButton.setTitleColor(UIColor(r: 255, g: 255, b: 255), for: UIControlState())
         loginButton.setTitle("Войти", for: UIControlState())
         loginButton.addTarget(self, action: #selector(self.didTapLoginButton(_ :)), for: .touchUpInside)

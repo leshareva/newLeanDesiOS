@@ -11,6 +11,7 @@ class CompleteViewController: UICollectionViewController, UICollectionViewDelega
     var task: Task?
     var sources = [File]()
     let customCellIdentifier = "cellId"
+    let image = UIImageView()
     
     var timer: Timer?
     var sourcesDictionary = [String: File]()
@@ -39,7 +40,6 @@ class CompleteViewController: UICollectionViewController, UICollectionViewDelega
         
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(ConceptCell.self, forCellWithReuseIdentifier: customCellIdentifier)
-        
         
         view.addSubview(archiveButton)
         
@@ -241,8 +241,9 @@ class CompleteViewController: UICollectionViewController, UICollectionViewDelega
             
             if let sourceUrl = source.source {
                 let tappy = MyTapGesture(target: self, action: #selector(self.showShareButtons(_:)))
-                tappy.anyobj = ["jpgLink": imageUrl, "sourceLink": sourceUrl]
-                cell.shareIcon.addGestureRecognizer(tappy)
+                let im = cell.imageView.image
+                tappy.anyobj = ["jpgLink": imageUrl, "sourceLink": sourceUrl, "image": im]
+                cell.shareButton.addGestureRecognizer(tappy)
             }
             
             
@@ -257,13 +258,14 @@ class CompleteViewController: UICollectionViewController, UICollectionViewDelega
             return
         }
         
+        guard let image = tapGesture.anyobj?["image"] as? UIImage else {
+            return
+        }
+        
         let alertController = UIAlertController(title: "Поделиться файлом", message: "Отправьте ссылку на исходник или на джепег друзьям", preferredStyle: .actionSheet)
         
-        let sendButton = UIAlertAction(title: "Поделиться JPG", style: .default, handler: { (action) -> Void in
-            print("Ok button tapped")
-            
-            self.handleShare(link: jpgLink as! String)
-            
+        let sendButton = UIAlertAction(title: "Сохранить в альбом", style: .default, handler: { (action) -> Void in
+               UIImageWriteToSavedPhotosAlbum(image, self,  #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
         })
         
         let deleteButton = UIAlertAction(title: "Поделиться исходником", style: .destructive, handler: { (action) -> Void in
@@ -283,6 +285,18 @@ class CompleteViewController: UICollectionViewController, UICollectionViewDelega
         
     }
     
+    func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        } else {
+            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        }
+    }
 
     
 //    func attributedText(string: NSString, range: String)->NSAttributedString{
