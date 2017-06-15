@@ -68,7 +68,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "point")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMore))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Выйти", style: .plain, target: self, action: #selector(handleLogout))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Выйти", style: .plain, target: self, action: #selector(handleLogout))
         navigationController?.navigationBar.isTranslucent = false
         self.view.backgroundColor = UIColor.white
 
@@ -196,8 +196,9 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
  
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let companyView = CompanyView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 140))
-        companyView.backgroundColor = UIColor.white
+        let companyView = CompanyView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 170))
+//        let headView = TasksHeaderView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 140))
+        companyView.payButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handlePay)))
         setupCompanyView(companyView: companyView)
         
         return companyView
@@ -205,7 +206,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 130
+        return 170
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -285,7 +286,7 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
     
      func setupTableView() {
         let screenSize: CGRect = UIScreen.main.bounds
-        tableView.frame         =   CGRect(x: 0, y: 40, width: screenSize.width, height: screenSize.height - 110);
+        tableView.frame         =   CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height - 110);
         tableView.delegate      =   self
         tableView.dataSource    =   self
         tableView.backgroundColor = .white
@@ -342,25 +343,21 @@ class TaskViewController: UIViewController, UITableViewDelegate, UITableViewData
             return
         }
         
-        let ref = FIRDatabase.database().reference().child("clients").child(uid).child("activeTasks")
-        ref.observe(.childAdded, with: { (snapshot) in
-                    let taskId = snapshot.key
-                
-                    let taskRef = FIRDatabase.database().reference().child("tasks").child(taskId)
-                    taskRef.queryOrdered(byChild: "time").observe(.value, with: { (snapshot) in
-                    
+        let ref = FIRDatabase.database().reference().child("tasks").queryOrdered(byChild: "fromId").queryEqual(toValue: uid)
+        
+                    ref.observe(.childAdded, with: { (snapshot) in
                         if let dictionary = snapshot.value as? [String: AnyObject] {
                             let task = Task(dictionary: dictionary)
-                            self.tasksDictionary[taskId] = task
+                            if task.status! != "archive" && task.status! != "reject"  {
+                                self.tasksDictionary[task.taskId!] = task
+                            }
                         }
                     
                         self.attemptReloadTable()
                         
                     }, withCancel: nil)
 
-            
-            
-            }, withCancel: nil)
+
         
         ref.observe(.childRemoved, with: { (snap) in
             self.tasksDictionary.removeValue(forKey: snap.key)

@@ -41,13 +41,13 @@ extension TaskViewController {
                     
                 }
                 
-//                guard let folderId =  (snapshot.value as? NSDictionary)!["conceptUrl"] as? String else {
-//                    return
-//                }
-//                
-//                UserDefaults.standard.set("https://drive.google.com/drive/folders/\(folderId)", forKey: "folder")
+                guard let folderId =  (snapshot.value as? NSDictionary)!["conceptUrl"] as? String else {
+                    return
+                }
                 
-//                companyView.conceptContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
+                UserDefaults.standard.set("https://drive.google.com/drive/folders/\(folderId)", forKey: "folder")
+                
+                companyView.conceptContainer.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.openConceptFolder)))
                 
             }, withCancel: nil)
             

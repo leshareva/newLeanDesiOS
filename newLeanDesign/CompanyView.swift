@@ -160,7 +160,7 @@ class CompanyView: UIView {
         
         titleTableLabel.isHidden = true
         self.addConstraints("H:|-16-[\(companyNameLabel)]|")
-        self.addConstraints("V:|-16-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-2-[\(priceLabel)]-16-[\(separatorOne)]-32-[\(titleTableLabel)]")
+        self.addConstraints("V:|-56-[\(companyNameLabel)]-8-[\(aboutPriceLabel)]-2-[\(priceLabel)]-16-[\(separatorOne)]-32-[\(titleTableLabel)]")
         self.addConstraints( companyNameLabel.heightAnchor == 25,
                             aboutPriceLabel.leftAnchor == companyNameLabel.leftAnchor,
                             priceLabel.leftAnchor == companyNameLabel.leftAnchor,

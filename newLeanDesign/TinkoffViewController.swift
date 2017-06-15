@@ -12,6 +12,7 @@ import SWXMLHash
 import CryptoSwift
 import DigitsKit
 import Firebase
+import ASDKUI
 
 class TinkoffViewController: UIViewController, UIWebViewDelegate {
     
@@ -28,6 +29,8 @@ class TinkoffViewController: UIViewController, UIWebViewDelegate {
         
     
         webV = UIWebView(frame: UIScreen.main.bounds)
+        webV.scalesPageToFit = true
+        
         webV.loadRequest(NSURLRequest(url: NSURL(string: "\(Server.serverUrl)/bills?amount=\(String(self.amount))&userId=\(userId)") as! URL) as URLRequest)
         webV.delegate = self
         self.view.addSubview(webV)

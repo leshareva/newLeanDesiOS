@@ -15,6 +15,7 @@
 		CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */; };
 		CB0D8DEA1DF53DB3008EB997 /* PromoCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0D8DE91DF53DB3008EB997 /* PromoCodeViewController.swift */; };
 		CB15C4FA1DEFEC490067A51E /* UIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB15C4F91DEFEC490067A51E /* UIControls.swift */; };
+		CB256B9A1E805C110003A3F7 /* TasksHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB256B991E805C110003A3F7 /* TasksHeaderView.swift */; };
 		CB2A01B21E07BE3D00AE5785 /* PriceWaitingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2A01B11E07BE3D00AE5785 /* PriceWaitingViewController.swift */; };
 		CB321AD71DBE067C00FD5F43 /* SendMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */; };
 		CB34A1851DC714260020F53E /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34A1841DC714260020F53E /* ChatInputView.swift */; };
@@ -102,6 +103,7 @@
 		CB0BAF8C1DED3AF7002FB011 /* SupportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
 		CB0D8DE91DF53DB3008EB997 /* PromoCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoCodeViewController.swift; sourceTree = "<group>"; };
 		CB15C4F91DEFEC490067A51E /* UIControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControls.swift; sourceTree = "<group>"; };
+		CB256B991E805C110003A3F7 /* TasksHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksHeaderView.swift; sourceTree = "<group>"; };
 		CB2A01B11E07BE3D00AE5785 /* PriceWaitingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceWaitingViewController.swift; sourceTree = "<group>"; };
 		CB321AD61DBE067B00FD5F43 /* SendMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageController.swift; sourceTree = "<group>"; };
 		CB34A1841DC714260020F53E /* ChatInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 		CB4F7E5D1E014C980057E249 /* ChatViewController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+handlers.swift"; sourceTree = "<group>"; };
 		CB4F7E5F1E014DDD0057E249 /* GetRateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetRateView.swift; sourceTree = "<group>"; };
 		CB56CCAB1E5E9B81001703ED /* Constant-dev.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Constant-dev.swift"; sourceTree = "<group>"; };
+		CB5CC7C41E87C2B4008EC8F7 /* TinkoffHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TinkoffHeader.h; sourceTree = "<group>"; };
 		CB5F4D0D1DBCC12600530341 /* ZoomingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomingImageView.swift; sourceTree = "<group>"; };
 		CB67233B1E0BCD5E002DC2E6 /* TaskViewController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TaskViewController+handlers.swift"; sourceTree = "<group>"; };
 		CB6C5E131DF02DA9007D74E3 /* WaitingAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingAlertView.swift; sourceTree = "<group>"; };
@@ -332,6 +335,7 @@
 				CB4F7E5F1E014DDD0057E249 /* GetRateView.swift */,
 				CBF50ADA1E1532980025B950 /* TipView.swift */,
 				CBC6823E1E1D18E200CCE93E /* SupportIconView.swift */,
+				CB256B991E805C110003A3F7 /* TasksHeaderView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -399,6 +403,7 @@
 				CB88CE2A1E39DA8400141DAC /* InfoPlist.strings */,
 				CBFDCB051DD6F41C0038BE90 /* GoogleService-Info-test.plist */,
 				CBFDCB071DD6F5A30038BE90 /* GoogleService-Info.plist */,
+				CB5CC7C41E87C2B4008EC8F7 /* TinkoffHeader.h */,
 			);
 			path = newLeanDesign;
 			sourceTree = "<group>";
@@ -603,6 +608,7 @@
 				CBF49D941E3CC53300D436C5 /* MyFilesViewController+handlers.swift in Sources */,
 				CBFD98541E06E3C60047D0D6 /* WaitingAwarenessViewController.swift in Sources */,
 				CB72EBDB1E0C56780019267A /* ConceptCell.swift in Sources */,
+				CB256B9A1E805C110003A3F7 /* TasksHeaderView.swift in Sources */,
 				CB39FAE91D942B2B007E9365 /* NewTaskController+handlers.swift in Sources */,
 				CB0BAF8D1DED3AF7002FB011 /* SupportViewController.swift in Sources */,
 				CB353C7D1E16621B00E74E92 /* SourceFooter.swift in Sources */,
@@ -899,7 +905,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = LinDesign;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/LeshaReva/Downloads/Работаю/newLeanDesign/newLeanDesign/TinkoffHeader.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1000,7 +1006,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.newLeanDesign.iOS;
 				PRODUCT_NAME = LinDesign;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/LeshaReva/Downloads/Работаю/newLeanDesign/newLeanDesign/TinkoffHeader.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -180,35 +180,42 @@ class AcceptPriceViewController: UIViewController {
             return
         }
         
-        let ref = FIRDatabase.database().reference()
-        ref.child("clients").child(userId).observeSingleEvent(of: .value, with: {(snapshot) in
-            if let sum = (snapshot.value as! NSDictionary)["sum"] as? Int {
-                if sum < Int(price) {
-                    let noMoneyViewController = NoMoneyViewController()
-                    noMoneyViewController.sum = sum
-                    noMoneyViewController.price = price as Int!
-                    self.navigationController?.pushViewController(noMoneyViewController, animated: true)
-                } else {
-                    let parameters: Parameters = [
-                        "taskId": taskId
-                    ]
-                    
-                    Alamofire.request("\(Server.serverUrl)/workdone",
-                        method: .post,
-                        parameters: parameters).responseJSON { response in
-                            
-                            if let result = response.result.value as? [String: Any] {
-                               print(result)
-                                self.view.makeToast("This is a piece of toast")
-                            }
-                    }
-
-                    
-                    TaskMethods.sendPush(message: "Клиент согласовал понимание задачи", toId: designerId, taskId: taskId)
-                    self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
-                }
-            }
-        }, withCancel: nil)
+        
+        let tinkoffViewController = TinkoffViewController()
+        tinkoffViewController.amount = Int(price)
+        
+        let navController = UINavigationController(rootViewController: tinkoffViewController)
+        self.navigationController?.present(navController, animated: true, completion: nil)
+        
+//        let ref = FIRDatabase.database().reference()
+//        ref.child("clients").child(userId).observeSingleEvent(of: .value, with: {(snapshot) in
+//            if let sum = (snapshot.value as! NSDictionary)["sum"] as? Int {
+//                if sum < Int(price) {
+//                    let noMoneyViewController = NoMoneyViewController()
+//                    noMoneyViewController.sum = sum
+//                    noMoneyViewController.price = price as Int!
+//                    self.navigationController?.pushViewController(noMoneyViewController, animated: true)
+//                } else {
+//                    let parameters: Parameters = [
+//                        "taskId": taskId
+//                    ]
+//                    
+//                    Alamofire.request("\(Server.serverUrl)/workdone",
+//                        method: .post,
+//                        parameters: parameters).responseJSON { response in
+//                            
+//                            if let result = response.result.value as? [String: Any] {
+//                               print(result)
+//                                self.view.makeToast("This is a piece of toast")
+//                            }
+//                    }
+//
+//                    
+//                    TaskMethods.sendPush(message: "Клиент согласовал понимание задачи", toId: designerId, taskId: taskId)
+//                    self.view.window!.rootViewController?.dismiss(animated: true, completion: nil)
+//                }
+//            }
+//        }, withCancel: nil)
         
         
 
@@ -236,12 +243,12 @@ class AcceptPriceViewController: UIViewController {
             }
             
             self.priceLabel.text = "\(String(describing: lroundf(Float(price)))) ₽"
-            let awarenessPrice = Double(price) * 0.10
-            let conceptPrice = Double(price) * 0.50
-            let designPrice = Double(price) * 0.40
-            self.labelsList.text = "Понимание задачи\nЧерновик\nЧистовик"
-            self.priceList.text = "\(String(lroundf(Float(awarenessPrice))))₽\n\(String(lroundf(Float(conceptPrice))))₽\n\(String(lroundf(Float(designPrice))))₽"
-            self.priceTitle.text = "Деньги снимаются поэтапно"
+//            let awarenessPrice = Double(price) * 0.10
+//            let conceptPrice = Double(price) * 0.50
+//            let designPrice = Double(price) * 0.40
+//            self.labelsList.text = "Понимание задачи\nЧерновик\nЧистовик"
+//            self.priceList.text = "\(String(lroundf(Float(awarenessPrice))))₽\n\(String(lroundf(Float(conceptPrice))))₽\n\(String(lroundf(Float(designPrice))))₽"
+//            self.priceTitle.text = "Деньги снимаются поэтапно"
             self.cancelText.text = "Если цена вам не подходит, задача отменится и попадет в архив."
             
         })

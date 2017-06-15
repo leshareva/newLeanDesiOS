@@ -13,7 +13,7 @@ import UIKit
 struct Server {
     //    static let desktopWeb = "http://indoor.leandesign.pro/#"
     static let desktopWeb = "http://upload.leandesign.pro/#"
-    static let serverUrl = "http://leandesign.pro:8100"
+    static let serverUrl = "http://back.leandesign.pro"
     //     static let serverUrl = "http://localhost:8100"
 }
 
